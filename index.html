@@ -85,7 +85,6 @@
 
     <footer class="bg-white border-t border-gray-100 mt-12 py-8 text-center text-sm text-gray-500 font-medium">
         <p>© 2026 Jadwal Kajian Cilegon</p>
-
     </footer>
 
     <script>
@@ -226,50 +225,6 @@
                             <div class="shrink-0 flex items-center">
                                 ${isMuslimah ? `<span class="inline-flex items-center text-sm md:text-base text-rose-600 bg-rose-50 px-3 py-1 rounded-full font-bold shadow-xs">Muslimah</span>` : ''}
                                 ${isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-bold shadow-xs">Anak 👶</span>` : ''}
-                                ${j.ket && !isMuslimah && !isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-blue-600 bg-blue-50 px-3 py-1 rounded-full font-bold shadow-xs">${j.ket}</span>` : ''}
-                            </div>
-                        </div>
-                    `;
-                });
-
-                sectionHTML += `</div></div>`;
-                container.innerHTML += sectionHTML;
-            }
-                let sectionHTML = `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 mb-8">
-                        <div class="bg-slate-800 text-white p-5 md:p-6">
-                            <h3 class="text-lg md:text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
-                            <div class="text-sm md:text-base text-gray-300 mt-2 flex flex-wrap gap-x-6 gap-y-1">
-                                ${info.alamat ? `<span><i class="fas fa-location-dot fa-fw text-emerald-400"></i> ${info.alamat}</span>` : ''}
-                                ${info.cp_masjid && info.cp_masjid !== '-' ? `<span><i class="fas fa-phone fa-fw text-emerald-400"></i> Info: ${info.cp_masjid}</span>` : ''}
-                            </div>
-                        </div>
-                        <div class="divide-y divide-gray-100">
-                `;
-
-                info.jadwal.forEach(j => {
-                    const ketLower = j.ket ? j.ket.toLowerCase() : "";
-                    const isMuslimah = ketLower.includes("muslimah");
-                    const isAnak = ketLower.includes("anak");
-
-                    sectionHTML += `
-                        <div class="p-5 md:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-gray-50/50 transition">
-                            <div class="space-y-2 w-full">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="bg-emerald-100 text-emerald-800 text-sm font-bold px-2.5 py-0.5 rounded-sm">${j.hari}</span>
-                                    <span class="text-sm md:text-base text-gray-500 font-semibold"><i class="far fa-clock mr-1"></i>${j.waktu}</span>
-                                </div>
-                                <h4 class="text-base md:text-lg font-bold text-gray-900">${j.pemateri}</h4>
-                                <p class="text-sm md:text-base text-gray-600 font-medium">${j.materi}</p>
-                                
-                                ${j.cp_kajian && j.cp_kajian !== '-' ? `
-                                <div class="text-xs md:text-sm text-emerald-600 font-bold pt-1 flex items-center gap-1.5">
-                                    <i class="fas fa-phone-alt"></i>  ${j.cp_kajian}
-                                </div>` : ''}
-                            </div>
-                            <div class="shrink-0 flex items-center">
-                                ${isMuslimah ? `<span class="inline-flex items-center text-sm md:text-base text-rose-600 bg-rose-50 px-3 py-1 rounded-full font-bold shadow-xs">Khusus Muslimah 🌹</span>` : ''}
-                                ${isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-bold shadow-xs">Kajian Anak 👶</span>` : ''}
                                 ${j.ket && !isMuslimah && !isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-blue-600 bg-blue-50 px-3 py-1 rounded-full font-bold shadow-xs">${j.ket}</span>` : ''}
                             </div>
                         </div>
