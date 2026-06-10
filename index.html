@@ -142,8 +142,7 @@
                     const encodedText = encodeURIComponent(result.teks_share);
                     const encodedUrl = encodeURIComponent(window.location.href);
                     document.getElementById('btnShareWA').href = "https://api.whatsapp.com/send?text=" + encodedText;
-                    document.getElementById('btnShareFB').href = "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl;
-                    document.getElementById('btnShareTG').href = "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodedText;
+                   
                 }
                 
                 initDropdown();
