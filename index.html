@@ -197,29 +197,27 @@
                 // Siapkan link WA untuk CP Masjid
                 const linkWAMasjid = formatWALink(info.cp_masjid);
 
-                let sectionHTML = `
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 mb-8">
-                        <div class="bg-slate-800 text-white p-5 md:p-6">
-                            <h3 class="text-lg md:text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
-                            <div class="text-sm md:text-base text-gray-300 mt-2 flex flex-wrap gap-x-6 gap-y-1">
-                                ${info.alamat ? `
-                                    <span>
-                                        <i class="fas fa-location-dot fa-fw text-emerald-400"></i> 
-                                        <a href="${info.link_maps ? info.link_maps : '#'}" 
-                                           target="_blank" 
-                                           class="hover:underline text-emerald-400 font-bold"
-                                           title="Google Maps">
-                                           ${info.alamat}
-                                        </a>
-                                    </span>` : ''}
-                                ${info.cp_masjid && info.cp_masjid !== '-' ? `
-                                    <span>
-                                        <i class="fas fa-phone fa-fw text-emerald-400"></i>  
-                                        <a href="${linkWAMasjid}" target="_blank" class="text-emerald-400 hover:underline font-bold">${info.cp_masjid}</a>
-                                    </span>` : ''}
-                            </div>
+                // Bagian render alamat di dalam perulangan info.jadwal
+                sectionHTML += `
+                    <div class="bg-slate-800 text-white p-5 md:p-6">
+                        <h3 class="text-lg md:text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
+                        <div class="text-sm md:text-base text-gray-300 mt-2 flex flex-wrap gap-x-6 gap-y-1">
+                            ${info.alamat ? `
+                                <span>
+                                    <i class="fas fa-location-dot fa-fw text-emerald-400"></i> 
+                                    <a href="${info.link_maps ? info.link_maps : '#'}" 
+                                       target="_blank" 
+                                       class="hover:underline text-emerald-400 font-bold">
+                                       ${info.alamat}
+                                    </a>
+                                </span>` : ''}
+                            ${info.cp_masjid && info.cp_masjid !== '-' ? `
+                                <span>
+                                    <i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: 
+                                    <a href="${formatWALink(info.cp_masjid)}" target="_blank" class="text-emerald-400 hover:underline font-bold">${info.cp_masjid}</a>
+                                </span>` : ''}
                         </div>
-                        <div class="divide-y divide-gray-100">
+                    </div>
                 `;
 
                 info.jadwal.forEach(j => {
