@@ -11,10 +11,10 @@
 
     <header class="bg-emerald-600 text-white shadow-md">
         <div class="container mx-auto px-4 py-6 text-center">
-            <h1 class="text-2xl md:text-3xl font-bold flex justify-center items-center gap-2">
+            <h1 class="text-3xl md:text-4xl font-bold flex justify-center items-center gap-2">
                 <i class="fas fa-mosque"></i> Jadwal Kajian Islam Ilmiah
             </h1>
-            <p class="text-emerald-100 text-sm mt-1">Kota Cilegon & Sekitarnya</p>
+            <p class="text-emerald-100 text-base mt-1">Kota Cilegon & Sekitarnya</p>
             <span id="versionLabel" class="inline-block bg-emerald-700 text-emerald-200 text-xs px-3 py-1 rounded-full mt-3 font-mono">Memuat versi...</span>
         </div>
     </header>
@@ -24,11 +24,11 @@
         <div class="bg-white p-4 rounded-xl shadow-xs mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="relative">
                 <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
-                <input type="text" id="searchInput" oninput="filterData()" placeholder="Cari pemateri atau kitab materi..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+                <input type="text" id="searchInput" oninput="filterData()" placeholder="Cari pemateri atau kitab materi..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-base">
             </div>
             <div class="relative">
                 <i class="fas fa-filter absolute left-3 top-3.5 text-gray-400"></i>
-                <select id="locationFilter" onchange="filterData()" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white appearance-none">
+                <select id="locationFilter" onchange="filterData()" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-base bg-white appearance-none">
                     <option value="">Semua Lokasi / Masjid</option>
                 </select>
             </div>
@@ -130,8 +130,8 @@
                 let sectionHTML = `
                     <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-gray-100">
                         <div class="bg-slate-800 text-white p-4">
-                            <h3 class="text-base font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
-                            <div class="text-xs text-gray-300 mt-1 flex flex-wrap gap-x-4 gap-y-1">
+                            <h3 class="text-lg font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
+                            <div class="text-sm text-gray-300 mt-1 flex flex-wrap gap-x-4 gap-y-1">
                                 ${info.alamat ? `<span><i class="fas fa-location-dot fa-fw text-emerald-400"></i> ${info.alamat}</span>` : ''}
                                 ${info.cp_masjid && info.cp_masjid !== '-' ? `<span><i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: ${info.cp_masjid}</span>` : ''}
                             </div>
@@ -145,11 +145,11 @@
                         <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-gray-50/50 transition">
                             <div class="space-y-1 w-full">
                                 <div class="flex items-center gap-2">
-                                    <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2 py-0.5 rounded-sm">${j.hari}</span>
-                                    <span class="text-xs text-gray-500 font-medium">${j.waktu}</span>
+                                    <span class="bg-emerald-50 text-emerald-700 text-sm font-semibold px-2 py-0.5 rounded-sm">${j.hari}</span>
+                                    <span class="text-sm text-gray-500 font-medium">${j.waktu}</span>
                                 </div>
-                                <h4 class="text-sm font-bold text-gray-900">${j.pemateri}</h4>
-                                <p class="text-xs text-gray-600">${j.materi}</p>
+                                <h4 class="text-base font-bold text-gray-900">${j.pemateri}</h4>
+                                <p class="text-sm text-gray-600">${j.materi}</p>
                                 
                                 ${j.cp_kajian && j.cp_kajian !== '-' ? `
                                 <div class="text-[11px] text-emerald-600 font-medium pt-1 flex items-center gap-1">
