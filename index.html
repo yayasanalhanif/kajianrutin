@@ -202,7 +202,16 @@
                         <div class="bg-slate-800 text-white p-5 md:p-6">
                             <h3 class="text-lg md:text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
                             <div class="text-sm md:text-base text-gray-300 mt-2 flex flex-wrap gap-x-6 gap-y-1">
-                                ${info.alamat ? `<span><i class="fas fa-location-dot fa-fw text-emerald-400"></i> ${info.alamat}</span>` : ''}
+                                ${info.alamat ? `
+                                    <span>
+                                        <i class="fas fa-location-dot fa-fw text-emerald-400"></i> 
+                                        <a href="${info.link_maps ? info.link_maps : '#'}" 
+                                           target="_blank" 
+                                           class="hover:underline text-emerald-400 font-bold"
+                                           title="Google Maps">
+                                           ${info.alamat}
+                                        </a>
+                                    </span>` : ''}
                                 ${info.cp_masjid && info.cp_masjid !== '-' ? `
                                     <span>
                                         <i class="fas fa-phone fa-fw text-emerald-400"></i>  
