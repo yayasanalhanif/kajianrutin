@@ -15,7 +15,7 @@
                 <i class="fas fa-mosque"></i> Jadwal Kajian Islam Ilmiah
             </h1>
             <p class="text-emerald-100 text-sm mt-1">Kota Cilegon & Sekitarnya</p>
-            <span class="inline-block bg-emerald-700 text-emerald-200 text-xs px-3 py-1 rounded-full mt-3 font-mono">Live Database</span>
+            <span id="versionLabel" class="inline-block bg-emerald-700 text-emerald-200 text-xs px-3 py-1 rounded-full mt-3 font-mono">Memuat versi...</span>
         </div>
     </header>
 
@@ -61,7 +61,13 @@
         async function fetchKajianData() {
             try {
                 const response = await fetch(API_URL);
-                dbKajian = await response.json();
+                const result = await response.json(); // Data sekarang berupa objek {versi, jadwal}
+                
+                // Ambil data jadwal dari objek
+                dbKajian = result.jadwal;
+                
+                // UPDATE TEKS VERSI DARI K1 KE HEADER
+                document.getElementById('versionLabel').textContent = result.versi;
                 
                 initDropdown();
                 document.getElementById('loadingStatus').classList.add('hidden');
@@ -70,7 +76,7 @@
             } catch (error) {
                 document.getElementById('loadingStatus').innerHTML = `
                     <i class="fas fa-exclamation-triangle text-3xl text-red-500 mb-2"></i>
-                    <p class="text-sm text-red-600">Gagal memuat data. Pastikan URL Deployment Apps Script sudah benar.</p>
+                    <p class="text-sm text-red-600">Gagal memuat data.</p>
                 `;
                 console.error("Error fetching data:", error);
             }
