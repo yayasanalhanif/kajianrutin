@@ -48,8 +48,7 @@
     </main>
 
     <footer class="bg-white border-t border-gray-100 mt-12 py-6 text-center text-xs text-gray-400">
-        <p>© 2026 Simpan & Koordinir Jadwal Kajian Cilegon</p>
-        <p class="mt-1">🌹 = Khusus Muslimah</p>
+        <p>© 2026 Jadwal Kajian Cilegon</p>
     </footer>
 
     <script>
@@ -90,7 +89,7 @@
             });
         }
 
-        function filterData() {
+       function filterData() {
             const searchValue = document.getElementById('searchInput').value.toLowerCase();
             const filterValue = document.getElementById('locationFilter').value;
             const container = document.getElementById('kajianContainer');
@@ -111,22 +110,24 @@
                 noResult.classList.add('hidden');
             }
 
+            // 1. Kelompokkan dengan menyertakan cp_masjid
             const groups = filtered.reduce((acc, item) => {
                 if (!acc[item.lokasi]) {
-                    acc[item.lokasi] = { alamat: item.alamat, cp: item.cp, jadwal: [] };
+                    acc[item.lokasi] = { alamat: item.alamat, cp_masjid: item.cp_masjid, jadwal: [] };
                 }
                 acc[item.lokasi].jadwal.push(item);
                 return acc;
             }, {});
 
+            // 2. Render Tampilan Baru (CP Masjid berdampingan dengan alamat, CP Kajian di bawah jadwal)
             for (const [namaMasjid, info] of Object.entries(groups)) {
                 let sectionHTML = `
                     <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-gray-100">
                         <div class="bg-slate-800 text-white p-4">
                             <h3 class="text-base font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
-                            <div class="text-xs text-gray-300 mt-1 space-y-0.5">
-                                ${info.alamat ? `<p><i class="fas fa-location-dot fa-fw"></i> ${info.alamat}</p>` : ''}
-                                ${info.cp ? `<p><i class="fas fa-phone fa-fw"></i> CP: ${info.cp}</p>` : ''}
+                            <div class="text-xs text-gray-300 mt-1 flex flex-wrap gap-x-4 gap-y-1">
+                                ${info.alamat ? `<span><i class="fas fa-location-dot fa-fw text-emerald-400"></i> ${info.alamat}</span>` : ''}
+                                ${info.cp_masjid && info.cp_masjid !== '-' ? `<span><i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: ${info.cp_masjid}</span>` : ''}
                             </div>
                         </div>
                         <div class="divide-y divide-gray-100">
@@ -136,15 +137,20 @@
                     const isMuslimah = j.ket === "Khusus Muslimah";
                     sectionHTML += `
                         <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-gray-50/50 transition">
-                            <div class="space-y-1">
+                            <div class="space-y-1 w-full">
                                 <div class="flex items-center gap-2">
                                     <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2 py-0.5 rounded-sm">${j.hari}</span>
                                     <span class="text-xs text-gray-500 font-medium">${j.waktu}</span>
                                 </div>
                                 <h4 class="text-sm font-bold text-gray-900">${j.pemateri}</h4>
                                 <p class="text-xs text-gray-600">${j.materi}</p>
+                                
+                                ${j.cp_kajian && j.cp_kajian !== '-' ? `
+                                <div class="text-[11px] text-emerald-600 font-medium pt-1 flex items-center gap-1">
+                                    <i class="fas fa-phone-alt text-[10px]"></i> Hubungi Panitia: ${j.cp_kajian}
+                                </div>` : ''}
                             </div>
-                            <div>
+                            <div class="shrink-0">
                                 ${isMuslimah ? `<span class="inline-flex items-center text-xs text-rose-600 bg-rose-50 px-2 py-1 rounded-full font-medium">Khusus Muslimah 🌹</span>` : ''}
                                 ${j.ket && !isMuslimah ? `<span class="inline-flex items-center text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full font-medium">${j.ket}</span>` : ''}
                             </div>
