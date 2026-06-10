@@ -218,32 +218,36 @@
                 return acc;
             }, {});
 
-            // Render Tampilan Baru (Nomor HP bisa diklik langsung ke WA)
+
+            // Render Tampilan Baru (Nomor HP bisa diklik & Link Maps)
             for (const [namaMasjid, info] of Object.entries(groups)) {
                 // Siapkan link WA untuk CP Masjid
                 const linkWAMasjid = formatWALink(info.cp_masjid);
 
-                // Bagian render alamat di dalam perulangan info.jadwal
-                sectionHTML += `
-                    <div class="bg-slate-800 text-white p-5 md:p-6">
-                        <h3 class="text-lg md:text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
-                        <div class="text-sm md:text-base text-gray-300 mt-2 flex flex-wrap gap-x-6 gap-y-1">
-                            ${info.alamat ? `
-                                <span>
-                                    <i class="fas fa-location-dot fa-fw text-emerald-400"></i> 
-                                    <a href="${info.link_maps ? info.link_maps : '#'}" 
-                                       target="_blank" 
-                                       class="hover:underline text-emerald-400 font-bold">
-                                       ${info.alamat}
-                                    </a>
-                                </span>` : ''}
-                            ${info.cp_masjid && info.cp_masjid !== '-' ? `
-                                <span>
-                                    <i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: 
-                                    <a href="${formatWALink(info.cp_masjid)}" target="_blank" class="text-emerald-400 hover:underline font-bold">${info.cp_masjid}</a>
-                                </span>` : ''}
+                // DEKLARASI AWAL sectionHTML (menggunakan let agar tidak error)
+                let sectionHTML = `
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 mb-8">
+                        <div class="bg-slate-800 text-white p-5 md:p-6">
+                            <h3 class="text-lg md:text-xl font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
+                            <div class="text-sm md:text-base text-gray-300 mt-2 flex flex-wrap gap-x-6 gap-y-1">
+                                ${info.alamat ? `
+                                    <span>
+                                        <i class="fas fa-location-dot fa-fw text-emerald-400"></i> 
+                                        <a href="${info.link_maps ? info.link_maps : '#'}" 
+                                           target="_blank" 
+                                           class="hover:underline text-emerald-400 font-bold"
+                                           title="Klik untuk buka di Google Maps">
+                                           ${info.alamat}
+                                        </a>
+                                    </span>` : ''}
+                                ${info.cp_masjid && info.cp_masjid !== '-' ? `
+                                    <span>
+                                        <i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: 
+                                        <a href="${linkWAMasjid}" target="_blank" class="text-emerald-400 hover:underline font-bold">${info.cp_masjid}</a>
+                                    </span>` : ''}
+                            </div>
                         </div>
-                    </div>
+                        <div class="divide-y divide-gray-100">
                 `;
 
                 info.jadwal.forEach(j => {
@@ -251,7 +255,7 @@
                     const isMuslimah = ketLower.includes("muslimah");
                     const isAnak = ketLower.includes("anak");
                     
-                    // Siapkan link WA untuk CP Kajian/Panitia
+                    // Siapkan link WA untuk CP Panitia Kajian
                     const linkWAKajian = formatWALink(j.cp_kajian);
 
                     sectionHTML += `
@@ -266,19 +270,20 @@
                                 
                                 ${j.cp_kajian && j.cp_kajian !== '-' ? `
                                 <div class="text-xs md:text-sm text-emerald-600 font-bold pt-1 flex items-center gap-1.5">
-                                    <i class="fas fa-phone-alt"></i>  
+                                    <i class="fas fa-phone-alt"></i> Hubungi Panitia: 
                                     <a href="${linkWAKajian}" target="_blank" class="hover:underline text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-sm border border-emerald-200">${j.cp_kajian}</a>
                                 </div>` : ''}
                             </div>
                             <div class="shrink-0 flex items-center">
-                                ${isMuslimah ? `<span class="inline-flex items-center text-sm md:text-base text-rose-600 bg-rose-50 px-3 py-1 rounded-full font-bold shadow-xs">Muslimah</span>` : ''}
-                                ${isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-bold shadow-xs">Anak 👶</span>` : ''}
+                                ${isMuslimah ? `<span class="inline-flex items-center text-sm md:text-base text-rose-600 bg-rose-50 px-3 py-1 rounded-full font-bold shadow-xs">Khusus Muslimah 🌹</span>` : ''}
+                                ${isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-bold shadow-xs">Kajian Anak 👶</span>` : ''}
                                 ${j.ket && !isMuslimah && !isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-blue-600 bg-blue-50 px-3 py-1 rounded-full font-bold shadow-xs">${j.ket}</span>` : ''}
                             </div>
                         </div>
                     `;
                 });
 
+                // Menutup tag div dari sectionHTML dan menempelkannya ke container utama
                 sectionHTML += `</div></div>`;
                 container.innerHTML += sectionHTML;
             }
