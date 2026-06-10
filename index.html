@@ -75,13 +75,13 @@
     </main>
 
     <footer class="bg-white border-t border-gray-100 mt-12 py-8 text-center text-sm text-gray-500 font-medium">
-        <p>© 2026 Simpan & Koordinir Jadwal Kajian Cilegon</p>
-        <p class="mt-1.5 text-gray-400">🌹 = Khusus Muslimah | 👶 = Kajian Anak</p>
+        <p>© 2026 Jadwal Kajian Cilegon</p>
+
     </footer>
 
     <script>
         // ⚠️ PASTIKAN URL INI ADALAH URL WEB APP ASLI MILIK OM AMIZA ⚠️
-        const API_URL = "https://script.google.com/macros/s/AKfycbz_9eY9M0rIuP48LscC3iX8_X3R3m5Gg-yD9-rre71Z3eW5YyD4O9-K26Nf2f5h4Hk/exec"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJBfdLnYVr1e7wu1XpSelEdVqVhe_SiGBB-_zcaTPhb3QEwA/exec"; 
         
         let dbKajian = [];
 
@@ -199,7 +199,7 @@
                                 
                                 ${j.cp_kajian && j.cp_kajian !== '-' ? `
                                 <div class="text-xs md:text-sm text-emerald-600 font-bold pt-1 flex items-center gap-1.5">
-                                    <i class="fas fa-phone-alt"></i> Info: ${j.cp_kajian}
+                                    <i class="fas fa-phone-alt"></i> Hubungi Panitia: ${j.cp_kajian}
                                 </div>` : ''}
                             </div>
                             <div class="shrink-0 flex items-center">
