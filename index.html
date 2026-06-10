@@ -4,59 +4,54 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jadwal Kajian Islam Ilmiah Kota Cilegon</title>
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="apple-touch-icon" href="favicon-32x32.png">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#059669">
-    
-    <script>
-      // Mendaftarkan Service Worker agar tombol instal muncul di HP
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('sw.js')
-            .then(reg => console.log('Service Worker terdaftar sukses!'))
-            .catch(err => console.log('Service Worker gagal:', err));
-        });
-      }
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#059669">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="apple-touch-icon" href="favicon-32x32.png">
+
     <style>
-  /* Menambah gaya agar loading screen benar-benar hijau */
-  #loadingStatus {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #059669; /* Warna Hijau Yayasan */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-  }
-  
-  /* Menampilkan logo di splash screen */
-  .splash-logo {
-    width: 150px;
-    margin-bottom: 20px;
-  }
-</style>
+        /* Gaya Premium Splash Screen Hijau */
+        #loadingStatus {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #059669;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .splash-logo {
+            width: 160px;
+            height: auto;
+            margin-bottom: 24px;
+        }
+    </style>
 </head>
 <body class="bg-gray-50 text-gray-800 antialiased font-sans">
-<div id="loadingStatus">
-    <img src="Logo Alhanif transparan putih.png" class="splash-logo" alt="Logo Yayasan">
-    <i class="fas fa-spinner fa-spin text-white text-3xl"></i>
-    <p class="text-white mt-4 font-bold">Memuat Jadwal...</p>
-</div>
+
+    <div id="loadingStatus">
+        <img src="Logo Alhanif transparan putih.png" class="splash-logo" alt="Logo Alhanif">
+        <div id="loadingSpinner">
+            <i class="fas fa-spinner fa-spin text-white text-4xl"></i>
+        </div>
+        <p id="loadingText" class="text-white mt-4 font-bold text-lg tracking-wide text-center px-6">Memuat Jadwal Kajian...</p>
+    </div>
+
     <header class="bg-emerald-600 text-white shadow-md">
         <div class="container mx-auto px-4 py-8 text-center">
             <h1 class="text-3xl md:text-5xl font-extrabold flex justify-center items-center gap-3">
-                <i class="fas fa-mosque"></i> Jadwal Kajian Rutin
+                <i class="fas fa-mosque"></i> Jadwal Kajian Islam Ilmiah
             </h1>
             <p class="text-emerald-100 text-base md:text-lg mt-2 font-medium">Kota Cilegon & Sekitarnya</p>
-            <span id="versionLabel" class="inline-block bg-emerald-700 text-emerald-200 text-sm md:text-base px-4 py-1.5 rounded-full mt-4 font-mono font-bold">Memuat versi...</span>
+            <span id="versionLabel" class="inline-block bg-emerald-700 text-emerald-200 text-sm md:text-base px-4 py-1.5 rounded-full mt-4 font-mono font-bold">Live Database</span>
         </div>
     </header>
 
@@ -71,49 +66,32 @@
                 <div class="relative">
                     <i class="fas fa-filter absolute left-3.5 top-4 text-gray-400 text-base"></i>
                     <select id="locationFilter" onchange="filterData()" class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-base md:text-lg bg-white appearance-none">
-                        <option value="">Semua Lokasi</option>
+                        <option value="">Semua Lokasi / Masjid</option>
                     </select>
                 </div>
             </div>
 
             <div class="flex flex-wrap items-center gap-6 pt-3 border-t border-gray-100">
-               <!--  <span class="text-base md:text-lg font-bold text-gray-700"><i class="fas fa-tags text-emerald-600 mr-1"></i> Kategori:</span> -->
-                
+                <span class="text-base md:text-lg font-bold text-gray-700"><i class="fas fa-tags text-emerald-600 mr-1"></i> Kategori:</span>
                 <label class="inline-flex items-center cursor-pointer text-base md:text-lg font-semibold text-gray-700">
-                    <input type="radio" name="categoryFilter" value="Semua" checked onchange="filterData()" class="w-5 h-5 accent-emerald-600 mr-2">
-                    All
+                    <input type="radio" name="categoryFilter" value="Semua" checked onchange="filterData()" class="w-5 h-5 accent-emerald-600 mr-2"> Semua
                 </label>
-                
                 <label class="inline-flex items-center cursor-pointer text-base md:text-lg font-semibold text-gray-700">
-                    <input type="radio" name="categoryFilter" value="Muslimah" onchange="filterData()" class="w-5 h-5 accent-emerald-600 mr-2">
-                    Muslimah
+                    <input type="radio" name="categoryFilter" value="Muslimah" onchange="filterData()" class="w-5 h-5 accent-emerald-600 mr-2"> Muslimah 🌹
                 </label>
-                
                 <label class="inline-flex items-center cursor-pointer text-base md:text-lg font-semibold text-gray-700">
-                    <input type="radio" name="categoryFilter" value="Anak" onchange="filterData()" class="w-5 h-5 accent-emerald-600 mr-2">
-                    Anak
+                    <input type="radio" name="categoryFilter" value="Anak" onchange="filterData()" class="w-5 h-5 accent-emerald-600 mr-2"> Anak-Anak 👶
                 </label>
             </div>
 
             <div class="pt-4 border-t border-gray-100 flex flex-wrap items-center gap-4">
                 <span class="text-base md:text-lg font-bold text-gray-700">Share:</span>
                 <div class="flex items-center gap-3">
-                    <a id="btnShareWA" href="#" target="_blank" class="w-11 h-11 rounded-full bg-[#25D366] hover:bg-[#128C7E] text-white flex items-center justify-center text-xl shadow-xs transition" title="Bagikan ke WhatsApp">
-                        <i class="fab fa-whatsapp"></i>
-                    </a>
-                    <!-- <a id="btnShareFB" href="#" target="_blank" class="w-11 h-11 rounded-full bg-[#1877F2] hover:bg-[#1154aa] text-white flex items-center justify-center text-lg shadow-xs transition" title="Bagikan ke Facebook">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <a id="btnShareTG" href="#" target="_blank" class="w-11 h-11 rounded-full bg-[#0088cc] hover:bg-[#006699] text-white flex items-center justify-center text-xl shadow-xs transition" title="Bagikan ke Telegram">
-                        <i class="fab fa-telegram-plane"></i>
-                    </a>-->
+                    <a id="btnShareWA" href="#" target="_blank" class="w-11 h-11 rounded-full bg-[#25D366] hover:bg-[#128C7E] text-white flex items-center justify-center text-xl shadow-xs transition" title="Bagikan ke WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a id="btnShareFB" href="#" target="_blank" class="w-11 h-11 rounded-full bg-[#1877F2] hover:bg-[#1154aa] text-white flex items-center justify-center text-lg shadow-xs transition" title="Bagikan ke Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a id="btnShareTG" href="#" target="_blank" class="w-11 h-11 rounded-full bg-[#0088cc] hover:bg-[#006699] text-white flex items-center justify-center text-xl shadow-xs transition" title="Bagikan ke Telegram"><i class="fab fa-telegram-plane"></i></a>
                 </div>
             </div>
-        </div>
-
-        <div id="loadingStatus" class="text-center py-12 text-gray-500">
-            <i class="fas fa-spinner fa-spin text-4xl text-emerald-600 mb-3"></i>
-            <p class="text-base font-medium">Memuat data langsung dari Google Sheet...</p>
         </div>
 
         <div id="kajianContainer" class="space-y-8 hidden"></div>
@@ -125,38 +103,66 @@
     </main>
 
     <footer class="bg-white border-t border-gray-100 mt-12 py-8 text-center text-sm text-gray-500 font-medium">
-        <p>© 2026 Jadwal Kajian Cilegon</p>
+        <p>© 2026 Simpan & Koordinir Jadwal Kajian Cilegon</p>
+        <p class="mt-1.5 text-gray-400">🌹 = Khusus Muslimah | 👶 = Kajian Anak</p>
     </footer>
 
     <script>
-        // ⚠️ PASTIKAN URL INI ADALAH URL WEB APP ASLI MILIK OM AMIZA ⚠️
+        // ⚠️ PASTIKAN URL INI ADALAH URL APPS SCRIPT WEB APP AKHIR OM AMIZA ⚠️
         const API_URL = "https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJBfdLnYVr1e7wu1XpSelEdVqVhe_SiGBB-_zcaTPhb3QEwA/exec"; 
         
         let dbKajian = [];
+
+        // Registrasi Service Worker PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Gagal:', err));
+            });
+        }
+
+        // Fungsi pembantu mengubah nomor HP menjadi link wa.me
+        function formatWALink(noHP) {
+            if (!noHP || noHP === '-' || noHP.trim() === '') return '';
+            let cleaned = noHP.replace(/\D/g, '');
+            if (cleaned.startsWith('0')) {
+                cleaned = '62' + cleaned.substring(1);
+            }
+            return "https://wa.me/" + cleaned;
+        }
 
         async function fetchKajianData() {
             try {
                 const response = await fetch(API_URL);
                 const result = await response.json();
                 
-                dbKajian = result.jadwal;
-                document.getElementById('versionLabel').textContent = result.versi;
+                dbKajian = result.jadwal || [];
+                document.getElementById('versionLabel').textContent = result.versi || "Live Database";
                 
-                // MENGHUBUNGKAN TEKS BROADCAST L2 KE TOMBOL SHARE WA WEBSITE
                 if (result.teks_share) {
-                    document.getElementById('btnShareWA').href = "https://api.whatsapp.com/send?text=" + encodeURIComponent(result.teks_share);
-                } else {
-                    document.getElementById('btnShareWA').classList.add('hidden'); // Sembunyikan jika kosong
+                    const encodedText = encodeURIComponent(result.teks_share);
+                    const encodedUrl = encodeURIComponent(window.location.href);
+                    document.getElementById('btnShareWA').href = "https://api.whatsapp.com/send?text=" + encodedText;
+                    document.getElementById('btnShareFB').href = "https://www.facebook.com/sharer/sharer.php?u=" + encodedUrl;
+                    document.getElementById('btnShareTG').href = "https://t.me/share/url?url=" + encodedUrl + "&text=" + encodedText;
                 }
                 
                 initDropdown();
-                document.getElementById('loadingStatus').classList.add('hidden');
+                
+                // Hilangkan Splash Screen dengan Efek Mulus
+                const splash = document.getElementById('loadingStatus');
+                splash.style.opacity = 0;
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 500);
+                
                 document.getElementById('kajianContainer').classList.remove('hidden');
                 filterData();
             } catch (error) {
-                document.getElementById('loadingStatus').innerHTML = `
-                    <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-3"></i>
-                    <p class="text-base text-red-600 font-bold">Gagal memuat data dari Google Sheet.</p>
+                // Tampilan Error Kontras Tinggi Tanpa Menghilangkan Logo Putih Om
+                document.getElementById('loadingSpinner').innerHTML = `<i class="fas fa-exclamation-triangle text-amber-300 text-4xl"></i>`;
+                document.getElementById('loadingText').innerHTML = `
+                    <span class="text-white text-xl block mb-2">Gagal Memuat Data</span>
+                    <span class="text-xs font-mono bg-emerald-800 text-amber-200 p-2 rounded block max-w-md mx-auto text-left whitespace-pre-wrap">${error.stack || error.toString()}</span>
                 `;
                 console.error("Error fetching data:", error);
             }
@@ -164,14 +170,12 @@
 
         function initDropdown() {
             const selectFilter = document.getElementById('locationFilter');
-            const lokasiUnik = [...new Set(dbKajian.map(item => item.lokasi))];
+            const lokasiUnik = [...new Set(dbKajian.map(item => item.lokasi).filter(Boolean))];
             lokasiUnik.forEach(lok => {
-                if(lok) {
-                    const opt = document.createElement('option');
-                    opt.value = lok;
-                    opt.textContent = lok;
-                    selectFilter.appendChild(opt);
-                }
+                const opt = document.createElement('option');
+                opt.value = lok;
+                opt.textContent = lok;
+                selectFilter.appendChild(opt);
             });
         }
 
@@ -186,11 +190,14 @@
             container.innerHTML = '';
 
             const filtered = dbKajian.filter(item => {
-                const matchSearch = item.pemateri.toLowerCase().includes(searchValue) || item.materi.toLowerCase().includes(searchValue);
+                const pemateriMatch = item.pemateri ? item.pemateri.toLowerCase().includes(searchValue) : false;
+                const materiMatch = item.materi ? item.materi.toLowerCase().includes(searchValue) : false;
+                const matchSearch = pemateriMatch || materiMatch;
+                
                 const matchLocation = filterValue === "" || item.lokasi === filterValue;
                 
                 let matchCategory = false;
-                const ketText = item.ket.toLowerCase();
+                const ketText = item.ket ? item.ket.toLowerCase() : "";
                 
                 if (categoryValue === "Semua") {
                     matchCategory = true;
@@ -210,21 +217,23 @@
                 noResult.classList.add('hidden');
             }
 
+            // Kelompokkan data termasuk menampung variabel link_maps
             const groups = filtered.reduce((acc, item) => {
                 if (!acc[item.lokasi]) {
-                    acc[item.lokasi] = { alamat: item.alamat, cp_masjid: item.cp_masjid, jadwal: [] };
+                    acc[item.lokasi] = { 
+                        alamat: item.alamat, 
+                        cp_masjid: item.cp_masjid, 
+                        link_maps: item.link_maps, // PENTING: data peta dimasukkan ke grup
+                        jadwal: [] 
+                    };
                 }
                 acc[item.lokasi].jadwal.push(item);
                 return acc;
             }, {});
 
-
-            // Render Tampilan Baru (Nomor HP bisa diklik & Link Maps)
             for (const [namaMasjid, info] of Object.entries(groups)) {
-                // Siapkan link WA untuk CP Masjid
                 const linkWAMasjid = formatWALink(info.cp_masjid);
 
-                // DEKLARASI AWAL sectionHTML (menggunakan let agar tidak error)
                 let sectionHTML = `
                     <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 mb-8">
                         <div class="bg-slate-800 text-white p-5 md:p-6">
@@ -240,7 +249,7 @@
                                            ${info.alamat}
                                         </a>
                                     </span>` : ''}
-                                ${info.cp_masjid && info.cp_masjid !== '-' ? `
+                                ${info.cp_masjid && info.cp_masjid !== '-' && info.cp_masjid.trim() !== '' ? `
                                     <span>
                                         <i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: 
                                         <a href="${linkWAMasjid}" target="_blank" class="text-emerald-400 hover:underline font-bold">${info.cp_masjid}</a>
@@ -251,11 +260,9 @@
                 `;
 
                 info.jadwal.forEach(j => {
-                    const ketLower = j.ket ? j.ket.toLowerCase() : "";
+                    const ketLower = j.get ? j.ket.toLowerCase() : (j.ket ? j.ket.toLowerCase() : "");
                     const isMuslimah = ketLower.includes("muslimah");
                     const isAnak = ketLower.includes("anak");
-                    
-                    // Siapkan link WA untuk CP Panitia Kajian
                     const linkWAKajian = formatWALink(j.cp_kajian);
 
                     sectionHTML += `
@@ -268,7 +275,7 @@
                                 <h4 class="text-base md:text-lg font-bold text-gray-900">${j.pemateri}</h4>
                                 <p class="text-sm md:text-base text-gray-600 font-medium">${j.materi}</p>
                                 
-                                ${j.cp_kajian && j.cp_kajian !== '-' ? `
+                                ${j.cp_kajian && j.cp_kajian !== '-' && j.cp_kajian.trim() !== '' ? `
                                 <div class="text-xs md:text-sm text-emerald-600 font-bold pt-1 flex items-center gap-1.5">
                                     <i class="fas fa-phone-alt"></i> Hubungi Panitia: 
                                     <a href="${linkWAKajian}" target="_blank" class="hover:underline text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-sm border border-emerald-200">${j.cp_kajian}</a>
@@ -283,27 +290,12 @@
                     `;
                 });
 
-                // Menutup tag div dari sectionHTML dan menempelkannya ke container utama
                 sectionHTML += `</div></div>`;
                 container.innerHTML += sectionHTML;
             }
         }
 
         window.onload = fetchKajianData;
-        
-        // Fungsi pembantu untuk mengubah nomor HP menjadi link wa.me
-        function formatWALink(noHP) {
-            if (!noHP || noHP === '-') return '';
-            // Bersihkan semua karakter selain angka (spasi, strip, dll)
-            let cleaned = noHP.replace(/\D/g, '');
-            
-            // Jika diawali angka 0, ubah menjadi 62
-            if (cleaned.startsWith('0')) {
-                cleaned = '62' + cleaned.substring(1);
-            }
-            
-            return `https://wa.me/${cleaned}`;
-        }
     </script>
 </body>
 </html>
