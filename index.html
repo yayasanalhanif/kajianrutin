@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Kajian Islam Ilmiah Kota Cilegon</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased font-sans">
+
+    <header class="bg-emerald-600 text-white shadow-md">
+        <div class="container mx-auto px-4 py-6 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold flex justify-center items-center gap-2">
+                <i class="fas fa-mosque"></i> Jadwal Kajian Islam Ilmiah
+            </h1>
+            <p class="text-emerald-100 text-sm mt-1">Kota Cilegon & Sekitarnya</p>
+            <span class="inline-block bg-emerald-700 text-emerald-200 text-xs px-3 py-1 rounded-full mt-3 font-mono">Rev.4 (Jun '26)</span>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-6 max-w-5xl">
+        
+        <div class="bg-white p-4 rounded-xl shadow-xs mb-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-3.5 text-gray-400"></i>
+                <input type="text" id="searchInput" oninput="filterData()" placeholder="Cari pemateri atau kitab materi..." class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm">
+            </div>
+            <div class="relative">
+                <i class="fas fa-filter absolute left-3 top-3.5 text-gray-400"></i>
+                <select id="locationFilter" onchange="filterData()" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-sm bg-white appearance-none">
+                    <option value="">Semua Lokasi / Masjid</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="kajianContainer" class="space-y-8">
+            </div>
+
+        <div id="noResult" class="hidden text-center py-12 text-gray-400">
+            <i class="fas fa-folder-open text-4xl mb-2"></i>
+            <p class="text-sm">Jadwal kajian tidak ditemukan.</p>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-100 mt-12 py-6 text-center text-xs text-gray-400">
+        <p>© 2026 Simpan & Koordinir Jadwal Kajian Cilegon</p>
+        <p class="mt-1">🌹 = Khusus Muslimah</p>
+    </footer>
+
+    <script>
+        // Database Array Segar dari Spreadsheet Om
+        const dbKajian = [
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Senin", waktu: "Ba'da Subuh", pemateri: "Ustadz Fityan Amali, Lc., M.Pd", materi: "Al-Mausu'ah Al-Fiqhiyah Al-Muyassaroh", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Senin", waktu: "Ba'da Maghrib", pemateri: "Ustadz M. Nazaruddin, Lc", materi: "Durusul Lughoh Al-Arobiyah / Bahasa Arab", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Selasa", waktu: "Ba'da Subuh", pemateri: "Ustadz Fathullah Burhan", materi: "Syarah Shahih Muslim", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Selasa", waktu: "Ba'da Maghrib", pemateri: "Ustadz Fadhil Ziyanul Hubbi, S.M", materi: "Shahih Al-Wabilus Shayyib Minal Kalimat Thoyyib", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Rabu", waktu: "Ba'da Subuh", pemateri: "Ustadz Hibban Muttabi Al Haq, S.H", materi: "Kaifa 'aamaluhum Rasulullah Muhammad ﷺ", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Rabu", waktu: "Ba'da Maghrib", pemateri: "Ustadz Faiz Abdullah, S. Ag., M. Ag", materi: "Tahsin", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Kamis", waktu: "Ba'da Subuh", pemateri: "Ustadz Ubaidillah Masyhadi", materi: "Mashdar Aqidah Ahlus Sunnah wal Jama'ah", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Kamis", waktu: "Ba'da Maghrib", pemateri: "Ustadz Ubaidillah Masyhadi", materi: "Syarah Riyadhus Shaalihin", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Jum'at", waktu: "Ba'da Subuh", pemateri: "Ustadz Fathullah Burhan", materi: "Syarah Shahih Muslim", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Jum'at", waktu: "Ba'da Maghrib", pemateri: "Ustadz M. Nazaruddin, Lc", materi: "Al-Qoulul Mufid 'ala Kitabut Tauhid", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Sabtu", waktu: "Ba'da Subuh", pemateri: "Ustadz Faiz Abdullah, S. Ag., M. Ag", materi: "Ad Daa Wa Ad-Dawaa", ket: "" },
+            { lokasi: "Masjid Imam An-Nawawi", alamat: "Perumnas Bumi Cibeber Kencana - Cilegon", cp: "-", hari: "Sabtu", waktu: "Ba'da Maghrib", pemateri: "Ustadz Fathullah Burhan", materi: "Mukhtasor Fiqih Islam", ket: "" },
+            { lokasi: "Masjid As Salaam", alamat: "Komplek KS - Cilegon", cp: "-", hari: "Sabtu", waktu: "Ba’da Subuh - Syuruq", pemateri: "Ustadz Ahmad Baihaqi", materi: "Kitab Al Jadid, Syarah Kitab Tauhid", ket: "Kajian Umum" },
+            { lokasi: "Masjid As Salaam", alamat: "Komplek KS - Cilegon", cp: "-", hari: "Rabu", waktu: "09.00 - 10.30 WIB", pemateri: "Ustadzah Dina Ummu Zuhair", materi: "Kitab Asmaul Husna", ket: "Khusus Muslimah" },
+            { lokasi: "Masjid As Salaam", alamat: "Komplek KS - Cilegon", cp: "-", hari: "Kamis", waktu: "09.00 - 10.30 WIB", pemateri: "Ustadzah Hasanah Ummu Maryam", materi: "Tematik - MT. Chairunnisa", ket: "Khusus Muslimah" },
+            { lokasi: "Masjid An-Nahl", alamat: "Bukit Palem - Cilegon", cp: "-", hari: "Selasa", waktu: "Ba'da Maghrib", pemateri: "Ust. Ubaidillah", materi: "Tafsir Muyassar", ket: "Umum" },
+            { lokasi: "Masjid An-Nahl", alamat: "Bukit Palem - Cilegon", cp: "-", hari: "Rabu", waktu: "Ba'da Maghrib", pemateri: "Ust. Hasan", materi: "Tahsin", ket: "Umum" },
+            { lokasi: "Masjid An-Nahl", alamat: "Bukit Palem - Cilegon", cp: "-", hari: "Jum'at", waktu: "Ba'da Subuh", pemateri: "Ust. Baihaqi", materi: "Kajian Aqidah Manzhumah Haiyah, Imam Ibn Abu Dawud", ket: "Umum" },
+            { lokasi: "Masjid Abu Bakar Ash Shiddiq", alamat: "Bumi Rakata Asri - Cilegon", cp: "-", hari: "Selasa", waktu: "Ba'da Maghrib", pemateri: "Ustadz Imam Syafei", materi: "Kitab Riyadussholihin", ket: "" },
+            { lokasi: "Masjid Al Ikhlas", alamat: "Gedong Cilegon Damai - Cilegon", cp: "-", hari: "Selasa", waktu: "Ba'da Maghrib", pemateri: "Ustadz Fityan Amali, Lc, M.Pd", materi: "Kajian Tafsir", ket: "" }
+        ];
+
+        // Inisialisasi Dropdown Lokasi Unik saat Load
+        const selectFilter = document.getElementById('locationFilter');
+        const lokasiUnik = [...new Set(dbKajian.map(item => item.lokasi))];
+        lokasiUnik.forEach(lok => {
+            const opt = document.createElement('option');
+            opt.value = lok;
+            opt.textContent = lok;
+            selectFilter.appendChild(opt);
+        });
+
+        function filterData() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase();
+            const filterValue = document.getElementById('locationFilter').value;
+            const container = document.getElementById('kajianContainer');
+            const noResult = document.getElementById('noResult');
+            
+            container.innerHTML = '';
+
+            // Proses Penyaringan Data
+            const filtered = dbKajian.filter(item => {
+                const matchSearch = item.pemateri.toLowerCase().includes(searchValue) || item.materi.toLowerCase().includes(searchValue);
+                const matchLocation = filterValue === "" || item.lokasi === filterValue;
+                return matchSearch && matchLocation;
+            });
+
+            if (filtered.length === 0) {
+                noResult.classList.remove('hidden');
+                return;
+            } else {
+                noResult.classList.add('hidden');
+            }
+
+            // Pengelompokan Berdasarkan Lokasi Masjid
+            const groups = filtered.reduce((acc, item) => {
+                if (!acc[item.lokasi]) {
+                    acc[item.lokasi] = { alamat: item.alamat, cp: item.cp, jadwal: [] };
+                }
+                acc[item.lokasi].jadwal.push(item);
+                return acc;
+            }, {});
+
+            // Render ke HTML DOM
+            for (const [namaMasjid, info] of Object.entries(groups)) {
+                let sectionHTML = `
+                    <div class="bg-white rounded-xl shadow-xs overflow-hidden border border-gray-100">
+                        <div class="bg-slate-800 text-white p-4">
+                            <h3 class="text-base font-bold flex items-center gap-2"><i class="fas fa-map-marker-alt text-emerald-400"></i> ${namaMasjid.toUpperCase()}</h3>
+                            <div class="text-xs text-gray-300 mt-1 space-y-0.5">
+                                <p><i class="fas fa-location-dot fa-fw"></i> ${info.alamat || '-'}</p>
+                                ${info.cp && info.cp !== '-' ? `<p><i class="fas fa-phone fa-fw"></i> CP: ${info.cp}</p>` : ''}
+                            </div>
+                        </div>
+                        <div class="divide-y divide-gray-100">
+                `;
+
+                info.jadwal.forEach(j => {
+                    const isMuslimah = j.ket === "Khusus Muslimah";
+                    sectionHTML += `
+                        <div class="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2 hover:bg-gray-50/50 transition">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-emerald-50 text-emerald-700 text-xs font-semibold px-2 py-0.5 rounded-sm">${j.hari}</span>
+                                    <span class="text-xs text-gray-500 font-medium">${j.waktu}</span>
+                                </div>
+                                <h4 class="text-sm font-bold text-gray-900">${j.pemateri}</h4>
+                                <p class="text-xs text-gray-600">${j.materi}</p>
+                            </div>
+                            <div>
+                                ${isMuslimah ? `<span class="inline-flex items-center text-xs text-rose-600 bg-rose-50 px-2 py-1 rounded-full font-medium"><i class="fas fa-rose mr-1"></i> Khusus Muslimah 🌹</span>` : ''}
+                                ${j.ket && !isMuslimah ? `<span class="inline-flex items-center text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-full font-medium">${j.ket}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                sectionHTML += `</div></div>`;
+                container.innerHTML += sectionHTML;
+            }
+        }
+
+        // Jalankan Pertama Kali saat Halaman Dibuka
+        filterData();
+    </script>
+</body>
+</html>
