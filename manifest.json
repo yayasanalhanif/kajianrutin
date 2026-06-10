@@ -1,5 +1,5 @@
 {
-  "name": "Kajian Cilegon",
+  "name": "Kajian Sunnah",
   "short_name": "Kajian Cilegon",
   "start_url": ".",
   "display": "standalone",
@@ -13,7 +13,7 @@
       "type": "image/png"
     },
     {
-      "src": "Logo Alhanif transparan putih.png",
+      "src": "logo-pwa-hijau.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
