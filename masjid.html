@@ -21,6 +21,14 @@ class="text-sm opacity-90">
 <h1
 id="namaMasjid"
 class="text-xl font-bold mt-2">
+    <div
+id="ringkasanMasjid"
+class="
+text-sm
+text-emerald-100
+mt-1
+">
+</div>
 Memuat...
 </h1>
 </div>
@@ -224,6 +232,13 @@ document
 "totalAnak"
 ).textContent =
 data.statistik.anak;
+    document
+.getElementById(
+"ringkasanMasjid"
+).textContent =
+
+`📚 ${data.statistik.kajian} Kajian • 📖 ${data.statistik.kitab} Kitab`;
+    
 renderJadwal(
 data.jadwal
 );
