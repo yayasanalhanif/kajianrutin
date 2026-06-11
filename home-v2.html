@@ -171,7 +171,27 @@ class="space-y-2">
 </h2>
 
 </div>
+<div class="mb-3">
 
+<input
+id="searchInput"
+type="text"
+placeholder="🔍 Cari masjid, pemateri, kitab..."
+class="
+w-full
+border
+border-slate-300
+rounded-xl
+px-4
+py-3
+bg-white
+shadow-sm
+focus:outline-none
+focus:ring-2
+focus:ring-green-700
+">
+
+</div>
 <select
 id="filterKecamatan"
 class="w-full bg-white border rounded-lg p-3">
@@ -395,17 +415,50 @@ const filter =
 document.getElementById(
 'filterKecamatan'
 ).value;
-
+const searchValue =
+document.getElementById(
+'searchInput'
+)
+.value
+.toLowerCase()
+.trim();
 let data = [...homeData.masjid];
 
-if(filter){
-
 data =
-data.filter(
-m=>m.kecamatan===filter
+data.filter(m => {
+
+const matchFilter =
+!filter ||
+m.kecamatan === filter;
+
+const matchSearch =
+
+searchValue === ""
+
+||
+
+m.nama
+.toLowerCase()
+.includes(searchValue)
+
+||
+
+(m.kecamatan || "")
+.toLowerCase()
+.includes(searchValue)
+
+||
+
+(m.searchText || "")
+.toLowerCase()
+.includes(searchValue);
+
+return (
+matchFilter &&
+matchSearch
 );
 
-}
+});
 
 const container =
 document.getElementById(
@@ -530,15 +583,11 @@ Lihat Jadwal
 `;
 
 });
-renderPagination(
-Math.ceil(
-(homeData.masjid.filter(m =>
-!filter ||
-m.kecamatan === filter
-)).length / perPage
-)
-);
+
+renderPagination(totalPages);
+
 }
+                        
 function renderPagination(totalPages){
 
 const container =
