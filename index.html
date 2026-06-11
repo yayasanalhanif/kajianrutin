@@ -66,7 +66,7 @@
                 <div class="relative">
                     <i class="fas fa-filter absolute left-3.5 top-4 text-gray-400 text-base"></i>
                     <select id="locationFilter" onchange="filterData()" class="w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-500 text-base md:text-lg bg-white appearance-none">
-                        <option value="">Semua Lokasi / Masjid</option>
+                        <option value="">Semua Masjid</option>
                     </select>
                 </div>
             </div>
@@ -250,7 +250,7 @@
                                     </span>` : ''}
                                 ${info.cp_masjid && info.cp_masjid !== '-' && info.cp_masjid.trim() !== '' ? `
                                     <span>
-                                        <i class="fas fa-phone fa-fw text-emerald-400"></i> CP Masjid: 
+                                        <i class="fas fa-phone fa-fw text-emerald-400"></i> 
                                         <a href="${linkWAMasjid}" target="_blank" class="text-emerald-400 hover:underline font-bold">${info.cp_masjid}</a>
                                     </span>` : ''}
                             </div>
@@ -281,7 +281,7 @@
                                 </div>` : ''}
                             </div>
                             <div class="shrink-0 flex items-center">
-                                ${isMuslimah ? `<span class="inline-flex items-center text-sm md:text-base text-rose-600 bg-rose-50 px-3 py-1 rounded-full font-bold shadow-xs">Khusus Muslimah 🌹</span>` : ''}
+                                ${isMuslimah ? `<span class="inline-flex items-center text-sm md:text-base text-rose-600 bg-rose-50 px-3 py-1 rounded-full font-bold shadow-xs">Muslimah 🌹</span>` : ''}
                                 ${isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-amber-600 bg-amber-50 px-3 py-1 rounded-full font-bold shadow-xs">Kajian Anak 👶</span>` : ''}
                                 ${j.ket && !isMuslimah && !isAnak ? `<span class="inline-flex items-center text-sm md:text-base text-blue-600 bg-blue-50 px-3 py-1 rounded-full font-bold shadow-xs">${j.ket}</span>` : ''}
                             </div>
