@@ -198,7 +198,10 @@ class="space-y-2">
 id="masjidContainer"
 class="grid gap-3">
 </div>
-
+<div
+id="pagination"
+class="flex justify-center gap-2 mt-4">
+</div>
 </section>
 
 </div>
@@ -383,7 +386,9 @@ renderMasjid
 );
 
 }
-
+let currentPage = 1;
+const perPage = 4;
+    
 function renderMasjid(){
 
 const filter =
@@ -391,8 +396,7 @@ document.getElementById(
 'filterKecamatan'
 ).value;
 
-let data =
-homeData.masjid;
+let data = [...homeData.masjid];
 
 if(filter){
 
@@ -409,7 +413,22 @@ document.getElementById(
 );
 
 container.innerHTML='';
+const totalPages =
+Math.ceil(
+data.length / perPage
+);
 
+const start =
+(currentPage - 1) * perPage;
+
+const end =
+start + perPage;
+
+data =
+data.slice(
+start,
+end
+);
 data.forEach(m=>{
 
 container.innerHTML += `
@@ -453,9 +472,55 @@ Lihat Jadwal
 `;
 
 });
+renderPagination(
+Math.ceil(
+(homeData.masjid.filter(m =>
+!filter ||
+m.kecamatan === filter
+)).length / perPage
+)
+);
+}
+function renderPagination(totalPages){
+
+const container =
+document.getElementById(
+'pagination'
+);
+
+container.innerHTML = '';
+
+if(totalPages <= 1) return;
+
+for(
+let i = 1;
+i <= totalPages;
+i++
+){
+
+const btn =
+document.createElement('button');
+
+btn.textContent = i;
+
+btn.className =
+i === currentPage
+? 'px-3 py-1 rounded bg-emerald-600 text-white'
+: 'px-3 py-1 rounded bg-white border';
+
+btn.onclick = () => {
+
+currentPage = i;
+
+renderMasjid();
+
+};
+
+container.appendChild(btn);
 
 }
 
+}
 loadData();
 
 </script>
