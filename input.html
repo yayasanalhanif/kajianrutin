@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Jadwal Kajian Cilegon</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
+        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        textarea, input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Input Jadwal Kajian</h2>
+    <textarea id="rawText" rows="6" placeholder="Paste teks WA di sini..."></textarea>
+    <button onclick="prosesData()">Rapikan dengan AI</button>
+
+    <div id="formResult" style="margin-top:20px; display:none;">
+        <hr>
+        <input type="text" id="lokasi" placeholder="Lokasi">
+        <input type="text" id="alamat" placeholder="Alamat">
+        <input type="text" id="hari" placeholder="Hari">
+        <input type="text" id="waktu" placeholder="Waktu">
+        <input type="text" id="pemateri" placeholder="Pemateri">
+        <button onclick="kirimKeSheet()" style="background: #007bff;">Simpan ke Google Sheet</button>
+    </div>
+</div>
+
+<script>
+    async function prosesData() {
+        const teks = document.getElementById('rawText').value;
+        // Peringatan: Untuk GitHub Pages, API Key sebaiknya tidak ditaruh di sini demi keamanan. 
+        // Namun untuk pemakaian pribadi, silakan tempel API Key Gemini Om di bawah:
+        const API_KEY = "AQ.Ab8RN6Kbs6I33yevbghuFFQZuMdQwd6pQWOplYpBeWkpC8qRzw";
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
+        
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ contents: [{ parts: [{ text: "Ekstrak menjadi JSON: " + teks }] }] })
+        });
+        
+        const data = await response.json();
+        const hasil = JSON.parse(data.candidates[0].content.parts[0].text);
+        
+        document.getElementById('lokasi').value = hasil.lokasi || "";
+        document.getElementById('alamat').value = hasil.alamat || "";
+        document.getElementById('hari').value = hasil.hari || "";
+        document.getElementById('waktu').value = hasil.waktu || "";
+        document.getElementById('pemateri').value = hasil.pemateri || "";
+        document.getElementById('formResult').style.display = 'block';
+    }
+
+    function kirimKeSheet() {
+        // Om bisa tambahkan fetch ke Apps Script Web App URL di sini untuk kirim ke Sheet
+        alert("Data siap disimpan!");
+    }
+</script>
+</body>
+</html>
