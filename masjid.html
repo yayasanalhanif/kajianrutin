@@ -293,9 +293,86 @@ data.jadwal
 
 }
 
-function renderJadwal(
-jadwal
+function renderJadwal(jadwal){
+
+const container =
+document.getElementById(
+"jadwalContainer"
+);
+
+container.innerHTML = "";
+
+const urutanHari = [
+"Senin",
+"Selasa",
+"Rabu",
+"Kamis",
+"Jum'at",
+"Sabtu",
+"Ahad"
+];
+
+const grup = {};
+
+jadwal.forEach(j => {
+
+if(!grup[j.hari]){
+grup[j.hari] = [];
+}
+
+grup[j.hari].push(j);
+
+});
+
+urutanHari.forEach(hari => {
+
+if(!grup[hari]) return;
+
+container.innerHTML += `
+
+`;
+
+grup[hari].forEach(j => {
+
+let badge = "";
+
+const ket =
+(j.keterangan || "")
+.toLowerCase();
+
+if(
+ket.includes(
+"muslimah"
+)
 ){
+badge = "🌹";
+}
+else if(
+ket.includes(
+"anak"
+)
+){
+badge = "👶";
+}
+
+container.innerHTML += `
+
+🕓 ${j.waktu}
+
+🎤 ${j.pemateri}
+
+📖 ${j.materi}
+
+${badge}
+${j.keterangan || ""}
+
+`;
+
+});
+
+});
+
+}{
 
 const container =
 document.getElementById(
