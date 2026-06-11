@@ -182,16 +182,32 @@
             const searchValue = document.getElementById('searchInput').value.toLowerCase();
             const filterValue = document.getElementById('locationFilter').value;
             const categoryValue = document.querySelector('input[name="categoryFilter"]:checked').value;
-            
+            console.log({
+                searchValue,
+                filterValue,
+                categoryValue,
+                totalData: dbKajian.length
+            });
             const container = document.getElementById('kajianContainer');
             const noResult = document.getElementById('noResult');
             
             container.innerHTML = '';
 
             const filtered = dbKajian.filter(item => {
-                const pemateriMatch = item.pemateri ? item.pemateri.toLowerCase().includes(searchValue) : false;
-                const materiMatch = item.materi ? item.materi.toLowerCase().includes(searchValue) : false;
-                const matchSearch = pemateriMatch || materiMatch;
+                const pemateriMatch =
+                    item.pemateri
+                        ? item.pemateri.toLowerCase().includes(searchValue)
+                        : false;
+                
+                const materiMatch =
+                    item.materi
+                        ? item.materi.toLowerCase().includes(searchValue)
+                        : false;
+                
+                const matchSearch =
+                    searchValue === "" ||
+                    pemateriMatch ||
+                    materiMatch;
                 
                 const matchLocation = filterValue === "" || item.lokasi === filterValue;
                 
@@ -259,7 +275,11 @@
                 `;
 
                 info.jadwal.forEach(j => {
-                    const ketLower = j.get ? j.ket.toLowerCase() : (j.ket ? j.ket.toLowerCase() : "");
+          
+                    const ketLower =
+                        j.ket
+                            ? j.ket.toLowerCase()
+                            : "";
                     const isMuslimah = ketLower.includes("muslimah");
                     const isAnak = ketLower.includes("anak");
                     const linkWAKajian = formatWALink(j.cp_kajian);
