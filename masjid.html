@@ -293,7 +293,7 @@ data.jadwal
 
 }
 
-function renderJadwal(jadwal){
+    function renderJadwal(jadwal){
 
 const container =
 document.getElementById(
@@ -330,6 +330,11 @@ if(!grup[hari]) return;
 
 container.innerHTML += `
 
+<div class="sticky top-16 z-10 bg-slate-100 py-2">
+<h3 class="font-bold text-lg">
+📅 ${hari}
+</h3>
+</div>
 `;
 
 grup[hari].forEach(j => {
@@ -340,106 +345,37 @@ const ket =
 (j.keterangan || "")
 .toLowerCase();
 
-if(
-ket.includes(
-"muslimah"
-)
-){
+if(ket.includes("muslimah")){
 badge = "🌹";
 }
-else if(
-ket.includes(
-"anak"
-)
-){
+else if(ket.includes("anak")){
 badge = "👶";
 }
 
 container.innerHTML += `
 
+<div class="bg-white rounded-xl shadow p-4 mb-3">
+
+<div class="font-semibold text-emerald-700">
 🕓 ${j.waktu}
-
-🎤 ${j.pemateri}
-
-📖 ${j.materi}
-
-${badge}
-${j.keterangan || ""}
-
-`;
-
-});
-
-});
-
-}{
-
-const container =
-document.getElementById(
-"jadwalContainer"
-);
-
-container.innerHTML = "";
-
-jadwal.forEach(j=>{
-
-let badge = "";
-
-const ket =
-(j.keterangan || "")
-.toLowerCase();
-
-if(
-ket.includes(
-"muslimah"
-)
-){
-badge =
-"🌹";
-}
-else if(
-ket.includes(
-"anak"
-)
-){
-badge =
-"👶";
-}
-
-container.innerHTML += `
-
-<div class="bg-white rounded-xl shadow p-4">
-
-<div class="font-bold">
-
-${j.hari}
-•
-${j.waktu}
-
 </div>
 
 <div class="mt-2">
-
 🎤 ${j.pemateri}
-
 </div>
 
 <div class="mt-1">
-
 📖 ${j.materi}
-
 </div>
 
 <div class="text-sm text-gray-500 mt-2">
-
-${badge}
-${j.keterangan || ""}
-
+${badge} ${j.keterangan || ""}
 </div>
 
 </div>
-
 `;
+
+});
 
 });
 
