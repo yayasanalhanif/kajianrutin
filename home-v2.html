@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Jadwal Kajian Cilegon</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+
+body{
+    padding-bottom:80px;
+}
+
+.card{
+    transition:.2s;
+}
+
+.card:hover{
+    transform:translateY(-2px);
+}
+
+</style>
+
+</head>
+
+<body class="bg-slate-100">
+
+<!-- HEADER -->
+
+<header class="sticky top-0 z-50 bg-emerald-600 text-white shadow">
+
+<div class="max-w-6xl mx-auto px-4 py-3">
+
+<h1 class="text-xl font-bold">
+🕌 Jadwal Kajian Cilegon
+</h1>
+
+<p class="text-sm opacity-90">
+Portal Kajian Islam Ilmiah Kota Cilegon
+</p>
+
+</div>
+
+</header>
+
+<!-- CONTENT -->
+
+<main class="max-w-6xl mx-auto p-4">
+
+<!-- LOADING -->
+
+<div id="loading" class="text-center py-10">
+
+<div class="text-4xl mb-2">
+⏳
+</div>
+
+Memuat data...
+
+</div>
+
+<!-- APP -->
+
+<div id="app" class="hidden">
+
+<!-- STATISTIK -->
+
+<section>
+
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+<div class="bg-white rounded-xl p-4 shadow">
+
+<div class="text-2xl font-bold text-emerald-600"
+id="totalKajian">0</div>
+
+<div class="text-sm text-gray-500">
+Kajian
+</div>
+
+</div>
+
+<div class="bg-white rounded-xl p-4 shadow">
+
+<div class="text-2xl font-bold text-blue-600"
+id="totalKitab">0</div>
+
+<div class="text-sm text-gray-500">
+Kitab
+</div>
+
+</div>
+
+<div class="bg-white rounded-xl p-4 shadow">
+
+<div class="text-2xl font-bold text-pink-600"
+id="totalMuslimah">0</div>
+
+<div class="text-sm text-gray-500">
+Muslimah
+</div>
+
+</div>
+
+<div class="bg-white rounded-xl p-4 shadow">
+
+<div class="text-2xl font-bold text-orange-500"
+id="totalAnak">0</div>
+
+<div class="text-sm text-gray-500">
+Anak
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- HERO -->
+
+<section class="mt-5">
+
+<div class="bg-white rounded-xl shadow p-4">
+
+<div class="text-sm text-gray-500">
+🏆 Masjid Teraktif
+</div>
+
+<div id="masjidTeraktif"
+class="text-lg font-bold mt-1">
+-
+</div>
+
+<div id="kajianTerbanyak"
+class="text-sm text-gray-500">
+-
+</div>
+
+</div>
+
+</section>
+
+<!-- KECAMATAN -->
+
+<section class="mt-5">
+
+<div class="flex justify-between items-center mb-2">
+
+<h2 class="font-bold">
+📍 Filter Kecamatan
+</h2>
+
+</div>
+
+<select
+id="filterKecamatan"
+class="w-full bg-white border rounded-lg p-3">
+
+<option value="">
+Semua Kecamatan
+</option>
+
+</select>
+
+</section>
+
+<!-- RANKING -->
+
+<section class="mt-5">
+
+<div class="bg-white rounded-xl shadow p-4">
+
+<h2 class="font-bold mb-3">
+🏆 Kecamatan Teraktif
+</h2>
+
+<div id="rankingKecamatan"
+class="space-y-2">
+</div>
+
+</div>
+
+</section>
+
+<!-- MASJID -->
+
+<section class="mt-5">
+
+<h2 class="font-bold mb-3">
+🕌 Daftar Masjid
+</h2>
+
+<div
+id="masjidContainer"
+class="grid gap-3">
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+<!-- BOTTOM NAV -->
+
+<nav
+class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
+
+<div
+class="grid grid-cols-5 text-center">
+
+<a href="#"
+class="py-3">
+🏠
+</a>
+
+<a href="#"
+class="py-3">
+🕌
+</a>
+
+<a href="#"
+class="py-3">
+🔍
+</a>
+
+<a href="#"
+class="py-3">
+📤
+</a>
+
+<a href="?page=admin"
+class="py-3">
+⚙️
+</a>
+
+</div>
+
+</nav>
+
+<script>
+
+// =====================
+// GANTI SENDIRI
+// =====================
+
+const API_URL = 'https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJBfdLnYVr1e7wu1XpSelEdVqVhe_SiGBB-_zcaTPhb3QEwA/exec';
+
+// =====================
+
+let homeData = {};
+
+async function loadData(){
+
+try{
+
+const res =
+await fetch(
+`${API_URL}?mode=home`
+);
+
+homeData =
+await res.json();
+
+render();
+
+}
+catch(err){
+
+alert(
+'Gagal memuat data'
+);
+
+console.error(err);
+
+}
+
+document
+.getElementById('loading')
+.style.display='none';
+
+document
+.getElementById('app')
+.classList.remove('hidden');
+
+}
+
+function render(){
+const s =
+homeData.statistik;
+
+document.getElementById(
+'totalKajian'
+).textContent = s.kajian;
+
+document.getElementById(
+'totalKitab'
+).textContent = s.kitab;
+
+document.getElementById(
+'totalMuslimah'
+).textContent = s.muslimah;
+
+document.getElementById(
+'totalAnak'
+).textContent = s.anak;
+
+document.getElementById(
+'masjidTeraktif'
+).textContent =
+s.masjidTeraktif ||
+homeData.rankingMasjid[0]?.nama ||
+'-';
+
+document.getElementById(
+'kajianTerbanyak'
+).textContent =
+`${s.kajianTerbanyak ||
+homeData.rankingMasjid[0]?.kajian ||
+0} Kajian`;
+
+renderKecamatan();
+
+renderMasjid();
+}
+
+function renderKecamatan(){
+
+const ranking =
+document.getElementById(
+'rankingKecamatan'
+);
+
+ranking.innerHTML='';
+
+homeData.rankingKecamatan
+.forEach(item=>{
+
+ranking.innerHTML += `
+<div class="flex justify-between">
+<span>${item.kecamatan}</span>
+<span class="font-semibold">
+${item.kajian}
+</span>
+</div>
+`;
+
+});
+
+const select =
+document.getElementById(
+'filterKecamatan'
+);
+
+const unik =
+[
+...new Set(
+homeData.masjid.map(
+m=>m.kecamatan
+)
+)
+];
+
+unik.sort();
+
+unik.forEach(k=>{
+
+select.innerHTML += `
+<option value="${k}">
+${k}
+</option>
+`;
+
+});
+
+select.addEventListener(
+'change',
+renderMasjid
+);
+
+}
+
+function renderMasjid(){
+
+const filter =
+document.getElementById(
+'filterKecamatan'
+).value;
+
+let data =
+homeData.masjid;
+
+if(filter){
+
+data =
+data.filter(
+m=>m.kecamatan===filter
+);
+
+}
+
+const container =
+document.getElementById(
+'masjidContainer'
+);
+
+container.innerHTML='';
+
+data.forEach(m=>{
+
+container.innerHTML += `
+<div class="card bg-white rounded-xl shadow p-4">
+
+<h3 class="font-bold text-lg">
+🕌 ${m.nama}
+</h3>
+
+<div class="text-sm text-gray-500">
+📍 ${m.kecamatan}
+</div>
+
+<div class="mt-3 flex gap-4 text-sm">
+
+<span>
+📚 ${m.kajian}
+</span>
+
+<span>
+📖 ${m.kitab}
+</span>
+
+<span>
+🌹 ${m.muslimah}
+</span>
+
+<span>
+👶 ${m.anak}
+</span>
+
+</div>
+
+<button
+onclick="alert('Detail Masjid akan dibuat pada tahap berikutnya')"
+class="mt-4 w-full bg-emerald-600 text-white rounded-lg py-2">
+Lihat Jadwal
+</button>
+
+</div>
+`;
+
+});
+
+}
+
+loadData();
+
+</script>
+
+</body>
+</html>
