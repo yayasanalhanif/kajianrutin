@@ -620,13 +620,103 @@ lower.includes(
 
 }
 
-function simpanKajian(){
+async function simpanKajian(){
+
+const yakin =
+confirm(
+"Yakin ingin menyimpan kajian ini?"
+);
+
+if(!yakin)
+return;
+
+const payload = {
+
+action:
+"simpanKajian",
+
+masjidId:
+document.getElementById("masjidId").value,
+
+hari:
+document.getElementById("hari").value,
+
+waktu:
+document.getElementById("waktu").value,
+
+pemateri:
+document.getElementById("pemateri").value,
+
+materi:
+document.getElementById("materi").value,
+
+keterangan:
+document.getElementById("keterangan").value,
+
+hpPanitia:
+document.getElementById("hpPanitia").value,
+
+isKitab:
+document.getElementById("isKitab").checked,
+
+isMuslimah:
+document.getElementById("isMuslimah").checked,
+
+isAnak:
+document.getElementById("isAnak").checked
+
+};
+
+try{
+
+const res =
+await fetch(
+API_URL,
+{
+method:"POST",
+headers:{
+"Content-Type":
+"application/json"
+},
+body:
+JSON.stringify(
+payload
+)
+}
+);
+
+const result =
+await res.json();
+
+if(result.success){
 
 alert(
-"Fungsi simpan akan dibuat setelah parser selesai"
+"Berhasil disimpan.\nJadwal ID: " +
+result.jadwalId
 );
 
 }
+else{
+
+alert(
+"Gagal menyimpan"
+);
+
+}
+
+}
+catch(err){
+
+console.error(err);
+
+alert(
+err.message
+);
+
+}
+
+}
+
 window.onload = () => {
   loadMasjid();
 };
