@@ -933,7 +933,54 @@ hasil
 
 }
 );
-    
+async function shareHome(){
+
+try{
+
+const res =
+await fetch(
+`${API_URL}?mode=share`
+);
+
+const data =
+await res.json();
+
+if(navigator.share){
+
+await navigator.share({
+
+title:
+"Jadwal Kajian Islam Ilmiah Kota Cilegon",
+
+text:
+data.shareText
+
+});
+
+}
+else{
+
+await navigator.clipboard.writeText(
+data.shareText
+);
+
+alert(
+"Teks jadwal berhasil disalin"
+);
+
+}
+
+}catch(err){
+
+console.error(err);
+
+alert(
+"Gagal membagikan jadwal"
+);
+
+}
+
+}    
 loadData();
 function toggleSearch(){
 
