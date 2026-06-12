@@ -1,62 +1,328 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Jadwal Kajian Cilegon</title>
-    <style>
-        body { font-family: sans-serif; padding: 20px; background: #f4f4f9; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        textarea, input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <h2>Input Jadwal Kajian</h2>
-    <textarea id="rawText" rows="6" placeholder="Paste teks WA di sini..."></textarea>
-    <button onclick="prosesData()">Rapikan dengan AI</button>
 
-    <div id="formResult" style="margin-top:20px; display:none;">
-        <hr>
-        <input type="text" id="lokasi" placeholder="Lokasi">
-        <input type="text" id="alamat" placeholder="Alamat">
-        <input type="text" id="hari" placeholder="Hari">
-        <input type="text" id="waktu" placeholder="Waktu">
-        <input type="text" id="pemateri" placeholder="Pemateri">
-        <button onclick="kirimKeSheet()" style="background: #007bff;">Simpan ke Google Sheet</button>
-    </div>
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Input Kajian</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+
+<body class="bg-slate-100 pb-24">
+
+<header
+class="sticky top-0 bg-emerald-600 text-white shadow z-50">
+
+<div class="max-w-4xl mx-auto p-4">
+
+<h1 class="text-2xl font-bold">
+
+➕ Input Kajian Baru
+
+</h1>
+
+<p class="text-white/90">
+
+Tempel pesan WhatsApp lalu analisa otomatis
+
+</p>
+
 </div>
 
-<script>
-    async function prosesData() {
-        const teks = document.getElementById('rawText').value;
-        // Peringatan: Untuk GitHub Pages, API Key sebaiknya tidak ditaruh di sini demi keamanan. 
-        // Namun untuk pemakaian pribadi, silakan tempel API Key Gemini Om di bawah:
-        const API_KEY = "AQ.Ab8RN6Kbs6I33yevbghuFFQZuMdQwd6pQWOplYpBeWkpC8qRzw";
-        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${API_KEY}`;
-        
-        const response = await fetch(url, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ contents: [{ parts: [{ text: "Ekstrak menjadi JSON: " + teks }] }] })
-        });
-        
-        const data = await response.json();
-        const hasil = JSON.parse(data.candidates[0].content.parts[0].text);
-        
-        document.getElementById('lokasi').value = hasil.lokasi || "";
-        document.getElementById('alamat').value = hasil.alamat || "";
-        document.getElementById('hari').value = hasil.hari || "";
-        document.getElementById('waktu').value = hasil.waktu || "";
-        document.getElementById('pemateri').value = hasil.pemateri || "";
-        document.getElementById('formResult').style.display = 'block';
-    }
+</header>
 
-    function kirimKeSheet() {
-        // Om bisa tambahkan fetch ke Apps Script Web App URL di sini untuk kirim ke Sheet
-        alert("Data siap disimpan!");
-    }
+<main
+class="max-w-4xl mx-auto p-4 space-y-4">
+
+<!-- PESAN WA -->
+
+<div
+class="bg-white rounded-xl shadow p-4">
+
+<h2
+class="font-bold mb-3">
+
+📱 Pesan WhatsApp
+
+</h2>
+
+<textarea
+id="waText"
+rows="10"
+class="
+w-full
+border
+rounded-xl
+p-3
+outline-none"
+placeholder="Paste pesan WA disini...">
+</textarea>
+
+<button
+onclick="analisaWA()"
+class="
+mt-3
+bg-emerald-600
+text-white
+px-4
+py-2
+rounded-lg">
+
+🔍 Analisa
+
+</button>
+
+</div>
+
+<!-- DATA MASJID -->
+
+<div
+class="bg-white rounded-xl shadow p-4">
+
+<h2
+class="font-bold mb-3">
+
+🕌 Data Masjid
+
+</h2>
+
+<div class="grid md:grid-cols-2 gap-3">
+
+<div>
+
+<label>Masjid ID</label>
+
+<input
+id="masjidId"
+class="w-full border rounded p-2">
+
+</div>
+
+<div>
+
+<label>Nama Masjid</label>
+
+<input
+id="namaMasjid"
+class="w-full border rounded p-2">
+
+</div>
+
+<div>
+
+<label>Kecamatan</label>
+
+<input
+id="kecamatan"
+class="w-full border rounded p-2">
+
+</div>
+
+<div>
+
+<label>HP Masjid</label>
+
+<input
+id="hpMasjid"
+class="w-full border rounded p-2">
+
+</div>
+
+<div class="md:col-span-2">
+
+<label>Alamat</label>
+
+<input
+id="alamat"
+class="w-full border rounded p-2">
+
+</div>
+
+<div class="md:col-span-2">
+
+<label>Maps</label>
+
+<input
+id="maps"
+class="w-full border rounded p-2">
+
+</div>
+
+</div>
+
+</div>
+
+<!-- DATA KAJIAN -->
+
+<div
+class="bg-white rounded-xl shadow p-4">
+
+<h2
+class="font-bold mb-3">
+
+📚 Data Kajian
+
+</h2>
+
+<div class="grid md:grid-cols-2 gap-3">
+
+<div>
+
+<label>Hari</label>
+
+<input
+id="hari"
+class="w-full border rounded p-2">
+
+</div>
+
+<div>
+
+<label>Waktu</label>
+
+<input
+id="waktu"
+class="w-full border rounded p-2">
+
+</div>
+
+<div>
+
+<label>Pemateri</label>
+
+<input
+id="pemateri"
+class="w-full border rounded p-2">
+
+</div>
+
+<div>
+
+<label>HP Panitia</label>
+
+<input
+id="hpPanitia"
+class="w-full border rounded p-2">
+
+</div>
+
+<div class="md:col-span-2">
+
+<label>Materi</label>
+
+<input
+id="materi"
+class="w-full border rounded p-2">
+
+</div>
+
+<div class="md:col-span-2">
+
+<label>Keterangan</label>
+
+<input
+id="keterangan"
+class="w-full border rounded p-2">
+
+</div>
+
+</div>
+
+<div class="mt-4 flex gap-4">
+
+<label>
+
+<input
+type="checkbox"
+id="isKitab">
+
+ Kajian Kitab
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="isMuslimah">
+
+ Muslimah
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="isAnak">
+
+ Anak
+
+</label>
+
+<label>
+
+<input
+type="checkbox"
+id="aktif"
+checked>
+
+ Aktif
+
+</label>
+
+</div>
+
+</div>
+
+<button
+onclick="simpanKajian()"
+class="
+w-full
+bg-emerald-600
+text-white
+py-3
+rounded-xl
+font-bold">
+
+💾 SIMPAN KAJIAN
+
+</button>
+
+</main>
+
+<script>
+
+function analisaWA(){
+
+const text =
+document
+.getElementById(
+"waText"
+)
+.value;
+
+alert(
+"Analisa WA akan dibuat tahap berikutnya"
+);
+
+}
+
+function simpanKajian(){
+
+alert(
+"Fungsi simpan akan dibuat setelah parser selesai"
+);
+
+}
+
 </script>
+
 </body>
 </html>
