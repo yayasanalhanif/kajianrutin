@@ -351,8 +351,271 @@ document
 )
 .value;
 
+if(!text){
+
 alert(
-"Analisa WA akan dibuat tahap berikutnya"
+"Paste pesan WA terlebih dahulu"
+);
+
+return;
+
+}
+
+deteksiMasjid(text);
+
+deteksiHari(text);
+
+deteksiWaktu(text);
+
+deteksiPemateri(text);
+
+deteksiMateri(text);
+
+deteksiKategori(text);
+
+}
+function deteksiMasjid(text){
+
+const lower =
+text.toLowerCase();
+
+let terbaik = null;
+let skorTerbaik = 0;
+
+masjidList.forEach(m => {
+
+const nama =
+(m.nama || "")
+.toLowerCase();
+
+const kata =
+nama.split(/\s+/);
+
+let skor = 0;
+
+kata.forEach(k => {
+
+if(
+k.length > 2 &&
+lower.includes(k)
+){
+skor++;
+}
+
+});
+
+if(skor > skorTerbaik){
+
+skorTerbaik = skor;
+terbaik = m;
+
+}
+
+});
+
+if(!terbaik || skorTerbaik < 2)
+return;
+
+document.getElementById("masjidId").value =
+terbaik.id;
+
+document.getElementById("namaMasjid").value =
+terbaik.nama;
+
+document.getElementById("kecamatan").value =
+terbaik.kecamatan;
+
+document.getElementById("alamat").value =
+terbaik.alamat;
+
+document.getElementById("hpMasjid").value =
+terbaik.hp || "";
+
+document.getElementById("maps").value =
+terbaik.maps || "";
+
+}
+
+function deteksiHari(text){
+
+const hariList = [
+
+"Senin",
+"Selasa",
+"Rabu",
+"Kamis",
+"Jumat",
+"Sabtu",
+"Ahad",
+"Minggu"
+
+];
+
+const found =
+hariList.find(h =>
+
+text
+.toLowerCase()
+.includes(
+h.toLowerCase()
+)
+
+);
+
+if(found){
+
+document
+.getElementById(
+"hari"
+)
+.value =
+found;
+
+}
+
+}
+
+function deteksiWaktu(text){
+
+const pola = [
+
+"Ba'da Subuh",
+"Ba'da Dzuhur",
+"Ba'da Ashar",
+"Ba'da Maghrib",
+"Ba'da Isya"
+
+];
+
+const found =
+pola.find(p =>
+
+text
+.toLowerCase()
+.includes(
+p.toLowerCase()
+)
+
+);
+
+if(found){
+
+document
+.getElementById(
+"waktu"
+)
+.value =
+found;
+
+}
+
+}
+
+function deteksiPemateri(text){
+
+const lines =
+text.split("\n");
+
+for(
+let line of lines
+){
+
+if(
+
+line.includes("Ustadz") ||
+
+line.includes("Ust.") ||
+
+line.includes("Syaikh")
+
+){
+
+document
+.getElementById(
+"pemateri"
+)
+.value =
+line.trim();
+
+break;
+
+}
+
+}
+
+}
+
+function deteksiMateri(text){
+
+const lines =
+text.split("\n");
+
+for(
+let line of lines
+){
+
+if(
+
+line.includes("Kitab") ||
+
+line.includes("Syarah") ||
+
+line.includes("Tematik")
+
+){
+
+document
+.getElementById(
+"materi"
+)
+.value =
+line.trim();
+
+break;
+
+}
+
+}
+
+}
+
+function deteksiKategori(text){
+
+const lower =
+text.toLowerCase();
+
+document
+.getElementById(
+"isMuslimah"
+)
+.checked =
+lower.includes(
+"muslimah"
+);
+
+document
+.getElementById(
+"isAnak"
+)
+.checked =
+lower.includes(
+"anak"
+);
+
+document
+.getElementById(
+"isKitab"
+)
+.checked =
+
+lower.includes(
+"kitab"
+)
+
+||
+
+lower.includes(
+"syarah"
 );
 
 }
