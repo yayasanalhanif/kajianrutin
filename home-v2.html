@@ -504,17 +504,7 @@ document.getElementById(
 "searchResultContainer"
 );
 
-const list =
-document.getElementById(
-"searchResultList"
-);
-
-const info =
-document.getElementById(
-"searchInfo"
-);
-
-list.innerHTML = "";
+container.innerHTML = "";
 
 if(!keyword){
 
@@ -558,8 +548,7 @@ container.classList.remove(
 );
 
 if(hasil.length === 0){
-info.innerHTML =
-`🔍 Ditemukan ${hasil.length} kajian`;
+// info.innerHTML = `🔍 Ditemukan ${hasil.length} kajian`;
 container.innerHTML = `
 
 <div class="bg-white rounded-xl p-4 shadow text-center">
@@ -625,7 +614,7 @@ mr-1">
 </span>`;
 }
 
-list.innerHTML += `
+container.innerHTML += `
 
 <div class="
 bg-white
@@ -826,7 +815,7 @@ rankIcon = "🥈";
 else if(index === 2){
 rankIcon = "🥉";
 }
-list.innerHTML += `
+container.innerHTML += `
 <div class="
 card
 bg-white
