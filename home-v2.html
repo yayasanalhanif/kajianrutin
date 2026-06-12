@@ -944,12 +944,11 @@ await fetch(
 
 const data =
 await res.json();
-    //sementara
-alert(
-"Panjang: " +
-data.shareText.length
-);
+
+    
 if(navigator.share){
+
+try{
 
 await navigator.share({
 
@@ -960,6 +959,19 @@ text:
 data.shareText
 
 });
+
+alert("SHARE BERHASIL");
+
+}catch(err){
+
+alert(
+"SHARE GAGAL\n\n" +
+err.name +
+"\n\n" +
+err.message
+);
+
+}
 
 }
 else{
