@@ -649,13 +649,16 @@ document.getElementById(
 'searchBox'
 );
 
-const searchValue =
-searchInput
-? searchInput.value
-    .toLowerCase()
-    .trim()
-: "";
+let searchValue = "";
 
+if(searchInput){
+
+searchValue =
+searchInput.value
+.toLowerCase()
+.trim();
+
+}
 
 let data = [...homeData.masjid];
 
