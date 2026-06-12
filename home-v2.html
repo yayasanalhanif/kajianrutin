@@ -360,11 +360,12 @@ render();
 }
 catch(err){
 
-alert(
-'Gagal memuat data'
-);
-
 console.error(err);
+
+alert(
+"ERROR:\n" +
+err.message
+);
 
 }
 
