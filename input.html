@@ -663,7 +663,33 @@ confirm(
 
 if(!yakin)
 return;
+let keterangan =
+"Umum";
 
+if(
+document.getElementById(
+"isMuslimah"
+).checked
+){
+keterangan =
+"Khusus Muslimah";
+}
+else if(
+document.getElementById(
+"isIkhwan"
+).checked
+){
+keterangan =
+"Khusus Ikhwan";
+}
+else if(
+document.getElementById(
+"isAnak"
+).checked
+){
+keterangan =
+"Anak";
+}
 const payload = {
 
 action:
@@ -685,7 +711,7 @@ materi:
 document.getElementById("materi").value,
 
 keterangan:
-document.getElementById("keterangan").value,
+keterangan,
 
 hpPanitia:
 document.getElementById("hpPanitia").value,
