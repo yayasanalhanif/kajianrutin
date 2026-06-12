@@ -268,8 +268,24 @@ Semua Kecamatan
 🕌 Daftar Masjid
 </h2>
 <div
+<div
 id="searchResultContainer"
-class="hidden space-y-3 mb-6">
+class="hidden mb-6">
+
+<div
+id="searchInfo"
+class="
+mb-3
+text-sm
+text-slate-600
+font-medium">
+</div>
+
+<div
+id="searchResultList"
+class="space-y-3">
+</div>
+
 </div>
 <div
 id="masjidContainer"
@@ -457,7 +473,30 @@ renderMasjid
 }
 let currentPage = 1;
 const perPage = 4;
+function highlight(text, keyword){
 
+if(!keyword)
+return text;
+
+const regex =
+new RegExp(
+`(${keyword})`,
+"gi"
+);
+
+return text.replace(
+
+regex,
+
+`<mark class="
+bg-yellow-200
+px-1
+rounded
+">$1</mark>`
+
+);
+
+}
 function renderSearchResult(keyword){
 
 const container =
@@ -465,7 +504,17 @@ document.getElementById(
 "searchResultContainer"
 );
 
-container.innerHTML = "";
+const list =
+document.getElementById(
+"searchResultList"
+);
+
+const info =
+document.getElementById(
+"searchInfo"
+);
+
+list.innerHTML = "";
 
 if(!keyword){
 
@@ -490,6 +539,10 @@ const text = (
 " " +
 (j.kecamatan || "") +
 " " +
+(j.hari || "") +
+" " +
+(j.waktu || "") +
+" " +
 (j.keterangan || "")
 
 ).toLowerCase();
@@ -505,7 +558,8 @@ container.classList.remove(
 );
 
 if(hasil.length === 0){
-
+info.innerHTML =
+`🔍 Ditemukan ${hasil.length} kajian`;
 container.innerHTML = `
 
 <div class="bg-white rounded-xl p-4 shadow text-center">
@@ -571,7 +625,7 @@ mr-1">
 </span>`;
 }
 
-container.innerHTML += `
+list.innerHTML += `
 
 <div class="
 bg-white
@@ -584,19 +638,28 @@ border-slate-200
 
 <div class="font-semibold text-[#14532D]">
 
-🎤 ${j.pemateri}
+🎤 ${highlight(
+j.pemateri,
+keyword
+)}
 
 </div>
 
 <div class="mt-2">
 
-📖 ${j.materi}
+📖 ${highlight(
+j.materi,
+keyword
+)}
 
 </div>
 
 <div class="mt-2 text-sm text-gray-600">
 
-🕌 ${j.namaMasjid}
+🕌 ${highlight(
+j.namaMasjid,
+keyword
+)}
 
 </div>
 
@@ -763,7 +826,7 @@ rankIcon = "🥈";
 else if(index === 2){
 rankIcon = "🥉";
 }
-container.innerHTML += `
+list.innerHTML += `
 <div class="
 card
 bg-white
@@ -773,7 +836,19 @@ border
 border-slate-200
 p-4
 ">
+${m.foto ? `
 
+<img
+src="${m.foto}"
+class="
+w-full
+h-40
+object-cover
+rounded-lg
+mb-3
+">
+
+` : ""}
 <h3
 class="
 font-bold
