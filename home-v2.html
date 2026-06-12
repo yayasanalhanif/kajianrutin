@@ -934,7 +934,7 @@ hasil
 }
 );
 async function shareHome(){
-alert("shareHome jalan");
+
 try{
 
 const res =
@@ -944,10 +944,7 @@ await fetch(
 
 const data =
 await res.json();
-alert(
-"navigator.share = " +
-typeof navigator.share
-);
+
 if(navigator.share){
 
 await navigator.share({
@@ -977,15 +974,8 @@ alert(
 
 console.error(err);
 
-catch(err){
-
-console.error(err);
-
 alert(
-"ERROR:\n" +
-err.name +
-"\n\n" +
-err.message
+"Gagal membagikan jadwal"
 );
 
 }
@@ -1035,7 +1025,7 @@ class="py-3 font-medium text-[#14532D]">
 
 <a
 href="#"
-onclick="alert('TOMBOL DIKLIK');shareHome();return false;"
+onclick="shareHome()"
 class="py-3">
 
 📤 Bagikan
