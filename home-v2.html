@@ -64,29 +64,6 @@ Portal Kajian Islam Ilmiah Kota Cilegon
 
 </div>
 
-<div
-id="searchContainer"
-class="
-hidden
-flex-1
-mr-3
-">
-
-<input
-id="searchBox"
-type="text"
-placeholder="Cari masjid, pemateri, kitab..."
-class="
-w-full
-px-4
-py-2
-rounded-lg
-text-black
-outline-none
-">
-
-</div>
-
 <button
 id="btnSearch"
 onclick="toggleSearch()"
@@ -482,13 +459,17 @@ const filter =
 document.getElementById(
 'filterKecamatan'
 ).value;
-const searchValue =
+const searchInput =
 document.getElementById(
-'searchInput'
-)
-.value
-.toLowerCase()
-.trim();
+'searchBox'
+);
+
+const searchValue =
+searchInput
+? searchInput.value
+    .toLowerCase()
+    .trim()
+: "";
 let data = [...homeData.masjid];
 
 data =
