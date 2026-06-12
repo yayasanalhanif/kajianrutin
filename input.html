@@ -234,47 +234,50 @@ class="w-full border rounded p-2">
 
 </div>
 
-<div class="mt-4 flex gap-4">
+<div class="mt-4 flex flex-wrap gap-4">
 
 <label>
-
 <input
 type="checkbox"
 id="isKitab">
-
  Kajian Kitab
-
 </label>
 
 <label>
+<input
+type="checkbox"
+id="isUmum"
+checked>
+ Umum
+</label>
 
+<label>
 <input
 type="checkbox"
 id="isMuslimah">
-
  Muslimah
-
 </label>
 
 <label>
+<input
+type="checkbox"
+id="isIkhwan">
+ Khusus Ikhwan
+</label>
 
+<label>
 <input
 type="checkbox"
 id="isAnak">
-
  Anak
-
 </label>
 
 <label>
-
 <input
 type="checkbox"
 id="aktif"
 checked>
-
  Aktif
-
 </label>
 
 </div>
@@ -584,23 +587,41 @@ function deteksiKategori(text){
 const lower =
 text.toLowerCase();
 
+const muslimah =
+lower.includes(
+"muslimah"
+);
+
+const anak =
+lower.includes(
+"anak"
+);
+
+const ikhwan =
+lower.includes(
+"ikhwan"
+);
+
 document
 .getElementById(
 "isMuslimah"
 )
 .checked =
-lower.includes(
-"muslimah"
-);
+muslimah;
 
 document
 .getElementById(
 "isAnak"
 )
 .checked =
-lower.includes(
-"anak"
-);
+anak;
+
+document
+.getElementById(
+"isIkhwan"
+)
+.checked =
+ikhwan;
 
 document
 .getElementById(
@@ -618,7 +639,20 @@ lower.includes(
 "syarah"
 );
 
+document
+.getElementById(
+"isUmum"
+)
+.checked =
+
+!(
+muslimah ||
+anak ||
+ikhwan
+);
+
 }
+
 
 async function simpanKajian(){
 
