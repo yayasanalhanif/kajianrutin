@@ -668,21 +668,47 @@ document.getElementById("isAnak").checked
 };
 
 try{
+const params =
+new URLSearchParams({
+
+mode:
+"simpanKajian",
+
+masjidId:
+payload.masjidId,
+
+hari:
+payload.hari,
+
+waktu:
+payload.waktu,
+
+pemateri:
+payload.pemateri,
+
+materi:
+payload.materi,
+
+keterangan:
+payload.keterangan,
+
+hpPanitia:
+payload.hpPanitia,
+
+isKitab:
+payload.isKitab,
+
+isMuslimah:
+payload.isMuslimah,
+
+isAnak:
+payload.isAnak
+
+});
 
 const res =
 await fetch(
-API_URL,
-{
-method:"POST",
-headers:{
-"Content-Type":
-"application/json"
-},
-body:
-JSON.stringify(
-payload
-)
-}
+`${API_URL}?${params}`
 );
 
 const result =
