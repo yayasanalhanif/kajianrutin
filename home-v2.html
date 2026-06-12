@@ -941,15 +941,7 @@ const res =
 await fetch(
 `${API_URL}?mode=share`
 );
-    //sementara dari sini
-const text =
-await res.text();
 
-alert(
-text.substring(0,300)
-);
-
-return; //sementara
 const data =
 await res.json();
 
