@@ -268,6 +268,7 @@ document
 );
 }
 function render(data){
+    masjidData = data;
 const m =
 data.masjid;
     const hero =
@@ -509,37 +510,54 @@ ${badges}
 }
     
 async function shareMasjid(){
-const url =
-window.location.href;
-const nama =
-document.getElementById(
-"namaMasjid"
-).textContent;
-const text =
-`🕌 ${nama}
-Lihat jadwal lengkap:
-${url}`;
+
 try{
-if(navigator.share){
-await navigator.share({
-title:nama,
-text:text,
-url:url
-});
-}
-else{
-await navigator.clipboard.writeText(
-url
-);
+
+if(!masjidData){
+
 alert(
-"Link berhasil disalin"
+"Data masjid belum siap"
 );
+
+return;
+
 }
+
+if(navigator.share){
+
+await navigator.share({
+
+title:
+masjidData.masjid.nama,
+
+text:
+masjidData.shareText
+
+});
+
+}else{
+
+await navigator.clipboard.writeText(
+masjidData.shareText
+);
+
+alert(
+"Teks jadwal berhasil disalin"
+);
+
 }
-catch(err){
-console.log(err);
+
+}catch(err){
+
+console.error(err);
+
+alert(
+"Gagal membagikan jadwal"
+);
+
 }
-    }
+
+}
     
 loadData();
 </script>
