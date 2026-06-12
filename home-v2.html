@@ -944,7 +944,11 @@ await fetch(
 
 const data =
 await res.json();
-
+    //sementara
+alert(
+"Panjang: " +
+data.shareText.length
+);
 if(navigator.share){
 
 await navigator.share({
