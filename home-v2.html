@@ -1418,11 +1418,26 @@ document
 }
 function clearSearch(){
 
+const box =
+document.getElementById(
+'searchBox'
+);
+
+box.value = '';
+
 document
 .getElementById(
-'searchBox'
+"searchResultContainer"
 )
-.value = '';
+.innerHTML = "";
+
+document
+.getElementById(
+"searchResultContainer"
+)
+.classList.add(
+"hidden"
+);
 
 renderMasjid();
 
