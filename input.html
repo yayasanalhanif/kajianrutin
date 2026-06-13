@@ -620,8 +620,7 @@ line.includes(h)
 ){
 
 hari =
-line
-.replace(/\*/g,"");
+hari.replace("Jum'at","Jumat");
 
 const matchWaktu =
 hari.match(
@@ -1092,16 +1091,14 @@ terbaik.maps || "";
 function deteksiHari(text){
 
 const hariList = [
-
 "Senin",
 "Selasa",
 "Rabu",
 "Kamis",
 "Jumat",
+"Jum'at",
 "Sabtu",
-"Ahad",
-"Minggu"
-
+"Ahad"
 ];
 
 const found =
@@ -1468,17 +1465,40 @@ const teks =
 .toLowerCase()
 .trim();
 
-const found =
-masjidList.find(m =>
+let terbaik = null;
+let skorTerbaik = 0;
 
+masjidList.forEach(m => {
+
+const namaMasjid =
 (m.nama || "")
-.toLowerCase()
-.trim() === teks
+.toLowerCase();
 
-);
+let skor = 0;
 
-return found
-? found.id
+teks.split(/\s+/)
+.forEach(kata => {
+
+if(
+kata.length > 3 &&
+namaMasjid.includes(kata)
+){
+skor++;
+}
+
+});
+
+if(skor > skorTerbaik){
+
+skorTerbaik = skor;
+terbaik = m;
+
+}
+
+});
+
+return terbaik
+? terbaik.id
 : "";
 
 }
