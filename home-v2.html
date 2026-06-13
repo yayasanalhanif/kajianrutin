@@ -194,7 +194,18 @@ focus:ring-[#14532D]
 
 <div class="grid grid-cols-2 gap-3 mb-6">
 
-<div class="bg-white rounded-xl shadow px-4 py-3">
+<div
+onclick="setFilter('')"
+class="
+bg-white
+rounded-xl
+shadow
+px-4
+py-3
+cursor-pointer
+hover:shadow-lg
+transition
+">
 <div class="flex items-center gap-2">
 <span
 id="totalKajian"
@@ -207,7 +218,19 @@ Kajian
 </div>
 </div>
 
-<div class="bg-white rounded-xl shadow px-4 py-3">
+<div
+onclick="setFilter('kitab')"
+class="
+bg-white
+rounded-xl
+shadow
+px-4
+py-3
+cursor-pointer
+hover:shadow-lg
+transition
+">
+    
 <div class="flex items-center gap-2">
 <span
 id="totalKitab"
@@ -220,7 +243,18 @@ Kitab
 </div>
 </div>
 
-<div class="bg-white rounded-xl shadow px-4 py-3">
+<div
+onclick="setFilter('muslimah')"
+class="
+bg-white
+rounded-xl
+shadow
+px-4
+py-3
+cursor-pointer
+hover:shadow-lg
+transition
+">
 <div class="flex items-center gap-2">
 <span
 id="totalMuslimah"
@@ -233,7 +267,18 @@ Muslimah
 </div>
 </div>
 
-<div class="bg-white rounded-xl shadow px-4 py-3">
+<div
+onclick="setFilter('anak')"
+class="
+bg-white
+rounded-xl
+shadow
+px-4
+py-3
+cursor-pointer
+hover:shadow-lg
+transition
+">
 <div class="flex items-center gap-2">
 <span
 id="totalAnak"
@@ -343,6 +388,18 @@ class="space-y-3">
 </div>
 
 </div>
+
+<div
+id="filterTitle"
+class="
+hidden
+mb-4
+text-center
+font-semibold
+text-emerald-700
+">
+</div>
+    
 <div
 id="masjidContainer"
 class="grid gap-3">
@@ -368,7 +425,30 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJ
 // =====================
 
 let homeData = {};
+let activeFilter = "";
 
+function setFilter(type){
+
+if(
+activeFilter === type
+){
+
+activeFilter = "";
+
+}
+else{
+
+activeFilter = type;
+
+}
+
+currentPage = 1;
+
+renderMasjid();
+
+}
+
+    
 async function loadData(){
 
 try{
