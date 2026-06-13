@@ -336,32 +336,16 @@ text-sm
 
 <thead>
 
-<tr
-class="bg-slate-100">
-<th>Status</th>
- <td class="border p-1 text-center">
+<tr class="bg-slate-100">
 
-🆕
+<th class="p-2">Status</th>
+<th class="p-2">Hari</th>
+<th class="p-2">Pekan</th>
+<th class="p-2">Waktu</th>
+<th class="p-2">Pemateri</th>
+<th class="p-2">Materi</th>
+<th class="p-2">Lokasi</th>
 
-</td>
-<th>Hari</th>
-<th>Pekan</th>
-<th>Waktu</th>
-<th>Pemateri</th>
-<th>Materi</th>
-<th>Lokasi</th>
-<td class="border p-1">
-
-<input
-value="${j.pemateri}"
-class="
-w-full
-border
-rounded
-p-1
-pemateriBatch">
-
-</td>
 </tr>
 
 </thead>
@@ -729,7 +713,11 @@ data.forEach((j,index) => {
 tbody.innerHTML += `
 
 <tr>
+<td class="border p-1 text-center">
 
+🆕
+
+</td>
 <td class="border p-1">
 
 <select
@@ -806,16 +794,27 @@ ${j.pekan=="5"?"selected":""}>
 <td class="border p-1">
 
 <input
-value="${j.waktu}"
+value="${j.pemateri || ''}"
 class="
 w-full
 border
 rounded
 p-1
-waktuBatch">
+pemateriBatch">
 
 </td>
+<td class="border p-1">
 
+<input
+value="${j.pemateri || ''}"
+class="
+w-full
+border
+rounded
+p-1
+pemateriBatch">
+
+</td>
 <td class="border p-1">
 
 <input
