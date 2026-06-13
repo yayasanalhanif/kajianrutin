@@ -419,7 +419,7 @@ Anak
 </div>
 
 <button
-onclick="simpanKajian()"
+onclick="simpanBatch()"
 class="
 w-full
 bg-emerald-600
@@ -428,7 +428,7 @@ py-3
 rounded-xl
 font-bold">
 
-💾 SIMPAN KAJIAN
+💾 SIMPAN SEMUA HASIL ANALISA
 
 </button>
 
@@ -859,7 +859,73 @@ document
 );
 
 }
+async function simpanBatch(){
 
+const rows =
+document.querySelectorAll(
+"#batchTable tr"
+);
+
+if(rows.length === 0){
+
+alert(
+"Belum ada hasil analisa."
+);
+
+return;
+
+}
+
+const data = [];
+
+rows.forEach(row => {
+
+const cells =
+row.querySelectorAll("td");
+
+data.push({
+
+hari:
+cells[1]
+.querySelector("select")
+.value,
+
+pekan:
+cells[2]
+.querySelector("select")
+.value,
+
+waktu:
+cells[3]
+.querySelector("input")
+.value,
+
+pemateri:
+cells[4]
+.querySelector("input")
+.value,
+
+materi:
+cells[5]
+.querySelector("input")
+.value,
+
+lokasi:
+cells[6]
+.querySelector("input")
+.value
+
+});
+
+});
+
+console.log(data);
+
+alert(
+`${data.length} kajian siap disimpan`
+);
+
+}
 function deteksiMasjid(text){
 
 const lower =
