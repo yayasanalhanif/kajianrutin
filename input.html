@@ -959,47 +959,60 @@ function deteksiKategori(text){
 const lower =
 text.toLowerCase();
 
-const muslimah =
+let kategori =
+"Umum";
+
+if(
 lower.includes(
 "muslimah"
-);
+)
+){
 
-const anak =
-lower.includes(
-"anak"
-);
+kategori =
+"Khusus Muslimah";
 
-const ikhwan =
+}
+else if(
 lower.includes(
 "ikhwan"
+)
+){
+
+kategori =
+"Khusus Ikhwan";
+
+}
+else if(
+lower.includes(
+"anak"
+)
+){
+
+kategori =
+"Anak";
+
+}
+
+const kategoriEl =
+document.getElementById(
+"kategori"
 );
 
-document
-.getElementById(
-"kategori"
-)
-.value =
-'Khusus Muslimah';
+if(kategoriEl){
 
-document
-.getElementById(
-"isAnak"
-)
-.checked =
-anak;
+kategoriEl.value =
+kategori;
 
-document
-.getElementById(
-"isIkhwan"
-)
-.checked =
-ikhwan;
+}
 
-document
-.getElementById(
+const kitabEl =
+document.getElementById(
 "isKitab"
-)
-.checked =
+);
+
+if(kitabEl){
+
+kitabEl.checked =
 
 lower.includes(
 "kitab"
@@ -1011,17 +1024,7 @@ lower.includes(
 "syarah"
 );
 
-document
-.getElementById(
-"isUmum"
-)
-.checked =
-
-!(
-muslimah ||
-anak ||
-ikhwan
-);
+}
 
 }
 
