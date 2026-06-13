@@ -1089,7 +1089,13 @@ document.getElementById(
 ).checked
 
 };
-console.log(payload);
+alert(
+JSON.stringify(
+payload,
+null,
+2
+)
+);
 try{
 
 const params =
