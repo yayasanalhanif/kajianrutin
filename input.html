@@ -592,6 +592,35 @@ line.match(
 
 if(match){
 
+let lokasi =
+match[3].trim();
+
+let waktuBaris =
+waktu;
+
+const waktuMatch =
+lokasi.match(
+/(\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})/
+);
+
+if(
+waktuMatch
+){
+
+waktuBaris =
+waktuMatch[1];
+
+lokasi =
+lokasi
+.replace(
+waktuMatch[1],
+""
+)
+.replace(/\|/g,"")
+.trim();
+
+}
+
 hasil.push({
 
 hari,
@@ -599,15 +628,15 @@ hari,
 pekan:
 match[1],
 
-waktu,
+waktu:
+waktuBaris,
 
 pemateri,
 
 materi:
 match[2].trim(),
 
-lokasi:
-match[3].trim(),
+lokasi,
 
 kategori
 
@@ -899,10 +928,10 @@ lower.includes(
 
 document
 .getElementById(
-"isMuslimah"
+"kategori"
 )
-.checked =
-muslimah;
+.value =
+'Khusus Muslimah';
 
 document
 .getElementById(
@@ -958,71 +987,63 @@ confirm(
 
 if(!yakin)
 return;
-let keterangan =
-"Umum";
 
-if(
-document.getElementById(
-"isMuslimah"
-).checked
-){
-keterangan =
-"Khusus Muslimah";
-}
-else if(
-document.getElementById(
-"isIkhwan"
-).checked
-){
-keterangan =
-"Khusus Ikhwan";
-}
-else if(
-document.getElementById(
-"isAnak"
-).checked
-){
-keterangan =
-"Anak";
-}
 const payload = {
 
-action:
-"simpanKajian",
-
 masjidId:
-document.getElementById("masjidId").value,
+document.getElementById(
+"masjidId"
+).value,
 
 hari:
-document.getElementById("hari").value,
+document.getElementById(
+"hari"
+).value,
+
+pekan:
+document.getElementById(
+"pekan"
+)?.value || "",
 
 waktu:
-document.getElementById("waktu").value,
+document.getElementById(
+"waktu"
+).value,
 
 pemateri:
-document.getElementById("pemateri").value,
+document.getElementById(
+"pemateri"
+).value,
 
 materi:
-document.getElementById("materi").value,
+document.getElementById(
+"materi"
+).value,
 
 keterangan:
-keterangan,
+document.getElementById(
+"kategori"
+).value,
 
 hpPanitia:
-document.getElementById("hpPanitia").value,
+document.getElementById(
+"hpPanitia"
+).value,
 
 isKitab:
-document.getElementById("isKitab").checked,
+document.getElementById(
+"isKitab"
+).checked,
 
-isMuslimah:
-document.getElementById("isMuslimah").checked,
-
-isAnak:
-document.getElementById("isAnak").checked
+aktif:
+document.getElementById(
+"aktif"
+).checked
 
 };
 
 try{
+
 const params =
 new URLSearchParams({
 
@@ -1034,6 +1055,9 @@ payload.masjidId,
 
 hari:
 payload.hari,
+
+pekan:
+payload.pekan,
 
 waktu:
 payload.waktu,
@@ -1053,11 +1077,8 @@ payload.hpPanitia,
 isKitab:
 payload.isKitab,
 
-isMuslimah:
-payload.isMuslimah,
-
-isAnak:
-payload.isAnak
+aktif:
+payload.aktif
 
 });
 
@@ -1091,12 +1112,14 @@ catch(err){
 console.error(err);
 
 alert(
+"ERROR:\n" +
 err.message
 );
 
 }
 
 }
+
 
 window.onload = () => {
   loadMasjid();
