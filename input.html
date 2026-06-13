@@ -661,16 +661,44 @@ let lokasi = "";
 
 if(bagian.length === 3){
 
+bagian.forEach(item => {
+
+const teks =
+item.trim();
+
+if(
+/jam\s*\d/i.test(teks)
+){
+
 waktuBaris =
-bagian[0]
-.replace(/Jam/i,"")
+teks
+.replace(/jam/i,"")
 .trim();
 
-materi =
-bagian[1];
+}
+else if(
+teks.toLowerCase()
+.startsWith("lokasi:")
+){
 
 lokasi =
-bagian[2];
+teks
+.replace(/lokasi:/i,"")
+.trim();
+
+}
+else if(!materi){
+
+materi = teks;
+
+}
+else{
+
+lokasi = teks;
+
+}
+
+});
 
 }
 else if(bagian.length === 2){
@@ -806,7 +834,6 @@ ${j.pekan=="5"?"selected":""}>
 
 </td>
 
-<td class="border p-1">
 
 <td class="border p-1">
 
