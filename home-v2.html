@@ -444,6 +444,36 @@ activeFilter = type;
 
 currentPage = 1;
 
+const title =
+document.getElementById(
+'filterTitle'
+);
+
+if(!activeFilter){
+
+title?.classList.add(
+'hidden'
+);
+
+}
+else{
+
+title?.classList.remove(
+'hidden'
+);
+
+title.innerHTML =
+
+activeFilter === "kitab"
+? "📚 Menampilkan Masjid dengan Kajian Kitab"
+
+: activeFilter === "muslimah"
+? "🌹 Menampilkan Masjid dengan Kajian Muslimah"
+
+: "👶 Menampilkan Masjid dengan Kajian Anak";
+
+}
+
 renderMasjid();
 
 }
@@ -875,41 +905,41 @@ searchInput.value
 
 let data = [...homeData.masjid];
 
+if(
+activeFilter ===
+"kitab"
+){
+
 data =
-data.filter(m => {
-
-const matchFilter =
-!filter ||
-m.kecamatan === filter;
-
-const matchSearch =
-
-searchValue === ""
-
-||
-
-m.nama
-.toLowerCase()
-.includes(searchValue)
-
-||
-
-(m.kecamatan || "")
-.toLowerCase()
-.includes(searchValue)
-
-||
-
-(m.searchText || "")
-.toLowerCase()
-.includes(searchValue);
-
-return (
-matchFilter &&
-matchSearch
+data.filter(
+m => m.kitab > 0
 );
 
-});
+}
+
+if(
+activeFilter ===
+"muslimah"
+){
+
+data =
+data.filter(
+m => m.muslimah > 0
+);
+
+}
+
+if(
+activeFilter ===
+"anak"
+){
+
+data =
+data.filter(
+m => m.anak > 0
+);
+
+}
 
 if(searchValue){
 
