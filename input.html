@@ -345,6 +345,8 @@ text-sm
 <th class="p-2">Pemateri</th>
 <th class="p-2">Materi</th>
 <th class="p-2">Lokasi</th>
+ <th>MasjidID</th>
+<th class="p-2">Masjid</th>
 
 </tr>
 
@@ -738,7 +740,41 @@ kategori
 return hasil;
 
 }
+function mappingLokasi(lokasi){
 
+const teks =
+(lokasi || "")
+.toLowerCase();
+
+if(
+teks.includes("mediterania")
+){
+return "Masjid Imam An-Nawawi";
+}
+
+if(
+teks.includes("topaz")
+){
+return "Masjid Imam An-Nawawi";
+}
+
+if(
+teks.includes("zircon")
+){
+return "Masjid Imam An-Nawawi";
+}
+
+if(
+teks.includes(
+"imam an nawawi"
+)
+){
+return "Masjid Imam An-Nawawi";
+}
+
+return "";
+
+}
 function renderBatchTable(data){
 console.log(
 "RENDER TABEL:",
@@ -885,7 +921,30 @@ p-1
 lokasiBatch">
 
 </td>
+<td class="border p-1">
 
+<input
+value="${mappingLokasi(j.lokasi)}"
+class="
+w-full
+border
+rounded
+p-1
+masjidBatch">
+
+</td>
+<td class="border p-1">
+
+<input
+value="${cariMasjidId(j.lokasi)}"
+class="
+w-full
+border
+rounded
+p-1
+masjidIdBatch">
+
+</td>
 </tr>
 
 `;
@@ -1402,7 +1461,27 @@ err.message
 }
 
 }
+function cariMasjidId(nama){
 
+const teks =
+(nama || "")
+.toLowerCase()
+.trim();
+
+const found =
+masjidList.find(m =>
+
+(m.nama || "")
+.toLowerCase()
+.trim() === teks
+
+);
+
+return found
+? found.id
+: "";
+
+}
 
 window.onload = () => {
   loadMasjid();
