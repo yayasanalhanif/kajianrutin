@@ -646,37 +646,40 @@ continue;
 
 const match =
 line.match(
-/Pekan\s*(\d+)\s*:\s*(.+?)\s*\|\s*(.+)/i
+/Pekan\s*(\d+)\s*:\s*(.+)/i
 );
-
 if(match){
 
-let lokasi =
-match[3].trim();
+const bagian =
+match[2]
+.split("|")
+.map(x => x.trim());
 
-let waktuBaris =
-waktu;
+let waktuBaris = "";
+let materi = "";
+let lokasi = "";
 
-const waktuMatch =
-lokasi.match(
-/(\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})/
-);
-
-if(
-waktuMatch
-){
+if(bagian.length === 3){
 
 waktuBaris =
-waktuMatch[1];
+bagian[0]
+.replace(/Jam/i,"")
+.trim();
+
+materi =
+bagian[1];
 
 lokasi =
-lokasi
-.replace(
-waktuMatch[1],
-""
-)
-.replace(/\|/g,"")
-.trim();
+bagian[2];
+
+}
+else if(bagian.length === 2){
+
+materi =
+bagian[0];
+
+lokasi =
+bagian[1];
 
 }
 
@@ -692,8 +695,7 @@ waktuBaris,
 
 pemateri,
 
-materi:
-match[2].trim(),
+materi,
 
 lokasi,
 
