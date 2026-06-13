@@ -157,22 +157,33 @@ hidden
 
 <div class="p-3">
 
+<div class="relative">
+
 <input
 id="searchBox"
 type="text"
-placeholder="Cari masjid, pemateri, kitab..."
-oninput="renderMasjid()"
+class="w-full ..."
+placeholder="Cari kajian, pemateri, masjid..."
+oninput="renderMasjid()">
+
+<button
+type="button"
+onclick="clearSearch()"
 class="
-w-full
-border
-rounded-xl
-px-4
-py-3
-outline-none
-text-slate-800
-focus:ring-2
-focus:ring-[#14532D]
+absolute
+right-3
+top-1/2
+-transform
+-translate-y-1/2
+text-gray-500
+font-bold
 ">
+
+✕
+
+</button>
+
+</div>
 
 </div>
 </div>
@@ -954,7 +965,11 @@ document
 .classList.add(
 "hidden"
 );
-
+document
+.getElementById(
+'pagination'
+)
+.innerHTML = '';
 return;
 
 }
@@ -1370,7 +1385,17 @@ document
 );
 
 }
+function clearSearch(){
 
+document
+.getElementById(
+'searchBox'
+)
+.value = '';
+
+renderMasjid();
+
+}
 </script>    
 </body>
 </html>
