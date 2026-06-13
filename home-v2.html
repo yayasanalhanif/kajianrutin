@@ -512,6 +512,45 @@ await fetch(
 
 homeData =
 await res.json();
+
+if(
+homeData.maintenance
+){
+
+document.body.innerHTML = `
+<div class="
+min-h-screen
+bg-emerald-600
+text-white
+flex
+items-center
+justify-center
+p-6
+">
+
+<div class="text-center">
+
+<h1 class="text-3xl font-bold mb-4">
+
+🔧 Sedang Dalam Perbaikan
+
+</h1>
+
+<p>
+
+Portal Kajian sedang diperbarui.
+Silakan kembali beberapa saat lagi.
+
+</p>
+
+</div>
+
+</div>
+`;
+
+return;
+
+}
 const ver =
 document.getElementById(
 'loadingVersion'
