@@ -1219,15 +1219,30 @@ console.log(
 data.shareText.length
 );
     
-const text =
-encodeURIComponent(
+if(navigator.share){
+
+await navigator.share({
+
+title:
+"Jadwal Kajian Islam Ilmiah Kota Cilegon",
+
+text:
+data.shareText
+
+});
+
+}
+else{
+
+await navigator.clipboard.writeText(
 data.shareText
 );
 
-window.open(
-`https://wa.me/?text=${text}`,
-"_blank"
+alert(
+"Teks jadwal disalin.\nSilakan paste ke WhatsApp."
 );
+
+}
 
 }catch(err){
 
