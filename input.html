@@ -77,7 +77,42 @@ rounded-lg">
 🔍 Analisa
 
 </button>
+<hr class="my-8">
 
+<h2 class="text-xl font-bold mb-3">
+
+📥 Input Massal dari WhatsApp
+
+</h2>
+
+<textarea
+id="batchInput"
+rows="12"
+class="
+w-full
+border
+rounded-xl
+p-3
+font-mono
+text-sm
+"
+placeholder="Paste pesan WA di sini...">
+</textarea>
+
+<button
+onclick="analisaBatch()"
+class="
+mt-3
+bg-emerald-600
+text-white
+px-4
+py-2
+rounded-lg
+">
+
+🔍 Analisa Batch
+
+</button>
 </div>
 
 <!-- DATA MASJID -->
@@ -231,7 +266,51 @@ id="keterangan"
 class="w-full border rounded p-2">
 
 </div>
+<div
+id="batchResult"
+class="hidden mt-6">
 
+<h3
+class="font-bold text-lg mb-3">
+
+Hasil Analisa
+
+</h3>
+
+<div class="overflow-x-auto">
+
+<table
+class="
+w-full
+border
+text-sm
+">
+
+<thead>
+
+<tr
+class="bg-slate-100">
+
+<th class="p-2">Hari</th>
+<th class="p-2">Pekan</th>
+<th class="p-2">Waktu</th>
+<th class="p-2">Materi</th>
+<th class="p-2">Lokasi</th>
+
+</tr>
+
+</thead>
+
+<tbody
+id="batchTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
 </div>
 
 <div class="mt-4 flex flex-wrap gap-4">
@@ -246,39 +325,45 @@ id="isKitab">
 <label>
 <input
 type="checkbox"
-id="isUmum"
-checked>
- Umum
-</label>
-
-<label>
-<input
-type="checkbox"
-id="isMuslimah">
- Muslimah
-</label>
-
-<label>
-<input
-type="checkbox"
-id="isIkhwan">
- Khusus Ikhwan
-</label>
-
-<label>
-<input
-type="checkbox"
-id="isAnak">
- Anak
-</label>
-
-<label>
-<input
-type="checkbox"
 id="aktif"
 checked>
  Aktif
 </label>
+
+</div>
+
+<div class="mt-4">
+
+<label class="block font-medium mb-1">
+Kategori Kajian
+</label>
+
+<select
+id="kategori"
+class="
+w-full
+border
+rounded-lg
+p-2
+">
+
+<option value="Umum">
+Umum
+</option>
+
+<option value="Khusus Muslimah">
+Khusus Muslimah
+</option>
+
+<option value="Khusus Ikhwan">
+Khusus Ikhwan
+</option>
+
+<option value="Anak">
+Anak
+</option>
+
+</select>
 
 </div>
 
@@ -377,6 +462,216 @@ deteksiMateri(text);
 deteksiKategori(text);
 
 }
+function analisaBatch(){
+
+const text =
+document
+.getElementById(
+"batchInput"
+)
+.value;
+
+const hasil =
+parseBatchWA(text);
+
+renderBatchTable(
+hasil
+);
+
+}
+
+function parseBatchWA(text){
+
+const hasil = [];
+
+const lines =
+text
+.split("\n")
+.map(x => x.trim())
+.filter(x => x);
+
+let hari = "";
+let waktu = "";
+let pemateri = "";
+let kategori = "Umum";
+
+for(
+let i=0;
+i<lines.length;
+i++
+){
+
+const line =
+lines[i];
+
+if(
+line.startsWith(
+"Pemateri:"
+)
+){
+
+pemateri =
+line.replace(
+"Pemateri:",
+""
+).trim();
+
+continue;
+
+}
+
+if(
+line.toLowerCase()
+.includes(
+"muslimah"
+)
+){
+
+kategori =
+"Khusus Muslimah";
+
+}
+
+if(
+line.toLowerCase()
+.includes(
+"ikhwan"
+)
+){
+
+kategori =
+"Khusus Ikhwan";
+
+}
+
+if(
+[
+"Senin",
+"Selasa",
+"Rabu",
+"Kamis",
+"Jumat",
+"Sabtu",
+"Ahad"
+].some(h =>
+line.includes(h)
+)
+){
+
+hari =
+line
+.replace(/\*/g,"");
+
+const matchWaktu =
+hari.match(
+/(\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})/
+);
+
+if(
+matchWaktu
+){
+
+waktu =
+matchWaktu[1];
+
+hari =
+hari
+.split(",")[0]
+.trim();
+
+}
+
+continue;
+
+}
+
+const match =
+line.match(
+/Pekan\s*(\d+)\s*:\s*(.+?)\s*\|\s*(.+)/i
+);
+
+if(match){
+
+hasil.push({
+
+hari,
+
+pekan:
+match[1],
+
+waktu,
+
+pemateri,
+
+materi:
+match[2].trim(),
+
+lokasi:
+match[3].trim(),
+
+kategori
+
+});
+
+}
+
+}
+
+return hasil;
+
+}
+
+function renderBatchTable(data){
+
+const tbody =
+document.getElementById(
+"batchTable"
+);
+
+tbody.innerHTML = "";
+
+data.forEach(j => {
+
+tbody.innerHTML += `
+
+<tr>
+
+<td class="border p-2">
+${j.hari}
+</td>
+
+<td class="border p-2">
+${j.pekan}
+</td>
+
+<td class="border p-2">
+${j.waktu}
+</td>
+
+<td class="border p-2">
+${j.materi}
+</td>
+
+<td class="border p-2">
+${j.lokasi}
+</td>
+
+</tr>
+
+`;
+
+});
+
+document
+.getElementById(
+"batchResult"
+)
+.classList.remove(
+"hidden"
+);
+
+}
+
 function deteksiMasjid(text){
 
 const lower =
