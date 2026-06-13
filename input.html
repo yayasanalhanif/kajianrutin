@@ -338,13 +338,30 @@ text-sm
 
 <tr
 class="bg-slate-100">
+<th>Status</th>
+ <td class="border p-1 text-center">
 
-<th class="p-2">Hari</th>
-<th class="p-2">Pekan</th>
-<th class="p-2">Waktu</th>
-<th class="p-2">Materi</th>
-<th class="p-2">Lokasi</th>
+🆕
 
+</td>
+<th>Hari</th>
+<th>Pekan</th>
+<th>Waktu</th>
+<th>Pemateri</th>
+<th>Materi</th>
+<th>Lokasi</th>
+<td class="border p-1">
+
+<input
+value="${j.pemateri}"
+class="
+w-full
+border
+rounded
+p-1
+pemateriBatch">
+
+</td>
 </tr>
 
 </thead>
@@ -707,30 +724,122 @@ document.getElementById(
 
 tbody.innerHTML = "";
 
-data.forEach(j => {
+data.forEach((j,index) => {
 
 tbody.innerHTML += `
 
 <tr>
 
-<td class="border p-2">
-${j.hari}
+<td class="border p-1">
+
+<select
+class="hariBatch w-full border rounded p-1">
+
+<option ${
+j.hari==="Senin"?"selected":""
+}>Senin</option>
+
+<option ${
+j.hari==="Selasa"?"selected":""
+}>Selasa</option>
+
+<option ${
+j.hari==="Rabu"?"selected":""
+}>Rabu</option>
+
+<option ${
+j.hari==="Kamis"?"selected":""
+}>Kamis</option>
+
+<option ${
+j.hari==="Jumat"?"selected":""
+}>Jumat</option>
+
+<option ${
+j.hari==="Sabtu"?"selected":""
+}>Sabtu</option>
+
+<option ${
+j.hari==="Ahad"?"selected":""
+}>Ahad</option>
+
+</select>
+
 </td>
 
-<td class="border p-2">
-${j.pekan}
+<td class="border p-1">
+
+<select
+class="pekanBatch w-full border rounded p-1">
+
+<option value=""></option>
+
+<option value="1"
+${j.pekan=="1"?"selected":""}>
+1
+</option>
+
+<option value="2"
+${j.pekan=="2"?"selected":""}>
+2
+</option>
+
+<option value="3"
+${j.pekan=="3"?"selected":""}>
+3
+</option>
+
+<option value="4"
+${j.pekan=="4"?"selected":""}>
+4
+</option>
+
+<option value="5"
+${j.pekan=="5"?"selected":""}>
+5
+</option>
+
+</select>
+
 </td>
 
-<td class="border p-2">
-${j.waktu}
+<td class="border p-1">
+
+<input
+value="${j.waktu}"
+class="
+w-full
+border
+rounded
+p-1
+waktuBatch">
+
 </td>
 
-<td class="border p-2">
-${j.materi}
+<td class="border p-1">
+
+<input
+value="${j.materi}"
+class="
+w-full
+border
+rounded
+p-1
+materiBatch">
+
 </td>
 
-<td class="border p-2">
-${j.lokasi}
+<td class="border p-1">
+
+<input
+value="${j.lokasi}"
+class="
+w-full
+border
+rounded
+p-1
+lokasiBatch">
+
 </td>
 
 </tr>
