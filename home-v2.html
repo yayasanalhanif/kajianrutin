@@ -1046,7 +1046,7 @@ document
 class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
 
 <div
-class="grid grid-cols-3 text-center">
+class="grid grid-cols-4 text-center">
 
 <a
 href="home-v2.html"
@@ -1070,6 +1070,15 @@ href="javascript:window.scrollTo({top:0,behavior:'smooth'})"
 class="py-3">
 
 ⬆️ Atas
+
+</a>
+<a
+href="#"
+id="installBtn"
+onclick="installApp()"
+class="py-3 hidden">
+
+📲 Instal
 
 </a>
 
@@ -1102,6 +1111,69 @@ err
 
 </script>
 
-    
+<script>
+
+let deferredPrompt = null;
+
+window.addEventListener(
+'beforeinstallprompt',
+(e) => {
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+document
+.getElementById(
+'installBtn'
+)
+.classList.remove(
+'hidden'
+);
+
+});
+
+async function installApp(){
+
+if(!deferredPrompt){
+
+alert(
+"Aplikasi sudah terinstal atau belum didukung browser."
+);
+
+return;
+
+}
+
+deferredPrompt.prompt();
+
+const result =
+await deferredPrompt.userChoice;
+
+if(
+result.outcome ===
+'accepted'
+){
+
+console.log(
+'PWA installed'
+);
+
+}
+
+deferredPrompt =
+null;
+
+document
+.getElementById(
+'installBtn'
+)
+.classList.add(
+'hidden'
+);
+
+}
+
+</script>    
 </body>
 </html>
