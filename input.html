@@ -343,7 +343,8 @@ function cariDuplikat(item){
   const masjidId =
   cariMasjidId(item.lokasi);
 
-  return jadwalList.find(j =>
+  const hasil =
+  jadwalList.find(j =>
 
     String(j.masjidId)
     ===
@@ -372,6 +373,13 @@ function cariDuplikat(item){
     .trim()
 
   );
+
+  console.log(
+    "HASIL DUPLIKAT",
+    hasil
+  );
+
+  return hasil;
 
 }
   
