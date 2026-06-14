@@ -720,7 +720,15 @@ return "";
 }
 
 function isDuplikat(item){
- console.log(
+
+console.log("CEK", item);
+
+const masjidId =
+cariMasjidId(
+item.lokasi
+);
+
+console.log(
 "CARI",
 {
 masjidId,
@@ -728,12 +736,6 @@ hari:item.hari,
 pekan:item.pekan,
 materi:item.materi
 }
-);
- 
-console.log("CEK", item);
-const masjidId =
-cariMasjidId(
-item.lokasi
 );
 
 const hasil =
@@ -784,6 +786,7 @@ console.log(
 item.materi,
 hasil
 );
+
 const kandidat =
 jadwalList.filter(j =>
 
@@ -797,6 +800,7 @@ console.log(
 "KANDIDAT",
 kandidat
 );
+
 return hasil;
 
 }
