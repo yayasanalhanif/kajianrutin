@@ -227,7 +227,7 @@ function renderBatchTable(data) {
   data.forEach(j => {
     const duplikat = isDuplikat(j);
     tbody.innerHTML += `
-      <tr>
+      <tr data-kategori="${j.kategori || 'Umum'}">
         <td class="border p-1 text-center">${duplikat ? "⚠️" : "🆕"}</td>
         <td class="border p-1">
           <select class="w-full border rounded p-1">
@@ -259,6 +259,7 @@ async function simpanBatch() {
   rows.forEach(row => {
     const cells = row.querySelectorAll("td");
     data.push({
+      kategori: row.dataset.kategori || "Umum",
       hari: cells[1].querySelector("select").value,
       pekan: cells[2].querySelector("select").value,
       waktu: cells[3].querySelector("input").value,
