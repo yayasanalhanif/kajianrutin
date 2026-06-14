@@ -790,7 +790,7 @@ return "";
 }
 
 function isDuplikat(item){
-
+console.log("CEK", item);
 const masjidId =
 cariMasjidId(
 item.lokasi
@@ -850,12 +850,11 @@ return hasil;
 }
  
 function renderBatchTable(data){
+console.log("RENDER", data.length);
 console.log("RENDER TABEL:", data);
 console.log("JADWAL LIST:", jadwalList);
-console.log(
-"RENDER TABEL:",
-data
-);
+
+ 
 const tbody =
 document.getElementById(
 "batchTable"
