@@ -790,7 +790,7 @@ return "";
 }
 
 function isDuplikat(item){
-
+console.log("CEK DUPLIKAT ITEM:", item);
 return jadwalList.some(j =>
 
 String(j.hari || "")
@@ -874,6 +874,8 @@ String(item.materi || "")
 }
  
 function renderBatchTable(data){
+console.log("RENDER TABEL:", data);
+console.log("JADWAL LIST:", jadwalList);
 console.log(
 "RENDER TABEL:",
 data
