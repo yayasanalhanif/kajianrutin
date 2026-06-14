@@ -496,87 +496,48 @@ err.message
  
  
 function analisaWA(){
-
 const text =
 document
 .getElementById(
 "waText"
 )
 .value;
-
 if(!text){
-
 alert(
 "Paste pesan WA terlebih dahulu"
 );
-
 return;
-
 }
-
 deteksiMasjid(text);
-console.log("LINE:", line);
 deteksiHari(text);
-
 deteksiWaktu(text);
-
 deteksiPemateri(text);
-
 deteksiMateri(text);
-
 deteksiKategori(text);
-
 }
 function analisaBatch(){
-
 const text =
 document
 .getElementById(
 "batchInput"
 )
 .value;
-
 console.log(
 "TEXT BATCH:",
 text
 );
-
 const hasil =
 parseBatchWA(text);
-
 console.log(
 "HASIL PARSER:",
 hasil
 );
-
 renderBatchTable(
 hasil
 );
-
 }
 
-
-const matchFilter =
-!filter ||
-m.kecamatan === filter;
-const matchSearch =
-searchValue === ""
-||
-m.nama
-.toLowerCase()
-.includes(searchValue)
-||
-(m.kecamatan || "")
-.toLowerCase()
-.includes(searchValue)
-||
-(m.searchText || "")
-.toLowerCase()
-.includes(searchValue);
-return (
-matchFilter &&
-matchSearch
-);
+ 
 function parseBatchWA(text){
 const hasil = [];
 const lines =
