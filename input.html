@@ -386,7 +386,10 @@ function renderBatchTable(data) {
     const duplikat =
     !!existing;
     tbody.innerHTML += `
-      <tr data-kategori="${j.kategori || 'Umum'}">
+      <tr
+      data-jadwalid="${existing?.jadwalId || ''}"
+      data-kategori="${j.kategori || 'Umum'}"
+      >
         <td class="border p-1 text-center">${duplikat
          ? `⚠️ Update`
          : `🆕 Baru`
@@ -421,6 +424,7 @@ async function simpanBatch() {
   rows.forEach(row => {
     const cells = row.querySelectorAll("td");
     data.push({
+      jadwalId: row.dataset.jadwalid || "",
       kategori: row.dataset.kategori || "Umum",
       hari: cells[1].querySelector("select").value,
       pekan: cells[2].querySelector("select").value,
