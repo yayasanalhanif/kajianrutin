@@ -515,7 +515,7 @@ return;
 }
 
 deteksiMasjid(text);
-
+console.log("LINE:", line);
 deteksiHari(text);
 
 deteksiWaktu(text);
@@ -1188,10 +1188,11 @@ const hariList = [
 "Ahad"
 ];
 
-const found =
+const hariKetemu =
 hariList.find(h =>
 
-text
+line
+.replace(/\*/g,"")
 .toLowerCase()
 .includes(
 h.toLowerCase()
@@ -1199,14 +1200,13 @@ h.toLowerCase()
 
 );
 
-if(found){
+if(hariKetemu){
 
-document
-.getElementById(
-"hari"
-)
-.value =
-found;
+hari =
+hariKetemu
+.replace("Jum'at","Jumat");
+
+continue;
 
 }
 
