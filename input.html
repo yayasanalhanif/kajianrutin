@@ -216,13 +216,65 @@ function parseBatchWA(text) {
 }
 
 function isDuplikat(item) {
-  const masjidId = cariMasjidId(item.lokasi);
-  return jadwalList.some(j => 
-    String(j.masjidId) === String(masjidId) &&
-    String(j.hari || "").trim().toLowerCase() === String(item.hari || "").trim().toLowerCase() &&
-    String(j.pekan || "").trim() === String(item.pekan || "").trim() &&
-    String(j.materi || "").trim().toLowerCase() === String(item.materi || "").trim().toLowerCase()
+
+  const masjidId =
+  cariMasjidId(item.lokasi);
+
+  const kandidat =
+  jadwalList.filter(j =>
+    String(j.masjidId) === String(masjidId)
   );
+
+  console.log(
+    "ITEM",
+    item
+  );
+
+  console.log(
+    "KANDIDAT",
+    kandidat
+  );
+
+  return jadwalList.some(j =>
+
+    String(j.masjidId) === String(masjidId)
+
+    &&
+
+    String(j.hari || "")
+    .trim()
+    .toLowerCase()
+
+    ===
+
+    String(item.hari || "")
+    .trim()
+    .toLowerCase()
+
+    &&
+
+    String(j.pekan || "")
+    .trim()
+
+    ===
+
+    String(item.pekan || "")
+    .trim()
+
+    &&
+
+    String(j.materi || "")
+    .trim()
+    .toLowerCase()
+
+    ===
+
+    String(item.materi || "")
+    .trim()
+    .toLowerCase()
+
+  );
+
 }
 
 function renderBatchTable(data) {
