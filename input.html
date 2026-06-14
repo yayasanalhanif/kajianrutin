@@ -92,7 +92,6 @@
               <th class="p-2">Pemateri</th>
               <th class="p-2">Materi</th>
               <th class="p-2">Lokasi</th>
-              <th class="p-2">Masjid</th>
               <th class="p-2">MasjidID</th>
             </tr>
           </thead>
@@ -194,14 +193,6 @@ function parseBatchWA(text) {
   return hasil;
 }
 
-function mappingLokasi(lokasi) {
-  const teks = (lokasi || "").toLowerCase();
-  if(teks.includes("mediterania") || teks.includes("topaz") || teks.includes("zircon") || teks.includes("imam an nawawi")) {
-    return "Masjid Imam An-Nawawi";
-  }
-  return "";
-}
-
 function isDuplikat(item) {
   const masjidId = cariMasjidId(item.lokasi);
   return jadwalList.some(j => 
@@ -236,7 +227,6 @@ function renderBatchTable(data) {
         <td class="border p-1"><input value="${j.pemateri || ''}" class="w-full border rounded p-1"></td>
         <td class="border p-1"><input value="${j.materi || ''}" class="w-full border rounded p-1"></td>
         <td class="border p-1"><input value="${j.lokasi || ''}" class="w-full border rounded p-1"></td>
-        <td class="border p-1"><input value="${mappingLokasi(j.lokasi)}" class="w-full border rounded p-1" readonly></td>
         <td class="border p-1"><input value="${cariMasjidId(j.lokasi)}" class="w-full border rounded p-1" readonly></td>
       </tr>
     `;
@@ -258,7 +248,12 @@ async function simpanBatch() {
       pemateri: cells[4].querySelector("input").value,
       materi: cells[5].querySelector("input").value,
       lokasi: cells[6].querySelector("input").value,
-      masjidId: cells[8].querySelector("input").value
+      masjidId:
+        cariMasjidId(
+        cells[6]
+        .querySelector("input")
+        .value
+        )
     });
   });
 
