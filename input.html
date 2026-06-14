@@ -1121,8 +1121,7 @@ const hariList = [
 const hariKetemu =
 hariList.find(h =>
 
-line
-.replace(/\*/g,"")
+text
 .toLowerCase()
 .includes(
 h.toLowerCase()
@@ -1132,11 +1131,13 @@ h.toLowerCase()
 
 if(hariKetemu){
 
-hari =
-hariKetemu
-.replace("Jum'at","Jumat");
-
-continue;
+document
+.getElementById("hari")
+.value =
+hariKetemu.replace(
+"Jum'at",
+"Jumat"
+);
 
 }
 
