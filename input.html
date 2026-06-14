@@ -1,1556 +1,405 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-
-<meta charset="UTF-8">
-
-<meta
-name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Input Kajian</title>
-
-<script src="https://cdn.tailwindcss.com"></script>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Input Kajian</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="bg-slate-100 pb-24">
-
-<header
-class="sticky top-0 bg-emerald-600 text-white shadow z-50">
-
-<div class="max-w-4xl mx-auto p-4">
-
-<h1 class="text-2xl font-bold">
-
-➕ Input Kajian Baru
-
-</h1>
-
-<p class="text-white/90">
-
-Tempel pesan WhatsApp lalu analisa otomatis
-
-</p>
-
-</div>
-
-</header>
-
-<main
-class="max-w-4xl mx-auto p-4 space-y-4">
-
-<!-- PESAN WA -->
-
-<div
-class="bg-white rounded-xl shadow p-4">
-
-<h2
-class="font-bold mb-3">
-
-📱 Pesan WhatsApp
-
-</h2>
-
-<textarea
-id="waText"
-rows="10"
-class="
-w-full
-border
-rounded-xl
-p-3
-outline-none"
-placeholder="Paste pesan WA disini...">
-</textarea>
-
-<button
-onclick="analisaWA()"
-class="
-mt-3
-bg-emerald-600
-text-white
-px-4
-py-2
-rounded-lg">
-
-🔍 Analisa
-
-</button>
-<hr class="my-8">
-
-<h2 class="text-xl font-bold mb-3">
-
-📥 Input Massal dari WhatsApp
-
-</h2>
-
-<textarea
-id="batchInput"
-rows="12"
-class="
-w-full
-border
-rounded-xl
-p-3
-font-mono
-text-sm
-"
-placeholder="Paste pesan WA di sini...">
-</textarea>
-
-<button
-onclick="analisaBatch()"
-class="
-mt-3
-bg-emerald-600
-text-white
-px-4
-py-2
-rounded-lg
-">
-
-🔍 Analisa Batch
-
-</button>
-</div>
-
-<!-- DATA MASJID -->
-
-<div
-class="bg-white rounded-xl shadow p-4">
-
-<h2
-class="font-bold mb-3">
-
-🕌 Data Masjid
-
-</h2>
-
-<div class="grid md:grid-cols-2 gap-3">
-
-<div>
-
-<label>Masjid ID</label>
-
-<input
-id="masjidId"
-class="w-full border rounded p-2">
-
-</div>
-
-<div>
-
-<label>Nama Masjid</label>
-
-<input
-id="namaMasjid"
-class="w-full border rounded p-2">
-
-</div>
-
-<div>
-
-<label>Kecamatan</label>
-
-<input
-id="kecamatan"
-class="w-full border rounded p-2">
-
-</div>
-
-<div>
-
-<label>HP Masjid</label>
-
-<input
-id="hpMasjid"
-class="w-full border rounded p-2">
-
-</div>
-
-<div class="md:col-span-2">
-
-<label>Alamat</label>
-
-<input
-id="alamat"
-class="w-full border rounded p-2">
-
-</div>
-
-<div class="md:col-span-2">
-
-<label>Maps</label>
-
-<input
-id="maps"
-class="w-full border rounded p-2">
-
-</div>
-
-</div>
-
-</div>
-
-<!-- DATA KAJIAN -->
-
-<div
-class="bg-white rounded-xl shadow p-4">
-
-<h2
-class="font-bold mb-3">
-
-📚 Data Kajian
-
-</h2>
-
-<div class="grid md:grid-cols-2 gap-3">
-
-<div>
-
-<label>Hari</label>
-
-<input
-id="hari"
-class="w-full border rounded p-2">
-
-</div>
-<div>
-
-<label>Pekan</label>
-
-<select
-id="pekan"
-class="w-full border rounded p-2">
-
-<option value="">
-Setiap Pekan
-</option>
-
-<option value="1">
-Pekan 1
-</option>
-
-<option value="2">
-Pekan 2
-</option>
-
-<option value="3">
-Pekan 3
-</option>
-
-<option value="4">
-Pekan 4
-</option>
-
-<option value="5">
-Pekan 5
-</option>
-
-</select>
-
-</div>
-<div>
-
-<label>Waktu</label>
-
-<input
-id="waktu"
-class="w-full border rounded p-2">
-
-</div>
-
-<div>
-
-<label>Pemateri</label>
-
-<input
-id="pemateri"
-class="w-full border rounded p-2">
-
-</div>
-
-<div>
-
-<label>HP Panitia</label>
-
-<input
-id="hpPanitia"
-class="w-full border rounded p-2">
-
-</div>
-
-<div class="md:col-span-2">
-
-<label>Materi</label>
-
-<input
-id="materi"
-class="w-full border rounded p-2">
-
-</div>
-
-<label>Kategori Kajian</label>
-
-<select
-id="kategori"
-class="w-full border rounded p-2">
-
-<option value="Umum">
-Umum
-</option>
-
-<option value="Khusus Muslimah">
-Khusus Muslimah
-</option>
-
-<option value="Khusus Ikhwan">
-Khusus Ikhwan
-</option>
-
-<option value="Anak">
-Anak
-</option>
-
-</select>
-<div
-id="batchResult"
-class="hidden mt-6">
-
-<h3
-class="font-bold text-lg mb-3">
-
-Hasil Analisa
-
-</h3>
-
-<div class="overflow-x-auto">
-
-<table
-class="
-w-full
-border
-text-sm
-">
-
-<thead>
-
-<tr class="bg-slate-100">
-
-<th class="p-2">Status</th>
-<th class="p-2">Hari</th>
-<th class="p-2">Pekan</th>
-<th class="p-2">Waktu</th>
-<th class="p-2">Pemateri</th>
-<th class="p-2">Materi</th>
-<th class="p-2">Lokasi</th>
- <th>MasjidID</th>
-<th class="p-2">Masjid</th>
-
-</tr>
-
-</thead>
-
-<tbody
-id="batchTable">
-
-</tbody>
-
-</table>
-
-</div>
-
-</div>
-</div>
-
-<div class="mt-4 flex flex-wrap gap-4">
-
-<label>
-<input
-type="checkbox"
-id="isKitab">
- Kajian Kitab
-</label>
-
-<label>
-<input
-type="checkbox"
-id="aktif"
-checked>
- Aktif
-</label>
-
-</div>
-
-<div class="mt-4">
-
-<label class="block font-medium mb-1">
-Kategori Kajian
-</label>
-
-<select
-id="kategori"
-class="
-w-full
-border
-rounded-lg
-p-2
-">
-
-<option value="Umum">
-Umum
-</option>
-
-<option value="Khusus Muslimah">
-Khusus Muslimah
-</option>
-
-<option value="Khusus Ikhwan">
-Khusus Ikhwan
-</option>
-
-<option value="Anak">
-Anak
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-<button
-onclick="simpanBatch()"
-class="
-w-full
-bg-emerald-600
-text-white
-py-3
-rounded-xl
-font-bold">
-
-💾 SIMPAN SEMUA HASIL ANALISA
-
-</button>
-
-</main>
+  <header class="sticky top-0 bg-emerald-600 text-white shadow z-50">
+    <div class="max-w-4xl mx-auto p-4">
+      <h1 class="text-2xl font-bold">➕ Input Kajian Baru</h1>
+      <p class="text-white/90">Tempel pesan WhatsApp lalu analisa otomatis</p>
+    </div>
+  </header>
+
+  <main class="max-w-4xl mx-auto p-4 space-y-4">
+    <div class="bg-white rounded-xl shadow p-4">
+      <h2 class="font-bold mb-3">📱 Pesan WhatsApp</h2>
+      <textarea id="waText" rows="6" class="w-full border rounded-xl p-3 outline-none" placeholder="Paste pesan WA untuk input tunggal..."></textarea>
+      <button onclick="analisaWA()" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded-lg">🔍 Analisa Tunggal</button>
+      
+      <hr class="my-6">
+      
+      <h2 class="text-xl font-bold mb-3">📥 Input Massal dari WhatsApp</h2>
+      <textarea id="batchInput" rows="8" class="w-full border rounded-xl p-3 font-mono text-sm" placeholder="Paste jadwal WA multi-hari di sini..."></textarea>
+      <button onclick="analisaBatch()" class="mt-3 bg-emerald-600 text-white px-4 py-2 rounded-lg">🔍 Analisa Batch</button>
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-4">
+      <h2 class="font-bold mb-3">🕌 Data Masjid</h2>
+      <div class="grid md:grid-cols-2 gap-3">
+        <div><label>Masjid ID</label><input id="masjidId" class="w-full border rounded p-2"></div>
+        <div><label>Nama Masjid</label><input id="namaMasjid" class="w-full border rounded p-2"></div>
+        <div><label>Kecamatan</label><input id="kecamatan" class="w-full border rounded p-2"></div>
+        <div><label>HP Masjid</label><input id="hpMasjid" class="w-full border rounded p-2"></div>
+        <div class="md:col-span-2"><label>Alamat</label><input id="alamat" class="w-full border rounded p-2"></div>
+        <div class="md:col-span-2"><label>Maps</label><input id="maps" class="w-full border rounded p-2"></div>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow p-4">
+      <h2 class="font-bold mb-3">📚 Data Kajian (Tunggal)</h2>
+      <div class="grid md:grid-cols-2 gap-3">
+        <div><label>Hari</label><input id="hari" class="w-full border rounded p-2"></div>
+        <div>
+          <label>Pekan</label>
+          <select id="pekan" class="w-full border rounded p-2">
+            <option value="">Setiap Pekan</option>
+            <option value="1">Pekan 1</option>
+            <option value="2">Pekan 2</option>
+            <option value="3">Pekan 3</option>
+            <option value="4">Pekan 4</option>
+            <option value="5">Pekan 5</option>
+          </select>
+        </div>
+        <div><label>Waktu</label><input id="waktu" class="w-full border rounded p-2"></div>
+        <div><label>Pemateri</label><input id="pemateri" class="w-full border rounded p-2"></div>
+        <div><label>HP Panitia</label><input id="hpPanitia" class="w-full border rounded p-2"></div>
+        <div class="md:col-span-2"><label>Materi</label><input id="materi" class="w-full border rounded p-2"></div>
+        
+        <div class="md:col-span-2">
+          <label>Kategori Kajian</label>
+          <select id="kategori" class="w-full border rounded p-2">
+            <option value="Umum">Umum</option>
+            <option value="Khusus Muslimah">Khusus Muslimah</option>
+            <option value="Khusus Ikhwan">Khusus Ikhwan</option>
+            <option value="Anak">Anak</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="mt-4 flex flex-wrap gap-4">
+        <label><input type="checkbox" id="isKitab"> Kajian Kitab</label>
+        <label><input type="checkbox" id="aktif" checked> Aktif</label>
+      </div>
+      
+      <button onclick="simpanKajian()" class="mt-6 w-full bg-blue-600 text-white py-2 rounded-xl font-bold">💾 SIMPAN KAJIAN TUNGGAL</button>
+    </div>
+
+    <div id="batchResult" class="hidden bg-white rounded-xl shadow p-4">
+      <h3 class="font-bold text-lg mb-3">Hasil Analisa Batch</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full border text-sm">
+          <thead>
+            <tr class="bg-slate-100">
+              <th class="p-2">Status</th>
+              <th class="p-2">Hari</th>
+              <th class="p-2">Pekan</th>
+              <th class="p-2">Waktu</th>
+              <th class="p-2">Pemateri</th>
+              <th class="p-2">Materi</th>
+              <th class="p-2">Lokasi</th>
+              <th class="p-2">Masjid</th>
+              <th class="p-2">MasjidID</th>
+            </tr>
+          </thead>
+          <tbody id="batchTable"></tbody>
+        </table>
+      </div>
+      
+      <button id="btnSimpanBatch" onclick="simpanBatch()" class="mt-6 w-full bg-emerald-600 text-white py-3 rounded-xl font-bold">
+        💾 SIMPAN SEMUA HASIL ANALISA BATCH
+      </button>
+    </div>
+
+  </main>
 
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJBfdLnYVr1e7wu1XpSelEdVqVhe_SiGBB-_zcaTPhb3QEwA/exec';
 
 let masjidList = [];
 let jadwalList = [];
-async function loadMasjid(){
 
-try{
-
-const res =
-await fetch(
-`${API_URL}?mode=home`
-);
-
-const data =
-await res.json();
-
-console.log(data);
-
-masjidList =
-data.masjid || [];
-
-jadwalList =
-data.jadwal || [];
-
-console.log(
-"Jumlah Masjid:",
-masjidList.length
-);
-
-console.log(
-"Jumlah Jadwal:",
-jadwalList.length
-);
- 
-console.log(
-masjidList[0]
-);
- 
-console.log(
-"Jumlah Masjid:",
-masjidList.length
-);
-
-}
-catch(err){
-
-console.error(err);
-
-alert(
-"Gagal memuat data masjid\n" +
-err.message
-);
-
+async function loadMasjid() {
+  try {
+    const res = await fetch(`${API_URL}?mode=home`);
+    const data = await res.json();
+    masjidList = data.masjid || [];
+    jadwalList = data.jadwal || [];
+    console.log("Data loaded. Masjid:", masjidList.length, "Jadwal:", jadwalList.length);
+  } catch(err) {
+    console.error(err);
+    alert("Gagal memuat data awal\n" + err.message);
+  }
 }
 
-}
- 
- 
-function analisaWA(){
-const text =
-document
-.getElementById(
-"waText"
-)
-.value;
-if(!text){
-alert(
-"Paste pesan WA terlebih dahulu"
-);
-return;
-}
-deteksiMasjid(text);
-deteksiHari(text);
-deteksiWaktu(text);
-deteksiPemateri(text);
-deteksiMateri(text);
-deteksiKategori(text);
-}
-function analisaBatch(){
-const text =
-document
-.getElementById(
-"batchInput"
-)
-.value;
-console.log(
-"TEXT BATCH:",
-text
-);
-const hasil =
-parseBatchWA(text);
-console.log(
-"HASIL PARSER:",
-hasil
-);
-renderBatchTable(
-hasil
-);
+function analisaWA() {
+  const text = document.getElementById("waText").value;
+  if(!text) return alert("Paste pesan WA terlebih dahulu");
+  deteksiMasjid(text);
+  deteksiHari(text);
+  deteksiWaktu(text);
+  deteksiPemateri(text);
+  deteksiMateri(text);
+  deteksiKategori(text);
 }
 
- 
-function parseBatchWA(text){
-const hasil = [];
-const lines =
-text
-.split("\n")
-.map(x => x.trim())
-.filter(x => x);
-let hari = "";
-let waktu = "";
-let pemateri = "";
-let kategori = "Umum";
-for(
-let i=0;
-i<lines.length;
-i++
-){
-const line =
-lines[i];
-if(
-line.startsWith(
-"Pemateri:"
-)
-){
-pemateri =
-line.replace(
-"Pemateri:",
-""
-).trim();
-continue;
-}
-if(
-line.toLowerCase()
-.includes(
-"muslimah"
-)
-){
-kategori =
-"Khusus Muslimah";
-}
-if(
-line.toLowerCase()
-.includes(
-"ikhwan"
-)
-){
-kategori =
-"Khusus Ikhwan";
-}
-if(
-[
-"Senin",
-"Selasa",
-"Rabu",
-"Kamis",
-"Jumat",
-"Jum'at",
-"Sabtu",
-"Ahad"
-].some(h =>
-line.includes(h)
-)
-){
-hari =
-line
-.replace(/\*/g,"")
-.trim()
-.replace("Jum'at","Jumat");
-const matchWaktu =
-hari.match(
-/(\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})/
-);
-if(matchWaktu){
-waktu =
-matchWaktu[1];
-hari =
-hari
-.split(",")[0]
-.trim();
-}
-continue;
-}
-const match =
-line.match(
-/Pekan\s*(\d+)\s*:\s*(.+)/i
-);
-if(match){
-const bagian =
-match[2]
-.split("|")
-.map(x => x.trim());
-let waktuBaris = "";
-let materi = "";
-let lokasi = "";
-if(bagian.length === 3){
-bagian.forEach(item => {
-const teks =
-item.trim();
-if(
-/jam\s*\d/i.test(teks)
-){
-waktuBaris =
-teks
-.replace(/jam/i,"")
-.trim();
-}
-else if(
-teks.toLowerCase()
-.startsWith("lokasi:")
-){
-lokasi =
-teks
-.replace(/lokasi:/i,"")
-.trim();
-}
-else if(!materi){
-materi = teks;
-}
-else{
-lokasi = teks;
-}
-});
-}
-else if(bagian.length === 2){
-materi =
-bagian[0];
-lokasi =
-bagian[1];
-}
-hasil.push({
-hari,
-pekan:
-match[1],
-waktu:
-waktuBaris,
-pemateri,
-materi,
-lokasi,
-kategori
-});
-}
-}
-return hasil;
+function analisaBatch() {
+  const text = document.getElementById("batchInput").value;
+  if(!text) return alert("Paste jadwal WA multi-hari terlebih dahulu");
+  const hasil = parseBatchWA(text);
+  renderBatchTable(hasil);
 }
 
- 
-function mappingLokasi(lokasi){
+function parseBatchWA(text) {
+  const hasil = [];
+  const lines = text.split("\n").map(x => x.trim()).filter(x => x);
+  let hari = "", waktu = "", pemateri = "", kategori = "Umum";
 
-const teks =
-(lokasi || "")
-.toLowerCase();
+  for(let i=0; i<lines.length; i++) {
+    const line = lines[i];
+    
+    if(line.startsWith("Pemateri:")) {
+      pemateri = line.replace("Pemateri:", "").trim();
+      continue;
+    }
+    if(line.toLowerCase().includes("muslimah")) kategori = "Khusus Muslimah";
+    if(line.toLowerCase().includes("ikhwan")) kategori = "Khusus Ikhwan";
+    
+    if(["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Jum'at", "Sabtu", "Ahad"].some(h => line.includes(h))) {
+      hari = line.replace(/\*/g,"").trim().replace("Jum'at","Jumat");
+      // Perbaikan Regex: menangkap 16.00-17.00 atau 16:00 - 17:30
+      const matchWaktu = hari.match(/(\d{2}[:.]\d{2}\s*-\s*\d{2}[:.]\d{2})/);
+      if(matchWaktu) {
+        waktu = matchWaktu[1];
+        hari = hari.split(",")[0].trim();
+      }
+      continue;
+    }
 
-if(
-teks.includes("mediterania")
-){
-return "Masjid Imam An-Nawawi";
+    const match = line.match(/Pekan\s*(\d+)\s*:\s*(.+)/i);
+    if(match) {
+      const bagian = match[2].split("|").map(x => x.trim());
+      let waktuBaris = "", materi = "", lokasi = "";
+      
+      if(bagian.length === 3) {
+        bagian.forEach(item => {
+          const teks = item.trim();
+          if(/jam\s*\d/i.test(teks)) waktuBaris = teks.replace(/jam/i,"").trim();
+          else if(teks.toLowerCase().startsWith("lokasi:")) lokasi = teks.replace(/lokasi:/i,"").trim();
+          else if(!materi) materi = teks;
+          else lokasi = teks;
+        });
+      } else if(bagian.length === 2) {
+        materi = bagian[0];
+        lokasi = bagian[1];
+      }
+      
+      hasil.push({ hari, pekan: match[1], waktu: waktuBaris, pemateri, materi, lokasi, kategori });
+    }
+  }
+  return hasil;
 }
 
-if(
-teks.includes("topaz")
-){
-return "Masjid Imam An-Nawawi";
+function mappingLokasi(lokasi) {
+  const teks = (lokasi || "").toLowerCase();
+  if(teks.includes("mediterania") || teks.includes("topaz") || teks.includes("zircon") || teks.includes("imam an nawawi")) {
+    return "Masjid Imam An-Nawawi";
+  }
+  return "";
 }
 
-if(
-teks.includes("zircon")
-){
-return "Masjid Imam An-Nawawi";
+function isDuplikat(item) {
+  const masjidId = cariMasjidId(item.lokasi);
+  return jadwalList.some(j => 
+    String(j.masjidId) === String(masjidId) &&
+    String(j.hari || "").trim().toLowerCase() === String(item.hari || "").trim().toLowerCase() &&
+    String(j.pekan || "").trim() === String(item.pekan || "").trim() &&
+    String(j.materi || "").trim().toLowerCase() === String(item.materi || "").trim().toLowerCase()
+  );
 }
 
-if(
-teks.includes(
-"imam an nawawi"
-)
-){
-return "Masjid Imam An-Nawawi";
+function renderBatchTable(data) {
+  const tbody = document.getElementById("batchTable");
+  tbody.innerHTML = "";
+
+  data.forEach(j => {
+    const duplikat = isDuplikat(j);
+    tbody.innerHTML += `
+      <tr>
+        <td class="border p-1 text-center">${duplikat ? "⚠️" : "🆕"}</td>
+        <td class="border p-1">
+          <select class="w-full border rounded p-1">
+            ${["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Ahad"].map(h => `<option ${j.hari===h?'selected':''}>${h}</option>`).join('')}
+          </select>
+        </td>
+        <td class="border p-1">
+          <select class="w-full border rounded p-1">
+            <option value=""></option>
+            ${[1,2,3,4,5].map(p => `<option value="${p}" ${j.pekan==p?'selected':''}>${p}</option>`).join('')}
+          </select>
+        </td>
+        <td class="border p-1"><input value="${j.waktu || ''}" class="w-full border rounded p-1"></td>
+        <td class="border p-1"><input value="${j.pemateri || ''}" class="w-full border rounded p-1"></td>
+        <td class="border p-1"><input value="${j.materi || ''}" class="w-full border rounded p-1"></td>
+        <td class="border p-1"><input value="${j.lokasi || ''}" class="w-full border rounded p-1"></td>
+        <td class="border p-1"><input value="${mappingLokasi(j.lokasi)}" class="w-full border rounded p-1" readonly></td>
+        <td class="border p-1"><input value="${cariMasjidId(j.lokasi)}" class="w-full border rounded p-1" readonly></td>
+      </tr>
+    `;
+  });
+  document.getElementById("batchResult").classList.remove("hidden");
 }
 
-return "";
+async function simpanBatch() {
+  const rows = document.querySelectorAll("#batchTable tr");
+  if(rows.length === 0) return alert("Belum ada hasil analisa.");
 
+  const data = [];
+  rows.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    data.push({
+      hari: cells[1].querySelector("select").value,
+      pekan: cells[2].querySelector("select").value,
+      waktu: cells[3].querySelector("input").value,
+      pemateri: cells[4].querySelector("input").value,
+      materi: cells[5].querySelector("input").value,
+      lokasi: cells[6].querySelector("input").value,
+      masjidId: cells[8].querySelector("input").value
+    });
+  });
+
+  const btn = document.getElementById("btnSimpanBatch");
+  btn.innerText = "⏳ Menyimpan Data...";
+  btn.disabled = true;
+
+  try {
+    const payload = JSON.stringify(data);
+    // Kita kirim stringified JSON via parameter URL untuk ditangkap AppScript
+    const res = await fetch(`${API_URL}?mode=simpanBatch&data=${encodeURIComponent(payload)}`);
+    const result = await res.json();
+
+    if(result.success) {
+      alert(`Berhasil menyimpan ${data.length} jadwal kajian!`);
+      document.getElementById("batchTable").innerHTML = "";
+      document.getElementById("batchResult").classList.add("hidden");
+      await loadMasjid(); // Reload list to prevent duplicates on next save
+    } else {
+      alert("Gagal menyimpan batch.");
+    }
+  } catch(err) {
+    console.error(err);
+    alert("ERROR: " + err.message);
+  } finally {
+    btn.innerText = "💾 SIMPAN SEMUA HASIL ANALISA BATCH";
+    btn.disabled = false;
+  }
 }
 
-function isDuplikat(item){
-
-console.log("CEK", item);
-
-const masjidId =
-cariMasjidId(
-item.lokasi
-);
-
-console.log(
-"CARI",
-{
-masjidId,
-hari:item.hari,
-pekan:item.pekan,
-materi:item.materi
-}
-);
-
-const hasil =
-jadwalList.some(j =>
-
-String(j.masjidId)
-===
-String(masjidId)
-
-&&
-
-String(j.hari || "")
-.trim()
-.toLowerCase()
-
-===
-
-String(item.hari || "")
-.trim()
-.toLowerCase()
-
-&&
-
-String(j.pekan || "")
-.trim()
-
-===
-
-String(item.pekan || "")
-.trim()
-
-&&
-
-String(j.materi || "")
-.trim()
-.toLowerCase()
-
-===
-
-String(item.materi || "")
-.trim()
-.toLowerCase()
-
-);
-
-console.log(
-"DUPLIKAT?",
-item.materi,
-hasil
-);
-
-const kandidat =
-jadwalList.filter(j =>
-
-String(j.masjidId)
-===
-String(masjidId)
-
-);
-
-console.log(
-"KANDIDAT",
-kandidat
-);
-
-return hasil;
-
-}
- 
-function renderBatchTable(data){
-console.log("RENDER", data.length);
-console.log("RENDER TABEL:", data);
-console.log("JADWAL LIST:", jadwalList);
-
- 
-const tbody =
-document.getElementById(
-"batchTable"
-);
-
-tbody.innerHTML = "";
-
-data.forEach((j,index) => {
-
-const duplikat =
-isDuplikat(j);
-
-console.log(
-"CEK DUPLIKAT",
-j,
-duplikat
-);
-
-tbody.innerHTML += `
-
-<tr>
-
-<td class="border p-1 text-center">
-
-${duplikat ? "⚠️" : "🆕"}
-
-</td>
-
-<td class="border p-1">
-
-<select
-class="hariBatch w-full border rounded p-1">
-
-<option ${
-j.hari==="Senin"?"selected":""
-}>Senin</option>
-
-<option ${
-j.hari==="Selasa"?"selected":""
-}>Selasa</option>
-
-<option ${
-j.hari==="Rabu"?"selected":""
-}>Rabu</option>
-
-<option ${
-j.hari==="Kamis"?"selected":""
-}>Kamis</option>
-
-<option ${
-j.hari==="Jumat"?"selected":""
-}>Jumat</option>
-
-<option ${
-j.hari==="Sabtu"?"selected":""
-}>Sabtu</option>
-
-<option ${
-j.hari==="Ahad"?"selected":""
-}>Ahad</option>
-
-</select>
-
-</td>
-
-<td class="border p-1">
-
-<select
-class="pekanBatch w-full border rounded p-1">
-
-<option value=""></option>
-
-<option value="1"
-${j.pekan=="1"?"selected":""}>
-1
-</option>
-
-<option value="2"
-${j.pekan=="2"?"selected":""}>
-2
-</option>
-
-<option value="3"
-${j.pekan=="3"?"selected":""}>
-3
-</option>
-
-<option value="4"
-${j.pekan=="4"?"selected":""}>
-4
-</option>
-
-<option value="5"
-${j.pekan=="5"?"selected":""}>
-5
-</option>
-
-</select>
-
-</td>
-
-
-<td class="border p-1">
-
-<input
-value="${j.waktu || ''}"
-class="
-w-full
-border
-rounded
-p-1
-waktuBatch">
-
-</td>
-
-<td class="border p-1">
-
-<input
-value="${j.pemateri || ''}"
-class="
-w-full
-border
-rounded
-p-1
-pemateriBatch">
-
-</td>
-<td class="border p-1">
-
-<input
-value="${j.materi || ''}"
-class="
-w-full
-border
-rounded
-p-1
-materiBatch">
-
-</td>
-
-<td class="border p-1">
-
-<input
-value="${j.lokasi || ''}"
-class="
-w-full
-border
-rounded
-p-1
-lokasiBatch">
-
-</td>
-<td class="border p-1">
-
-<input
-value="${mappingLokasi(j.lokasi)}"
-class="
-w-full
-border
-rounded
-p-1
-masjidBatch">
-
-</td>
-<td class="border p-1">
-
-<input
-value="${cariMasjidId(j.lokasi)}"
-class="
-w-full
-border
-rounded
-p-1
-masjidIdBatch">
-
-</td>
-</tr>
-
-`;
-
-});
-
-document
-.getElementById(
-"batchResult"
-)
-.classList.remove(
-"hidden"
-);
-
-}
-async function simpanBatch(){
-
-const rows =
-document.querySelectorAll(
-"#batchTable tr"
-);
-
-if(rows.length === 0){
-
-alert(
-"Belum ada hasil analisa."
-);
-
-return;
-
+// === FUNGSI HELPER PARSING WA TUNGGAL ===
+function deteksiMasjid(text) {
+  const lower = text.toLowerCase();
+  let terbaik = null, skorTerbaik = 0;
+  
+  masjidList.forEach(m => {
+    const nama = (m.nama || "").toLowerCase();
+    let skor = 0;
+    nama.split(/\s+/).forEach(k => {
+      if(k.length > 2 && lower.includes(k)) skor++;
+    });
+    if(skor > skorTerbaik) { skorTerbaik = skor; terbaik = m; }
+  });
+
+  if(terbaik && skorTerbaik >= 2) {
+    document.getElementById("masjidId").value = terbaik.id;
+    document.getElementById("namaMasjid").value = terbaik.nama;
+    document.getElementById("kecamatan").value = terbaik.kecamatan;
+    document.getElementById("alamat").value = terbaik.alamat;
+    document.getElementById("hpMasjid").value = terbaik.hp || "";
+    document.getElementById("maps").value = terbaik.maps || "";
+  }
 }
 
-const data = [];
-
-rows.forEach(row => {
-
-const cells =
-row.querySelectorAll("td");
-
-data.push({
-
-hari:
-cells[1]
-.querySelector("select")
-.value,
-
-pekan:
-cells[2]
-.querySelector("select")
-.value,
-
-waktu:
-cells[3]
-.querySelector("input")
-.value,
-
-pemateri:
-cells[4]
-.querySelector("input")
-.value,
-
-materi:
-cells[5]
-.querySelector("input")
-.value,
-
-lokasi:
-cells[6]
-.querySelector("input")
-.value
-
-});
-
-});
-
-console.log(data);
-
-alert(
-`${data.length} kajian siap disimpan`
-);
-
-}
-function deteksiMasjid(text){
-
-const lower =
-text.toLowerCase();
-
-let terbaik = null;
-let skorTerbaik = 0;
-
-masjidList.forEach(m => {
-
-const nama =
-(m.nama || "")
-.toLowerCase();
-
-const kata =
-nama.split(/\s+/);
-
-let skor = 0;
-
-kata.forEach(k => {
-
-if(
-k.length > 2 &&
-lower.includes(k)
-){
-skor++;
+function deteksiHari(text) {
+  const hariKetemu = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Jum'at", "Sabtu", "Ahad"].find(h => text.toLowerCase().includes(h.toLowerCase()));
+  if(hariKetemu) document.getElementById("hari").value = hariKetemu.replace("Jum'at", "Jumat");
 }
 
-});
-
-if(skor > skorTerbaik){
-
-skorTerbaik = skor;
-terbaik = m;
-
+function deteksiWaktu(text) {
+  const found = ["Ba'da Subuh", "Ba'da Dzuhur", "Ba'da Ashar", "Ba'da Maghrib", "Ba'da Isya"].find(p => text.toLowerCase().includes(p.toLowerCase()));
+  if(found) document.getElementById("waktu").value = found;
 }
 
-});
-
-if(!terbaik || skorTerbaik < 2)
-return;
-
-document.getElementById("masjidId").value =
-terbaik.id;
-
-document.getElementById("namaMasjid").value =
-terbaik.nama;
-
-document.getElementById("kecamatan").value =
-terbaik.kecamatan;
-
-document.getElementById("alamat").value =
-terbaik.alamat;
-
-document.getElementById("hpMasjid").value =
-terbaik.hp || "";
-
-document.getElementById("maps").value =
-terbaik.maps || "";
-
+function deteksiPemateri(text) {
+  for(let line of text.split("\n")) {
+    if(line.includes("Ustadz") || line.includes("Ust.") || line.includes("Syaikh")) {
+      document.getElementById("pemateri").value = line.trim();
+      break;
+    }
+  }
 }
 
-function deteksiHari(text){
-
-const hariList = [
-"Senin",
-"Selasa",
-"Rabu",
-"Kamis",
-"Jumat",
-"Jum'at",
-"Sabtu",
-"Ahad"
-];
-
-const hariKetemu =
-hariList.find(h =>
-
-text
-.toLowerCase()
-.includes(
-h.toLowerCase()
-)
-
-);
-
-if(hariKetemu){
-
-document
-.getElementById("hari")
-.value =
-hariKetemu.replace(
-"Jum'at",
-"Jumat"
-);
-
+function deteksiMateri(text) {
+  for(let line of text.split("\n")) {
+    if(line.includes("Kitab") || line.includes("Syarah") || line.includes("Tematik")) {
+      document.getElementById("materi").value = line.trim();
+      break;
+    }
+  }
 }
 
+function deteksiKategori(text) {
+  const lower = text.toLowerCase();
+  let kategori = "Umum";
+  if(lower.includes("muslimah")) kategori = "Khusus Muslimah";
+  else if(lower.includes("ikhwan")) kategori = "Khusus Ikhwan";
+  else if(lower.includes("anak")) kategori = "Anak";
+
+  const kategoriEl = document.getElementById("kategori");
+  if(kategoriEl) kategoriEl.value = kategori;
+
+  const kitabEl = document.getElementById("isKitab");
+  if(kitabEl) kitabEl.checked = (lower.includes("kitab") || lower.includes("syarah"));
 }
 
-function deteksiWaktu(text){
+async function simpanKajian() {
+  if(!confirm("Yakin ingin menyimpan kajian ini?")) return;
 
-const pola = [
+  const payload = {
+    mode: "simpanKajian",
+    masjidId: document.getElementById("masjidId").value,
+    hari: document.getElementById("hari").value,
+    pekan: document.getElementById("pekan")?.value || "",
+    waktu: document.getElementById("waktu").value,
+    pemateri: document.getElementById("pemateri").value,
+    materi: document.getElementById("materi").value,
+    keterangan: document.getElementById("kategori").value,
+    hpPanitia: document.getElementById("hpPanitia").value,
+    isKitab: document.getElementById("isKitab").checked,
+    aktif: document.getElementById("aktif").checked
+  };
 
-"Ba'da Subuh",
-"Ba'da Dzuhur",
-"Ba'da Ashar",
-"Ba'da Maghrib",
-"Ba'da Isya"
-
-];
-
-const found =
-pola.find(p =>
-
-text
-.toLowerCase()
-.includes(
-p.toLowerCase()
-)
-
-);
-
-if(found){
-
-document
-.getElementById(
-"waktu"
-)
-.value =
-found;
-
+  try {
+    const params = new URLSearchParams(payload);
+    const res = await fetch(`${API_URL}?${params}`);
+    const result = await res.json();
+    if(result.success) alert("Berhasil disimpan.\nJadwal ID: " + result.jadwalId);
+    else alert("Gagal menyimpan");
+  } catch(err) {
+    console.error(err);
+    alert("ERROR:\n" + err.message);
+  }
 }
 
+function cariMasjidId(nama) {
+  const teks = (nama || "").toLowerCase().trim();
+  let terbaik = null, skorTerbaik = 0;
+
+  masjidList.forEach(m => {
+    const namaMasjid = (m.nama || "").toLowerCase();
+    let skor = 0;
+    teks.split(/\s+/).forEach(kata => {
+      if(kata.length > 3 && namaMasjid.includes(kata)) skor++;
+    });
+    if(skor > skorTerbaik) { skorTerbaik = skor; terbaik = m; }
+  });
+  return terbaik ? terbaik.id : "";
 }
 
-function deteksiPemateri(text){
-
-const lines =
-text.split("\n");
-
-for(
-let line of lines
-){
-
-if(
-
-line.includes("Ustadz") ||
-
-line.includes("Ust.") ||
-
-line.includes("Syaikh")
-
-){
-
-document
-.getElementById(
-"pemateri"
-)
-.value =
-line.trim();
-
-break;
-
-}
-
-}
-
-}
-
-function deteksiMateri(text){
-
-const lines =
-text.split("\n");
-
-for(
-let line of lines
-){
-
-if(
-
-line.includes("Kitab") ||
-
-line.includes("Syarah") ||
-
-line.includes("Tematik")
-
-){
-
-document
-.getElementById(
-"materi"
-)
-.value =
-line.trim();
-
-break;
-
-}
-
-}
-
-}
-
-function deteksiKategori(text){
-
-const lower =
-text.toLowerCase();
-
-let kategori =
-"Umum";
-
-if(
-lower.includes(
-"muslimah"
-)
-){
-
-kategori =
-"Khusus Muslimah";
-
-}
-else if(
-lower.includes(
-"ikhwan"
-)
-){
-
-kategori =
-"Khusus Ikhwan";
-
-}
-else if(
-lower.includes(
-"anak"
-)
-){
-
-kategori =
-"Anak";
-
-}
-
-const kategoriEl =
-document.getElementById(
-"kategori"
-);
-
-if(kategoriEl){
-
-kategoriEl.value =
-kategori;
-
-}
-
-const kitabEl =
-document.getElementById(
-"isKitab"
-);
-
-if(kitabEl){
-
-kitabEl.checked =
-
-lower.includes(
-"kitab"
-)
-
-||
-
-lower.includes(
-"syarah"
-);
-
-}
-
-}
-
-
-async function simpanKajian(){
-
-const yakin =
-confirm(
-"Yakin ingin menyimpan kajian ini?"
-);
-
-if(!yakin)
-return;
-
-const payload = {
-
-masjidId:
-document.getElementById(
-"masjidId"
-).value,
-
-hari:
-document.getElementById(
-"hari"
-).value,
-
-pekan:
-document.getElementById(
-"pekan"
-)?.value || "",
-
-waktu:
-document.getElementById(
-"waktu"
-).value,
-
-pemateri:
-document.getElementById(
-"pemateri"
-).value,
-
-materi:
-document.getElementById(
-"materi"
-).value,
-
-keterangan:
-document.getElementById(
-"kategori"
-).value,
-
-hpPanitia:
-document.getElementById(
-"hpPanitia"
-).value,
-
-isKitab:
-document.getElementById(
-"isKitab"
-).checked,
-
-aktif:
-document.getElementById(
-"aktif"
-).checked
-
-};
-
- console.log(
-"PAYLOAD",
-payload
-);
-
- 
-alert(
-JSON.stringify(
-payload,
-null,
-2
-)
-);
-try{
-
-const params =
-new URLSearchParams({
-
-mode:
-"simpanKajian",
-
-masjidId:
-payload.masjidId,
-
-hari:
-payload.hari,
-
-pekan:
-payload.pekan,
-
-waktu:
-payload.waktu,
-
-pemateri:
-payload.pemateri,
-
-materi:
-payload.materi,
-
-keterangan:
-payload.keterangan,
-
-hpPanitia:
-payload.hpPanitia,
-
-isKitab:
-payload.isKitab,
-
-aktif:
-payload.aktif
-
-});
-
-const res =
-await fetch(
-`${API_URL}?${params}`
-);
-
-const result =
-await res.json();
-
-if(result.success){
-
-alert(
-"Berhasil disimpan.\nJadwal ID: " +
-result.jadwalId
-);
-
-}
-else{
-
-alert(
-"Gagal menyimpan"
-);
-
-}
-
-}
-catch(err){
-
-console.error(err);
-
-alert(
-"ERROR:\n" +
-err.message
-);
-
-}
-
-}
-function cariMasjidId(nama){
-
-const teks =
-(nama || "")
-.toLowerCase()
-.trim();
-
-let terbaik = null;
-let skorTerbaik = 0;
-
-masjidList.forEach(m => {
-
-const namaMasjid =
-(m.nama || "")
-.toLowerCase();
-
-let skor = 0;
-
-teks.split(/\s+/)
-.forEach(kata => {
-
-if(
-kata.length > 3 &&
-namaMasjid.includes(kata)
-){
-skor++;
-}
-
-});
-
-if(skor > skorTerbaik){
-
-skorTerbaik = skor;
-terbaik = m;
-
-}
-
-});
-
-return terbaik
-? terbaik.id
-: "";
-
-}
-
-window.onload = () => {
-  loadMasjid();
-};
+window.onload = loadMasjid;
 </script>
-
 </body>
 </html>
