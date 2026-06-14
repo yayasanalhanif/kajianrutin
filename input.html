@@ -225,21 +225,57 @@ function isDuplikat(item) {
     String(j.masjidId) === String(masjidId)
   );
 
-  console.log(
-    "ITEM",
-    item
-  );
+  console.log("ITEM", item);
 
-  console.log(
-    "KANDIDAT",
-    kandidat
-  );
+  kandidat.forEach(j => {
 
-  return jadwalList.some(j =>
+    console.log({
 
-    String(j.masjidId) === String(masjidId)
+      db_hari: j.hari,
+      in_hari: item.hari,
 
-    &&
+      db_pekan: j.pekan,
+      in_pekan: item.pekan,
+
+      db_materi: j.materi,
+      in_materi: item.materi,
+
+      cocok_hari:
+        String(j.hari || "")
+        .trim()
+        .toLowerCase()
+
+        ===
+
+        String(item.hari || "")
+        .trim()
+        .toLowerCase(),
+
+      cocok_pekan:
+        String(j.pekan || "")
+        .trim()
+
+        ===
+
+        String(item.pekan || "")
+        .trim(),
+
+      cocok_materi:
+        String(j.materi || "")
+        .trim()
+        .toLowerCase()
+
+        ===
+
+        String(item.materi || "")
+        .trim()
+        .toLowerCase()
+
+    });
+
+  });
+
+  return kandidat.some(j =>
 
     String(j.hari || "")
     .trim()
