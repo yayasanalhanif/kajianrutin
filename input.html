@@ -555,70 +555,76 @@ hasil
 
 }
 
+
+const matchFilter =
+!filter ||
+m.kecamatan === filter;
+const matchSearch =
+searchValue === ""
+||
+m.nama
+.toLowerCase()
+.includes(searchValue)
+||
+(m.kecamatan || "")
+.toLowerCase()
+.includes(searchValue)
+||
+(m.searchText || "")
+.toLowerCase()
+.includes(searchValue);
+return (
+matchFilter &&
+matchSearch
+);
 function parseBatchWA(text){
-
 const hasil = [];
-
 const lines =
 text
 .split("\n")
 .map(x => x.trim())
 .filter(x => x);
-
 let hari = "";
 let waktu = "";
 let pemateri = "";
 let kategori = "Umum";
-
 for(
 let i=0;
 i<lines.length;
 i++
 ){
-
 const line =
 lines[i];
-
 if(
 line.startsWith(
 "Pemateri:"
 )
 ){
-
 pemateri =
 line.replace(
 "Pemateri:",
 ""
 ).trim();
-
 continue;
-
 }
-
 if(
 line.toLowerCase()
 .includes(
 "muslimah"
 )
 ){
-
 kategori =
 "Khusus Muslimah";
-
 }
-
 if(
 line.toLowerCase()
 .includes(
 "ikhwan"
 )
 ){
-
 kategori =
 "Khusus Ikhwan";
-
 }
-
 if(
 [
 "Senin",
@@ -626,133 +632,96 @@ if(
 "Rabu",
 "Kamis",
 "Jumat",
+"Jum'at",
 "Sabtu",
 "Ahad"
 ].some(h =>
 line.includes(h)
 )
 ){
-
 hari =
-hari.replace("Jum'at","Jumat");
-
+line
+.replace(/\*/g,"")
+.trim()
+.replace("Jum'at","Jumat");
 const matchWaktu =
 hari.match(
 /(\d{2}\.\d{2}\s*-\s*\d{2}\.\d{2})/
 );
-
-if(
-matchWaktu
-){
-
+if(matchWaktu){
 waktu =
 matchWaktu[1];
-
 hari =
 hari
 .split(",")[0]
 .trim();
-
 }
-
 continue;
-
 }
-
 const match =
 line.match(
 /Pekan\s*(\d+)\s*:\s*(.+)/i
 );
 if(match){
-
 const bagian =
 match[2]
 .split("|")
 .map(x => x.trim());
-
 let waktuBaris = "";
 let materi = "";
 let lokasi = "";
-
 if(bagian.length === 3){
-
 bagian.forEach(item => {
-
 const teks =
 item.trim();
-
 if(
 /jam\s*\d/i.test(teks)
 ){
-
 waktuBaris =
 teks
 .replace(/jam/i,"")
 .trim();
-
 }
 else if(
 teks.toLowerCase()
 .startsWith("lokasi:")
 ){
-
 lokasi =
 teks
 .replace(/lokasi:/i,"")
 .trim();
-
 }
 else if(!materi){
-
 materi = teks;
-
 }
 else{
-
 lokasi = teks;
-
 }
-
 });
-
 }
 else if(bagian.length === 2){
-
 materi =
 bagian[0];
-
 lokasi =
 bagian[1];
-
 }
-
 hasil.push({
-
 hari,
-
 pekan:
 match[1],
-
 waktu:
 waktuBaris,
-
 pemateri,
-
 materi,
-
 lokasi,
-
 kategori
-
 });
-
 }
-
 }
-
 return hasil;
-
 }
+
+ 
 function mappingLokasi(lokasi){
 
 const teks =
