@@ -273,16 +273,7 @@ item.lokasi
         String(item.pekan || "")
         .trim(),
 
-      cocok_materi:
-        String(j.materi || "")
-        .trim()
-        .toLowerCase()
 
-        ===
-
-        String(item.materi || "")
-        .trim()
-        .toLowerCase()
 
     });
 
@@ -318,18 +309,6 @@ kandidat.map(j => ({
     String(item.pekan || "")
       .trim()
 
-    &&
-
-    String(j.materi || "")
-      .trim()
-      .toLowerCase()
-
-    ===
-
-    String(item.materi || "")
-      .trim()
-      .toLowerCase();
-
   console.log(
     "BANDINGKAN",
     {
@@ -359,15 +338,59 @@ return hasil;
 
 }
 
+function cariDuplikat(item){
+
+  const masjidId =
+  cariMasjidId(item.lokasi);
+
+  return jadwalList.find(j =>
+
+    String(j.masjidId)
+    ===
+    String(masjidId)
+
+    &&
+
+    String(j.hari || "")
+    .trim()
+    .toLowerCase()
+
+    ===
+
+    String(item.hari || "")
+    .trim()
+    .toLowerCase()
+
+    &&
+
+    String(j.pekan || "")
+    .trim()
+
+    ===
+
+    String(item.pekan || "")
+    .trim()
+
+  );
+
+}
+  
 function renderBatchTable(data) {
   const tbody = document.getElementById("batchTable");
   tbody.innerHTML = "";
 
   data.forEach(j => {
-    const duplikat = isDuplikat(j);
+    const existing =
+    cariDuplikat(j);
+    
+    const duplikat =
+    !!existing;
     tbody.innerHTML += `
       <tr data-kategori="${j.kategori || 'Umum'}">
-        <td class="border p-1 text-center">${duplikat ? "⚠️" : "🆕"}</td>
+        <td class="border p-1 text-center">${duplikat
+         ? `⚠️ Update`
+         : `🆕 Baru`
+        }</td>
         <td class="border p-1">
           <select class="w-full border rounded p-1">
             ${["Senin","Selasa","Rabu","Kamis","Jumat","Sabtu","Ahad"].map(h => `<option ${j.hari===h?'selected':''}>${h}</option>`).join('')}
