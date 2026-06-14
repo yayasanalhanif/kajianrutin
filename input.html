@@ -863,20 +863,23 @@ document.getElementById(
 tbody.innerHTML = "";
 
 data.forEach((j,index) => {
- console.log(
+
+const duplikat =
+isDuplikat(j);
+
+console.log(
 "CEK DUPLIKAT",
 j,
-isDuplikat(j)
+duplikat
 );
-console.log("BARIS", j);
+
 tbody.innerHTML += `
 
 <tr>
+
 <td class="border p-1 text-center">
 
-${isDuplikat(j)
-? "⚠️"
-: "🆕"}
+${duplikat ? "⚠️" : "🆕"}
 
 </td>
 
