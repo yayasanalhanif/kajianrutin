@@ -455,6 +455,10 @@ async function simpanBatch() {
 
   try {
     const payload = JSON.stringify(data);
+    console.log(
+  "SAVE PAYLOAD",
+  data
+);
     // Kita kirim stringified JSON via parameter URL untuk ditangkap AppScript
     const res = await fetch(`${API_URL}?mode=simpanBatch&data=${encodeURIComponent(payload)}`);
     const result = await res.json();
