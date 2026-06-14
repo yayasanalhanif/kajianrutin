@@ -438,8 +438,9 @@ font-bold">
 
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJBfdLnYVr1e7wu1XpSelEdVqVhe_SiGBB-_zcaTPhb3QEwA/exec';
-let masjidList = [];
 
+let masjidList = [];
+let jadwalList = [];
 async function loadMasjid(){
 
 try{
@@ -456,6 +457,19 @@ console.log(data);
 
 masjidList =
 data.masjid || [];
+
+jadwalList =
+data.jadwal || [];
+
+console.log(
+"Jumlah Masjid:",
+masjidList.length
+);
+
+console.log(
+"Jumlah Jadwal:",
+jadwalList.length
+);
  
 console.log(
 masjidList[0]
@@ -774,6 +788,47 @@ return "Masjid Imam An-Nawawi";
 return "";
 
 }
+
+function isDuplikat(item){
+
+return jadwalList.some(j =>
+
+String(j.hari || "")
+.trim()
+.toLowerCase()
+
+===
+
+String(item.hari || "")
+.trim()
+.toLowerCase()
+
+&&
+
+String(j.pekan || "")
+.trim()
+
+===
+
+String(item.pekan || "")
+.trim()
+
+&&
+
+String(j.materi || "")
+.trim()
+.toLowerCase()
+
+===
+
+String(item.materi || "")
+.trim()
+.toLowerCase()
+
+);
+
+}
+ 
 function renderBatchTable(data){
 console.log(
 "RENDER TABEL:",
@@ -793,9 +848,16 @@ tbody.innerHTML += `
 <tr>
 <td class="border p-1 text-center">
 
-🆕
+${isDuplikat(j)
+? "⚠️"
+: "🆕"}
 
 </td>
+console.log(
+"CEK DUPLIKAT",
+j,
+isDuplikat(j)
+);
 <td class="border p-1">
 
 <select
