@@ -216,7 +216,16 @@ function parseBatchWA(text) {
 }
 
 function isDuplikat(item) {
-
+console.log(
+"ID TEST",
+{
+lokasi: item.lokasi,
+masjidId:
+cariMasjidId(
+item.lokasi
+)
+}
+);
 
   const masjidId =
   cariMasjidId(item.lokasi);
