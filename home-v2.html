@@ -1002,7 +1002,14 @@ m => m.anak > 0
 );
 
 }
+if(filter){
 
+data =
+data.filter(
+m => m.kecamatan === filter
+);
+
+}
 if(searchValue){
 
 renderSearchResult(
