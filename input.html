@@ -288,42 +288,75 @@ item.lokasi
     });
 
   });
+console.log(
+"DEBUG KANDIDAT",
+kandidat.map(j => ({
+  hari: j.hari,
+  pekan: j.pekan,
+  materi: j.materi
+}))
+);
+  const hasil = kandidat.some(j => {
 
-  return kandidat.some(j =>
-
+  const cocok =
     String(j.hari || "")
-    .trim()
-    .toLowerCase()
+      .trim()
+      .toLowerCase()
 
     ===
 
     String(item.hari || "")
-    .trim()
-    .toLowerCase()
+      .trim()
+      .toLowerCase()
 
     &&
 
     String(j.pekan || "")
-    .trim()
+      .trim()
 
     ===
 
     String(item.pekan || "")
-    .trim()
+      .trim()
 
     &&
 
     String(j.materi || "")
-    .trim()
-    .toLowerCase()
+      .trim()
+      .toLowerCase()
 
     ===
 
     String(item.materi || "")
-    .trim()
-    .toLowerCase()
+      .trim()
+      .toLowerCase();
 
+  console.log(
+    "BANDINGKAN",
+    {
+      dbHari: j.hari,
+      inHari: item.hari,
+
+      dbPekan: j.pekan,
+      inPekan: item.pekan,
+
+      dbMateri: j.materi,
+      inMateri: item.materi,
+
+      cocok
+    }
   );
+
+  return cocok;
+
+});
+
+console.log(
+"DUPLIKAT AKHIR",
+hasil
+);
+
+return hasil;
 
 }
 
