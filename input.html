@@ -828,6 +828,50 @@ String(item.materi || "")
 );
 
 }
+
+function isDuplikat(item){
+
+return jadwalList.some(j => {
+
+return (
+
+String(j.hari || "")
+.trim()
+.toLowerCase()
+
+===
+
+String(item.hari || "")
+.trim()
+.toLowerCase()
+
+&&
+
+String(j.pekan || "")
+.trim()
+
+===
+
+String(item.pekan || "")
+.trim()
+
+&&
+
+String(j.materi || "")
+.trim()
+.toLowerCase()
+
+===
+
+String(item.materi || "")
+.trim()
+.toLowerCase()
+
+);
+
+});
+
+}
  
 function renderBatchTable(data){
 console.log(
@@ -842,6 +886,11 @@ document.getElementById(
 tbody.innerHTML = "";
 
 data.forEach((j,index) => {
+ console.log(
+"CEK DUPLIKAT",
+j,
+isDuplikat(j)
+);
 console.log("BARIS", j);
 tbody.innerHTML += `
 
@@ -853,11 +902,7 @@ ${isDuplikat(j)
 : "🆕"}
 
 </td>
-console.log(
-"CEK DUPLIKAT",
-j,
-isDuplikat(j)
-);
+
 <td class="border p-1">
 
 <select
