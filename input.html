@@ -137,10 +137,27 @@ function analisaWA() {
 }
 
 function analisaBatch() {
-  const text = document.getElementById("batchInput").value;
-  if(!text) return alert("Paste jadwal WA multi-hari terlebih dahulu");
-  const hasil = parseBatchWA(text);
+
+  const text =
+  document
+  .getElementById("batchInput")
+  .value;
+
+  if(!text)
+  return alert(
+    "Paste jadwal WA multi-hari terlebih dahulu"
+  );
+
+  const hasil =
+  parseBatchWA(text);
+
+  console.log(
+    "HASIL PARSER:",
+    hasil
+  );
+
   renderBatchTable(hasil);
+
 }
 
 function parseBatchWA(text) {
