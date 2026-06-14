@@ -790,8 +790,20 @@ return "";
 }
 
 function isDuplikat(item){
-console.log("CEK DUPLIKAT ITEM:", item);
-return jadwalList.some(j =>
+
+const masjidId =
+cariMasjidId(
+item.lokasi
+);
+
+const hasil =
+jadwalList.some(j =>
+
+String(j.masjidId)
+===
+String(masjidId)
+
+&&
 
 String(j.hari || "")
 .trim()
@@ -827,49 +839,13 @@ String(item.materi || "")
 
 );
 
-}
-
-function isDuplikat(item){
-
-return jadwalList.some(j => {
-
-return (
-
-String(j.hari || "")
-.trim()
-.toLowerCase()
-
-===
-
-String(item.hari || "")
-.trim()
-.toLowerCase()
-
-&&
-
-String(j.pekan || "")
-.trim()
-
-===
-
-String(item.pekan || "")
-.trim()
-
-&&
-
-String(j.materi || "")
-.trim()
-.toLowerCase()
-
-===
-
-String(item.materi || "")
-.trim()
-.toLowerCase()
-
+console.log(
+"DUPLIKAT?",
+item.materi,
+hasil
 );
 
-});
+return hasil;
 
 }
  
