@@ -1282,6 +1282,14 @@ console.log(
 data.shareText.length
 );
     
+const textToShare =
+
+data.shareText.length > 3500
+
+? data.teks_share_ringkas
+
+: data.shareText;
+
 if(navigator.share){
 
 await navigator.share({
@@ -1290,7 +1298,7 @@ title:
 "Jadwal Kajian Islam Ilmiah Kota Cilegon",
 
 text:
-data.shareText
+textToShare
 
 });
 
