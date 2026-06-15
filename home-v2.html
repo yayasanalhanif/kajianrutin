@@ -1277,18 +1277,11 @@ await fetch(
 
 const data =
 await res.json();
+
 console.log(
 "Panjang shareText:",
 data.shareText.length
 );
-    
-const textToShare =
-
-data.shareText.length > 3500
-
-? data.teks_share_ringkas
-
-: data.shareText;
 
 const textToShare =
 
@@ -1297,11 +1290,6 @@ data.shareText.length > 3500
 ? data.teks_share_ringkas
 
 : data.shareText;
-
-console.log(
-"Panjang:",
-data.shareText.length
-);
 
 console.log(
 "Mode Share:",
@@ -1309,10 +1297,24 @@ data.shareText.length > 3500
 ? "RINGKAS"
 : "LENGKAP"
 );
+
+if(navigator.share){
+
+await navigator.share({
+
+title:
+"Jadwal Kajian Islam Ilmiah Kota Cilegon",
+
+text:
+textToShare
+
+});
+
+}
 else{
 
 await navigator.clipboard.writeText(
-data.shareText
+textToShare
 );
 
 alert(
@@ -1331,7 +1333,7 @@ alert(
 
 }
 
-}  
+} 
 loadData();
 function toggleSearch(){
 
