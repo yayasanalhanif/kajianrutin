@@ -213,7 +213,7 @@ px-4
 animate-pulse
 shadow
 ">
-    Sedang dalam perbaikan. Silakan kembali beberapa saat lagi. ⚠️
+ 
 </div>
 <!-- CONTENT -->
 
@@ -531,14 +531,17 @@ if(
 homeData.maintenanceMinor
 ){
 
-document
-.getElementById(
+const banner =
+document.getElementById(
 "maintenanceBanner"
-)
-.classList.remove(
-"hidden"
 );
 
+banner.innerHTML =
+`⚠️ ${homeData.maintenanceMessage}`;
+
+banner.classList.remove(
+"hidden"
+);
 }
     
 if(
