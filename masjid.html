@@ -478,16 +478,35 @@ p-4
 mb-3
 ">
 <div class="
+flex
+justify-between
+items-center
 font-semibold
 text-slate-700
 ">
+
+<span>
 🕓 ${j.waktu}
+</span>
+
 ${j.pekan
- ? `<div class="text-xs text-amber-600">
-      Pekan ${j.pekan}
-    </div>`
- : ""
+? `
+<span
+class="
+text-xs
+px-2
+py-0.5
+rounded-full
+bg-amber-100
+text-amber-700
+font-medium
+">
+Pekan ${j.pekan}
+</span>
+`
+: ""
 }
+
 </div>
 <div class="
 mt-2
