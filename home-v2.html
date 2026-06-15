@@ -1305,7 +1305,12 @@ homeData.maintenanceMinor
 alert(
 homeData.maintenanceMessage
 );
+const namaUser =
+getNamaUser();
 
+if(!namaUser){
+return;
+}
 return;
 
 }
@@ -1314,7 +1319,7 @@ try{
 
 const res =
 await fetch(
-`${API_URL}?mode=share`
+`${API_URL}?mode=share&user=${encodeURIComponent(namaUser)}`
 );
 
 const data =
@@ -1549,6 +1554,40 @@ document
 );
 
 renderMasjid();
+
+}
+
+    function getNamaUser(){
+
+let namaUser =
+localStorage.getItem(
+"namaUserKajian"
+);
+
+if(
+!namaUser
+){
+
+namaUser =
+prompt(
+"Masukkan nama Anda:"
+);
+
+if(
+!namaUser ||
+!namaUser.trim()
+){
+return null;
+}
+
+localStorage.setItem(
+"namaUserKajian",
+namaUser.trim()
+);
+
+}
+
+return namaUser;
 
 }
 </script>    
