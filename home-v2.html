@@ -1290,19 +1290,25 @@ data.shareText.length > 3500
 
 : data.shareText;
 
-if(navigator.share){
+const textToShare =
 
-await navigator.share({
+data.shareText.length > 3500
 
-title:
-"Jadwal Kajian Islam Ilmiah Kota Cilegon",
+? data.teks_share_ringkas
 
-text:
-textToShare
+: data.shareText;
 
-});
+console.log(
+"Panjang:",
+data.shareText.length
+);
 
-}
+console.log(
+"Mode Share:",
+data.shareText.length > 3500
+? "RINGKAS"
+: "LENGKAP"
+);
 else{
 
 await navigator.clipboard.writeText(
