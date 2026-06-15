@@ -537,12 +537,14 @@ document.getElementById(
 );
 
 banner.innerHTML =
-`⚠️ ${homeData.maintenanceMessage}`;
+`⚠️ ${
+homeData.maintenanceMessage
+|| "Portal sedang dalam perbaikan."
+}`;
 
 banner.classList.remove(
 "hidden"
 );
-}
     
 if(
 homeData.maintenance
