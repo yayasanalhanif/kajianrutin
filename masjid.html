@@ -482,6 +482,12 @@ font-semibold
 text-slate-700
 ">
 🕓 ${j.waktu}
+${j.pekan
+ ? `<div class="text-xs text-amber-600">
+      Pekan ${j.pekan}
+    </div>`
+ : ""
+}
 </div>
 <div class="
 mt-2
