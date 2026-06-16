@@ -1410,16 +1410,43 @@ class="py-3 font-medium text-[#14532D]">
 
 🏠 Beranda
 
-</a>
+<div class="flex gap-2">
 
-<a
-href="#"
+<button
 onclick="shareHome()"
-class="py-3">
+class="
+flex-1
+bg-green-600
+text-white
+font-semibold
+py-3
+rounded-xl
+shadow
+">
 
-📤 Bagikan
+<i class="fa-brands fa-whatsapp"></i>
+Share
 
-</a>
+</button>
+
+<button
+onclick="salinJadwalLengkap()"
+class="
+flex-1
+bg-slate-600
+text-white
+font-semibold
+py-3
+rounded-xl
+shadow
+">
+
+<i class="fa-solid fa-share-nodes"></i>
+Copas
+
+</button>
+
+</div>
 
 <a
 href="javascript:window.scrollTo({top:0,behavior:'smooth'})"
@@ -1517,6 +1544,46 @@ document
 .classList.add(
 'hidden'
 );
+
+}
+
+
+async function salinJadwalLengkap(){
+
+try{
+
+const namaUser =
+getNamaUser();
+
+if(!namaUser){
+return;
+}
+
+const res =
+await fetch(
+`${API_URL}?mode=share&user=${encodeURIComponent(namaUser)}`
+);
+
+const data =
+await res.json();
+
+await navigator.clipboard.writeText(
+data.shareText
+);
+
+alert(
+"✅ Jadwal lengkap berhasil disalin.\n\nSilakan paste ke WhatsApp."
+);
+
+}catch(err){
+
+console.error(err);
+
+alert(
+"Gagal menyalin jadwal."
+);
+
+}
 
 }
 function clearSearch(){
