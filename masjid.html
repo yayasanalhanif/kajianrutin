@@ -253,7 +253,7 @@ localStorage.getItem(
 ) || "";
 const res =
 await fetch(
-`${API_URL}?mode=masjid&id=${id}&user=${encodeURIComponent(namaUser)}`
+`${API_URL}?mode=masjid&id=${masjidId}&user=${encodeURIComponent(namaUser)}`
 );
 const data =
 await res.json();
