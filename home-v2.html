@@ -1345,35 +1345,18 @@ data.shareText.length > 3500
 
 console.log(
 "Mode Share:",
-data.shareText.length > 3500
+data.shareText.length > 15000
 ? "RINGKAS"
 : "LENGKAP"
 );
 
-if(navigator.share){
+const waUrl =
+`https://wa.me/?text=${encodeURIComponent(textToShare)}`;
 
-await navigator.share({
-
-title:
-"Jadwal Kajian Islam Ilmiah Kota Cilegon",
-
-text:
-textToShare
-
-});
-
-}
-else{
-
-await navigator.clipboard.writeText(
-textToShare
+window.open(
+waUrl,
+"_blank"
 );
-
-alert(
-"Teks jadwal disalin.\nSilakan paste ke WhatsApp."
-);
-
-}
 
 }catch(err){
 
