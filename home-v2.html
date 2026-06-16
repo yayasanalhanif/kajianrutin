@@ -1321,7 +1321,10 @@ if(!namaUser){
   return;
 }    
 try{
-
+console.log(
+"Nama User:",
+namaUser
+);
 const res =
 await fetch(
 `${API_URL}?mode=share&user=${encodeURIComponent(namaUser)}`
