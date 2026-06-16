@@ -20,6 +20,26 @@ body{
 </style>
 </head>
 <body class="bg-slate-100">
+    <div
+id="toast"
+class="
+hidden
+fixed
+bottom-24
+left-1/2
+-transform
+-translate-x-1/2
+bg-[#14532D]
+text-white
+px-4
+py-3
+rounded-xl
+shadow-xl
+z-[9999]
+text-sm
+font-medium
+">
+</div>
 <header class="sticky top-0 z-50 bg-[#14532D] text-white shadow-lg">
 <div class="max-w-5xl mx-auto p-4">
 <!--
@@ -298,7 +318,7 @@ render(data);
 }
 catch(err){
   console.error(err);
-  alert(
+  showToast(
     "ERROR:\n" + err.message
   );
 }
@@ -583,7 +603,7 @@ function shareMasjid(){
 
 if(!masjidData){
 
-alert(
+showToast(
 "Data masjid belum siap"
 );
 
@@ -624,6 +644,34 @@ window.location.href =
 }
 
 }
+
+    function showToast(
+message,
+duration = 3000
+){
+
+const toast =
+document.getElementById(
+"toast"
+);
+
+toast.textContent =
+message;
+
+toast.classList.remove(
+"hidden"
+);
+
+setTimeout(() => {
+
+toast.classList.add(
+"hidden"
+);
+
+}, duration);
+
+}
+    
 </script>
 <nav
 class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
