@@ -1356,10 +1356,8 @@ data.shareText.length > 3500
 const waUrl =
 `https://wa.me/?text=${encodeURIComponent(textToShare)}`;
 alert(textToShare);
-window.open(
-waUrl,
-"_blank"
-);
+window.location.href =
+waUrl;
 
 }catch(err){
 
