@@ -736,6 +736,7 @@ homeData.rankingMasjid[0]?.kajian ||
 renderKecamatan();
 
 renderMasjid();
+    renderKajianHariIni();
 }
 
 function renderKecamatan(){
@@ -888,11 +889,11 @@ return;
 
 hasil.forEach(j => {
 
-let badge = "";
+let badges = "";
 
 if(j.isKitab){
 
-badge += `
+badges += `
 <span class="
 inline-block
 px-2 py-1
@@ -908,7 +909,7 @@ mr-1">
 
 if(j.isMuslimah){
 
-badge += `
+badges += `
 <span class="
 inline-block
 px-2 py-1
@@ -921,9 +922,9 @@ mr-1">
 🌹 MUSLIMAH
 </span>`;
 }
-else if(j.isAnak){
+if(j.isAnak){
 
-badge += `
+badges += `
 <span class="
 inline-block
 px-2 py-1
@@ -994,7 +995,7 @@ ${j.pekan
 
 <div class="mt-3">
 
-${badge}
+${badges}
 
 </div>
 
@@ -1307,7 +1308,55 @@ document.querySelector(
 container.innerHTML = "";
 
 kajianHariIni.forEach(j => {
-   
+let badges = "";
+
+if(j.isKitab){
+
+badges += `
+<span class="
+inline-block
+px-2 py-1
+rounded-full
+bg-blue-100
+text-blue-700
+text-xs
+font-semibold
+mr-1">
+📖 KITAB
+</span>`;
+}
+
+if(j.isMuslimah){
+
+badges += `
+<span class="
+inline-block
+px-2 py-1
+rounded-full
+bg-pink-100
+text-pink-700
+text-xs
+font-semibold
+mr-1">
+🌹 MUSLIMAH
+</span>`;
+}
+
+if(j.isAnak){
+
+badges += `
+<span class="
+inline-block
+px-2 py-1
+rounded-full
+bg-orange-100
+text-orange-700
+text-xs
+font-semibold
+mr-1">
+👶 ANAK
+</span>`;
+}   
 container.innerHTML += `
 <div class="
 bg-white
@@ -1344,11 +1393,7 @@ text-[#14532D]
 ${badges}
 
 </div>
-<div class="mt-2">
 
-${badges}
-
-</div>
 <div class="
 text-xs
 text-slate-500
