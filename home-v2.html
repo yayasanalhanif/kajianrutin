@@ -1377,9 +1377,37 @@ text-[#14532D]
 
 </div>
 
-<div class="text-sm mt-1">
+<div class="
+flex
+items-center
+justify-between
+mt-1
+text-sm
+">
+
+<div>
 
 🕒 ${j.waktu}
+
+</div>
+
+${
+j.pekan
+? `
+<span class="
+bg-yellow-100
+text-yellow-800
+text-xs
+font-semibold
+px-2
+py-1
+rounded-full
+">
+Pekan ${j.pekan}
+</span>
+`
+: ""
+}
 
 </div>
 
