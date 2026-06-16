@@ -247,9 +247,13 @@ params.get("id");
 let masjidData = null;
 async function loadData(){
 try{
+    const namaUser =
+localStorage.getItem(
+"namaUserKajian"
+) || "";
 const res =
 await fetch(
-`${API_URL}?mode=masjid&id=${masjidId}`
+`${API_URL}?mode=masjid&id=${id}&user=${encodeURIComponent(namaUser)}`
 );
 const data =
 await res.json();
