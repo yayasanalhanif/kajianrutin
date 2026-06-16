@@ -42,6 +42,26 @@ opacity .5s ease;
 </head>
 
 <body class="bg-slate-100">
+    <div
+id="toast"
+class="
+hidden
+fixed
+bottom-24
+left-1/2
+-transform
+-translate-x-1/2
+bg-[#14532D]
+text-white
+px-4
+py-3
+rounded-xl
+shadow-xl
+z-[9999]
+text-sm
+font-medium
+">
+</div>
 <div id="loadingStatus"
 class="fixed inset-0 bg-emerald-600 flex flex-col justify-center items-center z-[9999]">
 
@@ -623,7 +643,7 @@ catch(err){
 
 console.error(err);
 
-alert(
+showToast(
 "ERROR:\n" +
 err.message
 );
@@ -1305,7 +1325,7 @@ homeData &&
 homeData.maintenanceMinor
 ){
 
-alert(
+showToast(
 homeData.maintenanceMessage
 );
 const namaUser =
@@ -1358,7 +1378,7 @@ data.shareText.length > 3500
 
 const waUrl =
 `https://wa.me/?text=${encodeURIComponent(textToShare)}`;
-alert(textToShare);
+
 window.location.href =
 waUrl;
 
@@ -1366,7 +1386,7 @@ waUrl;
 
 console.error(err);
 
-alert(
+showToast(
 "Gagal membuka WhatsApp"
 );
 
@@ -1400,6 +1420,33 @@ document
 }
 
 }    
+
+    function showToast(
+message,
+duration = 3000
+){
+
+const toast =
+document.getElementById(
+"toast"
+);
+
+toast.textContent =
+message;
+
+toast.classList.remove(
+"hidden"
+);
+
+setTimeout(() => {
+
+toast.classList.add(
+"hidden"
+);
+
+}, duration);
+
+}
 </script>
 <nav
 class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg z-50">
@@ -1499,7 +1546,7 @@ async function installApp(){
 
 if(!deferredPrompt){
 
-alert(
+showToast(
 "Aplikasi sudah terinstal atau belum didukung browser."
 );
 
@@ -1560,7 +1607,7 @@ await navigator.clipboard.writeText(
 data.shareText
 );
 
-alert(
+showToast(
 "✅ Jadwal lengkap berhasil disalin.\n\nSilakan paste ke WhatsApp."
 );
 
@@ -1568,7 +1615,7 @@ alert(
 
 console.error(err);
 
-alert(
+showToast(
 "Gagal menyalin jadwal."
 );
 
