@@ -427,7 +427,8 @@ class="text-sm text-gray-500">
 </section>
 <!-- RANKING -->
 
-<section class="mt-5">
+<section
+class="mt-5 hidden">
 
 <div class="bg-white rounded-xl shadow p-4">
 
@@ -801,31 +802,42 @@ document.getElementById(
 'filterKecamatan'
 );
 
+const areaCount = {};
+
+homeData.jadwal.forEach(j => {
+
+if(!areaCount[j.kecamatan]){
+
+areaCount[j.kecamatan] = 0;
+
+}
+
+areaCount[j.kecamatan]++;
+
+});
+
 const unik =
-[
-...new Set(
-homeData.masjid.map(
-m=>m.kecamatan
-)
-)
-];
+Object.entries(areaCount)
+.sort((a,b)=>
+b[1]-a[1]
+);
 
-unik.sort();
+select.innerHTML =
+`<option value="">
+Semua Area (${homeData.statistik.kajian})
+</option>`;
 
-unik.forEach(k=>{
+unik.forEach(([nama,jumlah])=>{
 
 select.innerHTML += `
-<option value="${k}">
-${k}
+<option value="${nama}">
+${nama} (${jumlah})
 </option>
 `;
 
 });
 
-select.addEventListener(
-'change',
-renderMasjid
-);
+
 
 }
 let currentPage = 1;
