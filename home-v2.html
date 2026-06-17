@@ -37,6 +37,37 @@ body{
 transition:
 opacity .5s ease;
 }
+    @keyframes logoGlow{
+
+0%{
+opacity:.6;
+transform:scale(.95);
+filter:
+drop-shadow(0 0 0px white);
+}
+
+50%{
+opacity:1;
+transform:scale(1);
+filter:
+drop-shadow(0 0 15px rgba(255,255,255,.8));
+}
+
+100%{
+opacity:.6;
+transform:scale(.95);
+filter:
+drop-shadow(0 0 0px white);
+}
+
+}
+
+#loadingLogo{
+
+animation:
+logoGlow 2.5s ease-in-out infinite;
+
+}
 </style>
 
 </head>
@@ -71,10 +102,12 @@ class="w-32 mb-4"
 alt="Logo"
     onerror="this.style.display='none'">
 
-<div
-id="loadingSpinner"
-class="animate-spin rounded-full h-12 w-12 border-4 border-white border-t-transparent">
-</div>
+<img
+id="loadingLogo"
+src="logo.svg"
+class="w-40 h-40"
+alt="JKC"
+onerror="this.style.display='none'">
 
 <div
 id="loadingText"
