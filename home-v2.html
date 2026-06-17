@@ -1259,6 +1259,15 @@ renderPagination(totalPages);
 
 function renderKajianHariIni(){
 
+const section =
+document.getElementById(
+"kajianHariIni"
+);
+
+if(!section){
+return;
+}
+
 const hariIni =
 [
 "Minggu",
@@ -1273,11 +1282,6 @@ const hariIni =
 const kajianHariIni =
 homeData.jadwal.filter(
 j => j.hari === hariIni
-);
-
-const section =
-document.getElementById(
-"kajianHariIni"
 );
 
 const container =
