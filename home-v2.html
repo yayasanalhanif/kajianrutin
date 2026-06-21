@@ -1571,6 +1571,7 @@ hasil
 }
 );
 async function shareHome(){
+
 if(
 homeData &&
 homeData.maintenanceMinor
@@ -1579,26 +1580,25 @@ homeData.maintenanceMinor
 showToast(
 homeData.maintenanceMessage
 );
+
+return;
+
+}
+
 const namaUser =
 getNamaUser();
 
 if(!namaUser){
 return;
 }
-return;
 
-}
-const namaUser =
-getNamaUser();
-
-if(!namaUser){
-  return;
-}    
 try{
+
 console.log(
 "Nama User:",
 namaUser
 );
+
 const res =
 await fetch(
 `${API_URL}?mode=share&user=${encodeURIComponent(namaUser)}`
@@ -1606,11 +1606,6 @@ await fetch(
 
 const data =
 await res.json();
-console.log(data);
-console.log(
-"Panjang shareText:",
-data.shareText.length
-);
 
 const textToShare =
 
@@ -1619,13 +1614,6 @@ data.shareText.length > 3500
 ? data.teks_share_ringkas
 
 : data.shareText;
-
-console.log(
-"Mode Share:",
-data.shareText.length > 3500
-? "RINGKAS"
-: "LENGKAP"
-);
 
 const waUrl =
 `https://wa.me/?text=${encodeURIComponent(textToShare)}`;
@@ -1638,12 +1626,14 @@ waUrl;
 console.error(err);
 
 showToast(
-"Gagal membuka WhatsApp"
+"Gagal membuka WhatsApp",
+"error"
 );
 
 }
 
-} 
+}
+    
 loadData();
 function toggleSearch(){
 
@@ -1933,6 +1923,96 @@ namaUser.trim()
 return namaUser;
 
 }
-</script>    
+</script>   
+<div
+id="modalNamaUser"
+class="
+hidden
+fixed
+inset-0
+bg-black/50
+z-[99999]
+flex
+items-center
+justify-center
+p-4">
+
+<div
+class="
+bg-white
+rounded-2xl
+shadow-xl
+w-full
+max-w-sm
+p-5">
+
+<h3
+class="
+font-bold
+text-lg
+mb-2">
+
+👤 Nama Pengguna
+
+</h3>
+
+<p
+class="
+text-sm
+text-slate-600
+mb-4">
+
+Nama Anda akan ikut
+dalam pesan WhatsApp.
+
+</p>
+
+<input
+id="inputNamaUser"
+type="text"
+placeholder="Contoh: Zawawi"
+class="
+w-full
+border
+rounded-lg
+p-3
+mb-4">
+
+<div
+class="
+flex
+justify-end
+gap-2">
+
+<button
+onclick="tutupModalNama()"
+class="
+px-4
+py-2
+rounded-lg
+bg-slate-200">
+
+Batal
+
+</button>
+
+<button
+onclick="simpanNamaUser()"
+class="
+px-4
+py-2
+rounded-lg
+bg-green-600
+text-white">
+
+Simpan
+
+</button>
+
+</div>
+
+</div>
+
+</div>
 </body>
 </html>
