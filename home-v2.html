@@ -1885,33 +1885,18 @@ renderMasjid();
 
 }
 
-    function getNamaUser(){
+ function getNamaUser(){
 
-let namaUser =
+const namaUser =
 localStorage.getItem(
 "namaUserKajian"
 );
 
-if(
-!namaUser
-){
+if(!namaUser){
 
-namaUser =
-prompt(
-"Masukkan nama Anda:"
-);
+mintaNamaUser();
 
-if(
-!namaUser ||
-!namaUser.trim()
-){
 return null;
-}
-
-localStorage.setItem(
-"namaUserKajian",
-namaUser.trim()
-);
 
 }
 
