@@ -1578,18 +1578,12 @@ homeData.maintenanceMinor
 ){
 
 showToast(
-homeData.maintenanceMessage
+homeData.maintenanceMessage,
+"warning"
 );
 
 return;
 
-}
-
-const namaUser =
-getNamaUser();
-
-if(!namaUser){
-return;
 }
 
 try{
@@ -1833,7 +1827,8 @@ const namaUser =
 getNamaUser();
 
 if(!namaUser){
-return;
+mintaNamaUser();
+return null;
 }
 
 const res =
@@ -1921,6 +1916,61 @@ namaUser.trim()
 }
 
 return namaUser;
+
+}
+function mintaNamaUser(){
+
+document
+.getElementById(
+"modalNamaUser"
+)
+.classList.remove(
+"hidden"
+);
+
+}
+function tutupModalNama(){
+
+document
+.getElementById(
+"modalNamaUser"
+)
+.classList.add(
+"hidden"
+);
+
+}
+function simpanNamaUser(){
+
+const nama =
+document
+.getElementById(
+"inputNamaUser"
+)
+.value
+.trim();
+
+if(!nama){
+
+showToast(
+"Silakan isi nama",
+"warning"
+);
+
+return;
+
+}
+
+localStorage.setItem(
+"namaUserKajian",
+nama
+);
+
+tutupModalNama();
+
+showToast(
+"Nama berhasil disimpan"
+);
 
 }
 </script>   
