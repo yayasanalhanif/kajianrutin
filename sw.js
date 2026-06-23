@@ -1,9 +1,14 @@
-// Service Worker sederhana agar web bisa diinstal di HP
-self.addEventListener('install', (e) => {
-  self.skipWaiting();
-});
+// Minimal Service Worker
 
-self.addEventListener('fetch', (e) => {
-  // Biarkan browser mengambil data live seperti biasa dari Google Sheet
-  e.respondWith(fetch(e.request));
+self.addEventListener(
+'install',
+() => self.skipWaiting()
+);
+
+self.addEventListener(
+'activate',
+(event) => {
+event.waitUntil(
+clients.claim()
+);
 });
