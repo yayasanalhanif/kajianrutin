@@ -1734,44 +1734,134 @@ FILTER DATA
 
 function getFilteredKajian(){
 
-let data =
-[...semuaKajian];
+  /*
+   * Ambil seluruh data kajian
+   */
+  let data =
+    [...semuaKajian];
 
-const area =
-document.getElementById(
-"areaSelect"
-).value;
 
-const masjidId =
-document.getElementById(
-"masjidSelect"
-).value;
+  /*
+   * FILTER AREA
+   */
+  const areaSelect =
+    document.getElementById(
+      "areaSelect"
+    );
 
-if(area){
+  const area =
+    areaSelect
+      ? areaSelect.value
+      : "";
 
-data =
-data.filter(
-j =>
-String(j.kecamatan) ===
-String(area)
-);
+
+  /*
+   * FILTER MASJID
+   */
+  const masjidSelect =
+    document.getElementById(
+      "masjidSelect"
+    );
+
+  const masjidId =
+    masjidSelect
+      ? masjidSelect.value
+      : "";
+
+
+  /*
+   * FILTER HARI
+   *
+   * Sesuaikan ID ini dengan select
+   * hari yang ada di poster.html.
+   */
+  const hariSelect =
+    document.getElementById(
+      "hariSelect"
+    );
+
+  const hari =
+    hariSelect
+      ? hariSelect.value
+      : "";
+
+
+  /* =====================================================
+     FILTER AREA
+  ===================================================== */
+
+  if(area){
+
+    data =
+      data.filter(
+        j =>
+
+          String(
+            j.kecamatan
+          ) ===
+
+          String(
+            area
+          )
+
+      );
+
+  }
+
+
+  /* =====================================================
+     FILTER MASJID
+  ===================================================== */
+
+  if(masjidId){
+
+    data =
+      data.filter(
+        j =>
+
+          String(
+            j.masjidId
+          ) ===
+
+          String(
+            masjidId
+          )
+
+      );
+
+  }
+
+
+  /* =====================================================
+     FILTER HARI
+  ===================================================== */
+
+  if(hari){
+
+    data =
+      data.filter(
+        j => {
+
+          const hariData =
+            normalHari(
+              j.hari
+            );
+
+          return (
+            hariData ===
+            normalHari(hari)
+          );
+
+        }
+      );
+
+  }
+
+
+  return data;
 
 }
 
-if(masjidId){
-
-data =
-data.filter(
-j =>
-String(j.masjidId) ===
-String(masjidId)
-);
-
-}
-
-return data;
-
-}
 
   function bagiHariMenjadiDuaKolom(hariGroups) {
 
