@@ -772,6 +772,170 @@ body{
 
   font-size: 22px;
 }
+
+
+
+/* =====================================================
+   EXPORT PNG — KOREKSI VERTIKAL TEKS
+===================================================== */
+
+.poster.export-mode {
+
+  --export-text-up:
+    -7.56px;
+
+}
+
+
+/* =====================================================
+   WAKTU
+===================================================== */
+
+.poster.export-mode
+.poster-time-text {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   BADGE
+===================================================== */
+
+.poster.export-mode
+.poster-badge-text {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   NAMA HARI
+===================================================== */
+
+.poster.export-mode
+.poster-day-header > span {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   PEMATERI
+===================================================== */
+
+.poster.export-mode
+.poster-pemateri {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   MATERI
+===================================================== */
+
+.poster.export-mode
+.poster-materi {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   HITUNG KAJIAN DI HEADER HARI
+===================================================== */
+
+.poster.export-mode
+.poster-day-count {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   HEADER MASJID
+===================================================== */
+
+.poster.export-mode
+.poster-location-name,
+.poster.export-mode
+.poster-location-area {
+
+  position: relative;
+
+  top:
+    var(--export-text-up);
+
+}
+
+
+/* =====================================================
+   TANGGAL HEADER
+===================================================== */
+
+.poster.export-mode
+.poster-date-box {
+
+  /*
+   * Kotak tanggal jangan digeser.
+   * Yang dikoreksi hanya teksnya
+   * jika nanti dibungkus span.
+   */
+
+}
+
+
+/* =====================================================
+   LOGO JKC
+===================================================== */
+
+.poster.export-mode
+.poster-logo-mark {
+
+  /*
+   * Lingkaran TIDAK digeser.
+   */
+
+}
+
+
+.poster.export-mode
+.poster-logo-mark {
+
+  /*
+   * Untuk sementara koreksi isi
+   * menggunakan line-height.
+   */
+
+  line-height:
+    1;
+
+}
 </style>
 
 </head>
@@ -1956,9 +2120,124 @@ function renderBadges(
    CARD KAJIAN
 ===================================================== */
 
-function renderKajianCard(
-  j
-){
+function renderKajianCard(j){
+
+  let badges = "";
+
+
+  const isKitab =
+    j.isKitab === true ||
+    j.isKitab === "TRUE";
+
+
+  const isMuslimah =
+    j.isMuslimah === true ||
+    j.isMuslimah === "TRUE";
+
+
+  const isAnak =
+    j.isAnak === true ||
+    j.isAnak === "TRUE";
+
+
+  if(isKitab){
+
+    badges += `
+
+      <span class="
+        poster-card-badge
+        poster-card-kitab
+      ">
+
+        <span class="
+          poster-badge-text
+        ">
+
+          📖 KITAB
+
+        </span>
+
+      </span>
+
+    `;
+
+  }
+
+
+  if(isMuslimah){
+
+    badges += `
+
+      <span class="
+        poster-card-badge
+        poster-card-muslimah
+      ">
+
+        <span class="
+          poster-badge-text
+        ">
+
+          🌸 MUSLIMAH
+
+        </span>
+
+      </span>
+
+    `;
+
+  }
+
+
+  if(isAnak){
+
+    badges += `
+
+      <span class="
+        poster-card-badge
+        poster-card-anak
+      ">
+
+        <span class="
+          poster-badge-text
+        ">
+
+          👶 ANAK
+
+        </span>
+
+      </span>
+
+    `;
+
+  }
+
+
+  if(j.pekan){
+
+    badges += `
+
+      <span class="
+        poster-card-badge
+        poster-card-pekan
+      ">
+
+        <span class="
+          poster-badge-text
+        ">
+
+          📅 PEKAN
+          ${escapeHtml(
+            String(j.pekan)
+          )}
+
+        </span>
+
+      </span>
+
+    `;
+
+  }
+
 
   const waktu =
     String(
@@ -1985,9 +2264,15 @@ function renderKajianCard(
         ${waktuClass}
       ">
 
-        ${escapeHtml(
-          waktu
-        )}
+        <span class="
+          poster-time-text
+        ">
+
+          ${escapeHtml(
+            waktu
+          )}
+
+        </span>
 
       </div>
 
@@ -2002,8 +2287,7 @@ function renderKajianCard(
         ">
 
           ${escapeHtml(
-            j.pemateri ||
-            "-"
+            j.pemateri || "-"
           )}
 
         </div>
@@ -2014,8 +2298,7 @@ function renderKajianCard(
         ">
 
           ${escapeHtml(
-            j.materi ||
-            "-"
+            j.materi || "-"
           )}
 
         </div>
@@ -2025,7 +2308,7 @@ function renderKajianCard(
           poster-card-badges
         ">
 
-          ${renderBadges(j)}
+          ${badges}
 
         </div>
 
@@ -3136,7 +3419,7 @@ function balancePosterColumns(){
    DOWNLOAD PNG
 ===================================================== */
 
-async function downloadPoster(){
+  async function downloadPoster(){
 
   const poster =
     document.getElementById(
@@ -3159,17 +3442,43 @@ async function downloadPoster(){
   try{
 
     /*
-     * Pastikan balancing selesai
-     * sebelum screenshot.
+     * Pastikan tinggi dua kolom
+     * sudah seimbang.
      */
 
-    balancePosterColumns();
+    if(
+      typeof balancePosterColumns ===
+      "function"
+    ){
 
+      balancePosterColumns();
+
+    }
+
+
+    /*
+     * Aktifkan mode khusus export.
+     *
+     * Preview tidak berubah.
+     */
+
+    poster.classList.add(
+      "export-mode"
+    );
+
+
+    /*
+     * Beri browser waktu
+     * melakukan repaint.
+     */
 
     await new Promise(
       resolve =>
         requestAnimationFrame(
-          resolve
+          () =>
+            requestAnimationFrame(
+              resolve
+            )
         )
     );
 
@@ -3178,14 +3487,34 @@ async function downloadPoster(){
       await html2canvas(
         poster,
         {
-          scale:2,
 
-          useCORS:true,
+          scale: 2,
+
+          useCORS: true,
 
           backgroundColor:
-            "#ffffff"
+            "#ffffff",
+
+          /*
+           * Pastikan font sudah
+           * selesai dirender.
+           */
+
+          logging: false
+
         }
       );
+
+
+    /*
+     * Matikan kembali mode export.
+     *
+     * Preview kembali normal.
+     */
+
+    poster.classList.remove(
+      "export-mode"
+    );
 
 
     const link =
@@ -3214,6 +3543,16 @@ async function downloadPoster(){
 
 
   }catch(err){
+
+    /*
+     * Pastikan class export
+     * tetap dibersihkan jika error.
+     */
+
+    poster.classList.remove(
+      "export-mode"
+    );
+
 
     console.error(
       "Download poster:",
