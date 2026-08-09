@@ -282,17 +282,12 @@ body{
 ========================================================= */
 
 .poster-days {
-  padding:
-    25px 30px 25px;
+  padding: 25px 30px;
 
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
+  column-count: 2;
   column-gap: 20px;
 
-  align-items: start;
+  column-fill: balance;
 }
 
 
@@ -305,6 +300,7 @@ body{
 
   page-break-inside: avoid;
 }
+  
 
 
 /* HEADER HARI */
@@ -2160,8 +2156,10 @@ function renderPoster(){
 
             <span>
 
-              ${hari.toUpperCase()}
-
+             ${hari === "Minggu"
+                ? "Ahad"
+                : hari.toUpperCase()
+              }
             </span>
 
 
