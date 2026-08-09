@@ -616,18 +616,31 @@ document.getElementById(
 "areaSelect"
 );
 
+select.innerHTML = `
+<option value="">
+Semua Area
+</option>
+`;
+
 const areas =
 [
 ...new Set(
-semuaMasjid
+semuaKajian
 .map(
-m =>
-m.kecamatan
+j => j.kecamatan
 )
-.filter(Boolean)
+.filter(
+k => k &&
+String(k).trim()
+)
 )
 ]
-.sort();
+.sort(
+(a,b) =>
+String(a).localeCompare(
+String(b)
+)
+);
 
 areas.forEach(
 area => {
@@ -663,8 +676,7 @@ document.getElementById(
 "masjidSelect"
 );
 
-select.innerHTML =
-`
+select.innerHTML = `
 <option value="">
 Semua Masjid
 </option>
@@ -675,28 +687,101 @@ document.getElementById(
 "areaSelect"
 ).value;
 
+
+/*
+Ambil daftar masjid langsung
+dari data jadwal.
+*/
+
 let data =
-semuaMasjid;
+semuaKajian;
+
+
+/*
+Filter berdasarkan area
+jika dipilih.
+*/
 
 if(area){
 
 data =
 data.filter(
-m =>
-m.kecamatan === area
+j =>
+String(j.kecamatan) ===
+String(area)
 );
 
 }
 
-data
+
+/*
+Buat daftar unik berdasarkan masjidId.
+*/
+
+const masjidMap = new Map();
+
+data.forEach(
+j => {
+
+const id =
+j.masjidId;
+
+if(
+id === undefined ||
+id === null
+){
+
+return;
+
+}
+
+if(
+!masjidMap.has(
+String(id)
+)
+){
+
+masjidMap.set(
+String(id),
+{
+id:id,
+nama:
+j.namaMasjid ||
+j.lokasi ||
+"Masjid",
+kecamatan:
+j.kecamatan ||
+""
+}
+);
+
+}
+
+});
+
+
+/*
+Urutkan nama masjid.
+*/
+
+const daftarMasjid =
+[
+...masjidMap.values()
+]
 .sort(
 (a,b) =>
-String(a.nama || a.lokasi)
+String(a.nama)
 .localeCompare(
-String(b.nama || b.lokasi)
+String(b.nama)
 )
-)
-.forEach(
+);
+
+
+/*
+Masukkan ke SELECT.
+*/
+
+daftarMasjid.forEach(
 m => {
 
 const option =
@@ -708,9 +793,7 @@ option.value =
 m.id;
 
 option.textContent =
-m.nama ||
-m.lokasi ||
-"Tanpa Nama";
+m.nama;
 
 select.appendChild(
 option
@@ -721,21 +804,7 @@ option
 }
 
 
-/* =====================================================
-MENCARI MASJID
-===================================================== */
 
-function getMasjid(
-id
-){
-
-return semuaMasjid.find(
-m =>
-String(m.id) ===
-String(id)
-);
-
-}
 
 
 /* =====================================================
@@ -889,20 +958,13 @@ function renderKajianCard(
 j
 ){
 
-const masjid =
-getMasjid(
-j.masjidId
-);
-
 const namaMasjid =
 j.namaMasjid ||
 j.lokasi ||
-masjid?.nama ||
 "Masjid";
 
 const area =
 j.kecamatan ||
-masjid?.kecamatan ||
 "";
 
 return `
@@ -1487,12 +1549,7 @@ homeData.jadwal
 : [];
 
 
-semuaMasjid =
-Array.isArray(
-homeData.masjid
-)
-? homeData.masjid
-: [];
+semuaMasjid = [];
 
 
 /*
