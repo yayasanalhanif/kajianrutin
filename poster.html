@@ -87,6 +87,369 @@ body{
 
 }
 
+  /* =====================================================
+   TEMPLATE POSTER JADWAL KAJIAN
+   TEMA : EMERALD GOLD
+===================================================== */
+
+.poster{
+  width:1080px;
+  min-height:1350px;
+  background:#f7f3e8;
+  color:#17251f;
+  overflow:hidden;
+  position:relative;
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+/* HEADER */
+
+.poster-template-header{
+  position:relative;
+  min-height:300px;
+  background:
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(212,175,55,.28),
+      transparent 28%
+    ),
+    linear-gradient(
+      135deg,
+      #064e3b 0%,
+      #0f5132 55%,
+      #062e24 100%
+    );
+  color:white;
+  padding:48px 55px 38px;
+  overflow:hidden;
+}
+
+.poster-template-header:after{
+  content:"";
+  position:absolute;
+  width:430px;
+  height:430px;
+  right:-150px;
+  top:-180px;
+  border:2px solid rgba(212,175,55,.35);
+  border-radius:50%;
+  box-shadow:
+    0 0 0 25px rgba(212,175,55,.06),
+    0 0 0 50px rgba(212,175,55,.04);
+}
+
+.poster-brand{
+  position:relative;
+  z-index:2;
+  display:flex;
+  align-items:center;
+  gap:22px;
+}
+
+.poster-logo-mark{
+  width:125px;
+  height:125px;
+  border:3px solid #d4af37;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:48px;
+  font-weight:900;
+  color:#d4af37;
+  background:rgba(255,255,255,.05);
+}
+
+.poster-title-small{
+  color:#d4af37;
+  font-size:27px;
+  font-weight:700;
+  letter-spacing:1px;
+}
+
+.poster-title-main{
+  font-size:58px;
+  line-height:.95;
+  font-weight:900;
+  letter-spacing:-2px;
+}
+
+.poster-title-sub{
+  font-size:31px;
+  margin-top:8px;
+  color:#f5e7b0;
+  font-weight:700;
+}
+
+.poster-date-box{
+  position:relative;
+  z-index:3;
+  margin-top:35px;
+  display:inline-flex;
+  align-items:center;
+  gap:14px;
+  background:#d4af37;
+  color:#073b2b;
+  padding:13px 25px;
+  border-radius:12px;
+  font-size:25px;
+  font-weight:900;
+  box-shadow:0 7px 20px rgba(0,0,0,.25);
+}
+
+
+/* BADGES */
+
+.poster-badges{
+  padding:22px 45px;
+  background:#063b2d;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+
+.poster-filter-badge{
+  border-radius:30px;
+  padding:10px 22px;
+  font-size:19px;
+  font-weight:800;
+  border:2px solid rgba(255,255,255,.35);
+}
+
+.poster-filter-kitab{
+  background:#2563eb;
+  color:white;
+}
+
+.poster-filter-muslimah{
+  background:#db2777;
+  color:white;
+}
+
+.poster-filter-anak{
+  background:#f59e0b;
+  color:white;
+}
+
+.poster-filter-pekan{
+  background:#d4af37;
+  color:#173b2d;
+}
+
+
+/* CONTENT */
+
+.poster-days{
+  padding:28px 35px 35px;
+}
+
+.poster-day-section{
+  margin-bottom:25px;
+}
+
+.poster-day-header{
+  background:
+    linear-gradient(
+      90deg,
+      #064e3b,
+      #0f5132
+    );
+  color:white;
+  border-left:8px solid #d4af37;
+  padding:14px 20px;
+  font-size:30px;
+  font-weight:900;
+  border-radius:12px 12px 0 0;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.poster-day-count{
+  font-size:17px;
+  color:#f5e7b0;
+  font-weight:600;
+}
+
+
+/* CARD */
+
+.poster-kajian{
+  background:#fffdf7;
+  border:1px solid #ded8c7;
+  border-left:4px solid #d4af37;
+  padding:17px 18px;
+  margin-top:10px;
+  border-radius:10px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  display:flex;
+  gap:16px;
+}
+
+.poster-time{
+  width:88px;
+  min-width:88px;
+  height:58px;
+  border-radius:10px;
+  background:#063b2d;
+  color:#f5e7b0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  font-weight:900;
+}
+
+.poster-kajian-body{
+  flex:1;
+}
+
+.poster-masjid{
+  color:#0f5132;
+  font-size:21px;
+  font-weight:900;
+  line-height:1.15;
+}
+
+.poster-area{
+  color:#777;
+  font-size:14px;
+  margin-top:3px;
+}
+
+.poster-pemateri{
+  font-size:17px;
+  font-weight:700;
+  margin-top:9px;
+}
+
+.poster-materi{
+  color:#444;
+  font-size:16px;
+  margin-top:5px;
+  line-height:1.25;
+}
+
+
+/* BADGE DALAM CARD */
+
+.poster-card-badges{
+  margin-top:8px;
+}
+
+.poster-card-badge{
+  display:inline-block;
+  padding:4px 9px;
+  margin-right:4px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:800;
+}
+
+.poster-card-kitab{
+  background:#dbeafe;
+  color:#1d4ed8;
+}
+
+.poster-card-muslimah{
+  background:#fce7f3;
+  color:#be185d;
+}
+
+.poster-card-anak{
+  background:#fef3c7;
+  color:#b45309;
+}
+
+.poster-card-pekan{
+  background:#f6e7ad;
+  color:#8a6a00;
+}
+
+
+/* QUOTE */
+
+.poster-quote{
+  margin:5px 35px 30px;
+  background:
+    linear-gradient(
+      135deg,
+      #063b2d,
+      #0f5132
+    );
+  color:white;
+  border-radius:18px;
+  padding:28px 32px;
+  border:2px solid #d4af37;
+  position:relative;
+  overflow:hidden;
+}
+
+.poster-quote-mark{
+  position:absolute;
+  right:20px;
+  top:-20px;
+  font-size:120px;
+  color:rgba(212,175,55,.18);
+  font-family:Georgia,serif;
+}
+
+.poster-quote-text{
+  position:relative;
+  z-index:2;
+  font-size:26px;
+  line-height:1.25;
+  font-weight:700;
+}
+
+.poster-quote-source{
+  position:relative;
+  z-index:2;
+  margin-top:12px;
+  color:#f5e7b0;
+  font-size:15px;
+}
+
+
+/* FOOTER */
+
+.poster-template-footer{
+  background:#03291f;
+  color:white;
+  min-height:135px;
+  padding:24px 35px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-top:5px solid #d4af37;
+}
+
+.poster-footer-main{
+  font-size:22px;
+  font-weight:900;
+}
+
+.poster-footer-sub{
+  margin-top:5px;
+  color:#d8e8df;
+  font-size:15px;
+}
+
+.poster-footer-right{
+  text-align:right;
+  color:#f5e7b0;
+  font-weight:700;
+}
+
+
+/* EMPTY */
+
+.poster-empty{
+  padding:80px 30px;
+  text-align:center;
+  color:#777;
+  font-size:24px;
+}
 </style>
 
 </head>
@@ -954,9 +1317,7 @@ return html;
 MEMBUAT CARD KAJIAN
 ===================================================== */
 
-function renderKajianCard(
-j
-){
+function renderKajianCard(j){
 
 const namaMasjid =
 j.namaMasjid ||
@@ -967,36 +1328,72 @@ const area =
 j.kecamatan ||
 "";
 
+let badges = "";
+
+if(
+j.isKitab === true ||
+j.isKitab === "TRUE"
+){
+
+badges += `
+<span class="poster-card-badge poster-card-kitab">
+📖 KITAB
+</span>
+`;
+
+}
+
+if(
+j.isMuslimah === true ||
+j.isMuslimah === "TRUE"
+){
+
+badges += `
+<span class="poster-card-badge poster-card-muslimah">
+🌸 MUSLIMAH
+</span>
+`;
+
+}
+
+if(
+j.isAnak === true ||
+j.isAnak === "TRUE"
+){
+
+badges += `
+<span class="poster-card-badge poster-card-anak">
+👶 ANAK
+</span>
+`;
+
+}
+
+if(j.pekan){
+
+badges += `
+<span class="poster-card-badge poster-card-pekan">
+📅 PEKAN ${escapeHtml(j.pekan)}
+</span>
+`;
+
+}
+
 return `
 
-<div class="kajian-card">
+<div class="poster-kajian">
 
-<div class="
-flex
-items-start
-gap-4
-">
-
-<div class="
-text-2xl
-font-bold
-text-[#14532D]
-min-w-[90px]
-">
+<div class="poster-time">
 
 ${escapeHtml(
-j.waktu || "-"
+j.waktu || "--:--"
 )}
 
 </div>
 
-<div class="flex-1">
+<div class="poster-kajian-body">
 
-<div class="
-font-bold
-text-lg
-text-[#14532D]
-">
+<div class="poster-masjid">
 
 ${escapeHtml(
 namaMasjid
@@ -1004,44 +1401,31 @@ namaMasjid
 
 </div>
 
-<div class="
-text-sm
-text-slate-500
-mt-1
-">
+<div class="poster-area">
 
 📍 ${escapeHtml(area)}
 
 </div>
 
-<div class="
-font-semibold
-mt-3
-">
+<div class="poster-pemateri">
 
-🎙️ ${escapeHtml(
+${escapeHtml(
 j.pemateri || "-"
 )}
 
 </div>
 
-<div class="
-text-sm
-text-slate-600
-mt-1
-">
+<div class="poster-materi">
 
-📚 ${escapeHtml(
+${escapeHtml(
 j.materi || "-"
 )}
 
 </div>
 
-<div class="mt-2">
+<div class="poster-card-badges">
 
-${renderBadges(j)}
-
-</div>
+${badges}
 
 </div>
 
@@ -1144,8 +1528,6 @@ document.getElementById(
 "poster"
 );
 
-poster.innerHTML = "";
-
 const {
 start,
 end
@@ -1155,27 +1537,29 @@ getKajianMinggu();
 let data =
 getFilteredKajian();
 
+
+/* =========================================
+   GROUP HARI
+========================================= */
+
 const grouped = {};
 
-namaHari.forEach(
+[
+"Senin",
+"Selasa",
+"Rabu",
+"Kamis",
+"Jumat",
+"Sabtu",
+"Minggu"
+]
+.forEach(
 hari => {
 
 grouped[hari] = [];
 
 });
 
-
-/*
-PENTING:
-
-Data jadwal Anda tidak memiliki
-tanggal kalender.
-
-Karena itu V1 mengelompokkan
-berdasarkan hari.
-
-Kolom "pekan" hanya menjadi badge.
-*/
 
 data.forEach(
 j => {
@@ -1196,12 +1580,126 @@ grouped[hari].push(j);
 });
 
 
-namaHari
-.filter(
-hari =>
-hari !== "Minggu"
-)
-.concat(["Minggu"])
+/* =========================================
+   HEADER
+========================================= */
+
+let html = `
+
+<div class="poster-template-header">
+
+<div class="poster-brand">
+
+<div class="poster-logo-mark">
+
+JKC
+
+</div>
+
+<div>
+
+<div class="poster-title-small">
+Jadwal
+</div>
+
+<div class="poster-title-main">
+KAJIAN
+</div>
+
+<div class="poster-title-sub">
+ISLAM ILMIAH
+</div>
+
+<div style="
+font-size:20px;
+margin-top:3px;
+color:#fff;
+">
+
+KOTA CILEGON
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="poster-date-box">
+
+📅
+
+${formatTanggal(start)}
+
+&nbsp;–&nbsp;
+
+${formatTanggal(end)}
+
+</div>
+
+</div>
+
+
+<div class="poster-badges">
+
+<span class="
+poster-filter-badge
+poster-filter-kitab
+">
+
+📖 KITAB
+
+</span>
+
+<span class="
+poster-filter-badge
+poster-filter-muslimah
+">
+
+🌸 MUSLIMAH
+
+</span>
+
+<span class="
+poster-filter-badge
+poster-filter-anak
+">
+
+👶 ANAK
+
+</span>
+
+<span class="
+poster-filter-badge
+poster-filter-pekan
+">
+
+📅 PEKANAN
+
+</span>
+
+</div>
+
+<div class="poster-days">
+`;
+
+
+/* =========================================
+   HARI
+========================================= */
+
+let jumlahHari =
+0;
+
+[
+"Senin",
+"Selasa",
+"Rabu",
+"Kamis",
+"Jumat",
+"Sabtu",
+"Minggu"
+]
 .forEach(
 hari => {
 
@@ -1217,41 +1715,47 @@ return;
 
 }
 
+jumlahHari++;
+
+
+/* SORT WAKTU */
+
 list.sort(
 (a,b) =>
 timeToNumber(a.waktu) -
 timeToNumber(b.waktu)
 );
 
-poster.innerHTML += `
 
-<section class="mb-8">
+html += `
 
-<div class="
-day-title
-rounded-xl
-px-5
-py-3
-text-xl
-font-bold
-mb-3
-">
+<section class="poster-day-section">
 
+<div class="poster-day-header">
+
+<span>
 ${hari.toUpperCase()}
+</span>
+
+<span class="poster-day-count">
+
+${list.length} Kajian
+
+</span>
 
 </div>
 
-<div class="space-y-3">
+`;
 
-${list
-.map(
-j =>
-renderKajianCard(j)
-)
-.join("")
-}
+list.forEach(
+j => {
 
-</div>
+html +=
+renderKajianCard(j);
+
+});
+
+html += `
 
 </section>
 
@@ -1260,87 +1764,104 @@ renderKajianCard(j)
 });
 
 
-/* =====================================================
-HEADER
-===================================================== */
+/* =========================================
+   JIKA KOSONG
+========================================= */
 
-poster.innerHTML = `
+if(!data.length){
 
-<div class="
-poster-header
-px-10
-py-8
-mb-8
-">
+html += `
 
-<div class="
-text-4xl
-font-extrabold
-tracking-wide
-">
+<div class="poster-empty">
 
-JADWAL KAJIAN
+📚
+
+<br>
+
+Tidak ada jadwal kajian
+yang sesuai filter.
 
 </div>
 
-<div class="
-text-2xl
-font-semibold
-mt-1
-">
+`;
 
-ISLAM ILMIAH
+}
 
-</div>
 
-<div class="
-text-xl
-mt-1
-text-white/90
-">
+/* =========================================
+   TUTUP CONTENT
+========================================= */
 
-KOTA CILEGON
+html += `
 
 </div>
 
-<div class="
-mt-5
-text-lg
-font-semibold
-">
 
-${formatTanggal(start)}
-–
+<div class="poster-quote">
 
-${formatTanggal(end)}
+<div class="poster-quote-mark">
+“
+</div>
+
+<div class="poster-quote-text">
+
+"Barang siapa menempuh jalan
+untuk mencari ilmu, maka Allah
+akan mudahkan baginya jalan
+menuju Surga."
+
+</div>
+
+<div class="poster-quote-source">
+
+HR. Muslim
 
 </div>
 
 </div>
 
-<div class="px-8 pb-10">
 
-${poster.innerHTML}
+<div class="poster-template-footer">
+
+<div>
+
+<div class="poster-footer-main">
+
+JADWAL KAJIAN ISLAM ILMIAH
 
 </div>
 
-<div class="
-text-center
-text-sm
-text-slate-400
-pb-6
-">
+<div class="poster-footer-sub">
 
-Jadwal Kajian Islam Ilmiah Kota Cilegon
+Kota Cilegon • Jadwal dapat berubah,
+silakan cek jadwal terbaru.
+
+</div>
+
+</div>
+
+<div class="poster-footer-right">
+
+🕌
+
+<br>
+
+Semoga bermanfaat
+
+</div>
 
 </div>
 
 `;
 
 
-/* =====================================================
-STATUS
-===================================================== */
+poster.innerHTML =
+html;
+
+
+/* =========================================
+   STATUS
+========================================= */
 
 showStatus(
 `Menampilkan ${data.length} kajian.`,
