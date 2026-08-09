@@ -282,12 +282,17 @@ body{
 ========================================================= */
 
 .poster-days {
-  padding: 25px 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+}
 
-  column-count: 2;
-  column-gap: 20px;
-
-  column-fill: balance;
+.poster-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
 }
 
 
@@ -1768,6 +1773,98 @@ return data;
 
 }
 
+  function bagiHariMenjadiDuaKolom(hariGroups) {
+
+  if (!hariGroups || hariGroups.length <= 1) {
+
+    return {
+      kiri: hariGroups || [],
+      kanan: []
+    };
+
+  }
+
+  const totalKajian =
+    hariGroups.reduce(
+      (total, hari) =>
+        total + hari.list.length,
+      0
+    );
+
+  let terbaik = null;
+
+  /*
+   * Karena jumlah hari biasanya hanya 7,
+   * kita bisa mencoba semua kemungkinan
+   * titik pemisah.
+   *
+   * Yang dicari:
+   * - seluruh blok hari tetap utuh
+   * - urutan hari tetap terjaga
+   * - selisih jumlah kajian sekecil mungkin
+   */
+
+  for (
+    let i = 1;
+    i < hariGroups.length;
+    i++
+  ) {
+
+    const kiri =
+      hariGroups.slice(0, i);
+
+    const kanan =
+      hariGroups.slice(i);
+
+    const jumlahKiri =
+      kiri.reduce(
+        (total, hari) =>
+          total + hari.list.length,
+        0
+      );
+
+    const jumlahKanan =
+      kanan.reduce(
+        (total, hari) =>
+          total + hari.list.length,
+        0
+      );
+
+    const selisih =
+      Math.abs(
+        jumlahKiri -
+        jumlahKanan
+      );
+
+    if (
+      terbaik === null ||
+      selisih < terbaik.selisih
+    ) {
+
+      terbaik = {
+
+        kiri,
+        kanan,
+
+        jumlahKiri,
+        jumlahKanan,
+
+        selisih
+
+      };
+
+    }
+
+  }
+
+  return {
+
+    kiri: terbaik.kiri,
+    kanan: terbaik.kanan
+
+  };
+
+}
 
 /* =====================================================
 RENDER POSTER
@@ -1776,15 +1873,16 @@ RENDER POSTER
 function renderPoster(){
 
   const poster =
-    document.getElementById(
-      "poster"
-    );
+    document.getElementById("poster");
+
+  if(!poster){
+    return;
+  }
 
 
-  /*
-    Ambil periode minggu
-    dari pilihan tanggal generator.
-  */
+  /* =====================================================
+     AMBIL PERIODE MINGGU
+  ===================================================== */
 
   const {
     start,
@@ -1792,24 +1890,17 @@ function renderPoster(){
   } = getKajianMinggu();
 
 
-  /*
-    Ambil data sesuai filter:
-    - tanggal/minggu
-    - area
-    - masjid
-  */
+  /* =====================================================
+     AMBIL DATA SESUAI FILTER
+  ===================================================== */
 
   let data =
     getFilteredKajian();
 
 
-  /*
-    Ambil nama masjid dari dropdown.
-
-    Karena poster dibuat untuk satu tempat,
-    nama masjid tidak perlu diulang
-    pada setiap card.
-  */
+  /* =====================================================
+     NAMA MASJID
+  ===================================================== */
 
   const masjidSelect =
     document.getElementById(
@@ -1837,9 +1928,9 @@ function renderPoster(){
   }
 
 
-  /*
-    Cari area dari data kajian.
-  */
+  /* =====================================================
+     AREA
+  ===================================================== */
 
   let area = "";
 
@@ -1852,14 +1943,70 @@ function renderPoster(){
   }
 
 
-  /*
-    Group berdasarkan hari.
-  */
+  /* =====================================================
+     GROUP DATA BERDASARKAN HARI
+  ===================================================== */
 
-  const grouped = {};
+  const grouped = {
+
+    Senin: [],
+    Selasa: [],
+    Rabu: [],
+    Kamis: [],
+    Jumat: [],
+    Sabtu: [],
+    Minggu: []
+
+  };
 
 
-  [
+  data.forEach(j => {
+
+    const hari =
+      normalHari(j.hari);
+
+    if(
+      grouped[hari]
+    ){
+
+      grouped[hari].push(j);
+
+    }
+
+  });
+
+
+  /* =====================================================
+     URUTKAN WAKTU
+  ===================================================== */
+
+  Object.keys(
+    grouped
+  ).forEach(hari => {
+
+    grouped[hari].sort(
+      (a,b) => {
+
+        return (
+          timeToNumber(a.waktu) -
+          timeToNumber(b.waktu)
+        );
+
+      }
+    );
+
+  });
+
+
+  /* =====================================================
+     BENTUK BLOK HARI
+     
+     Setiap hari tetap menjadi SATU BLOK.
+     Tidak boleh dipecah antara kolom.
+  ===================================================== */
+
+  const urutanHari = [
+
     "Senin",
     "Selasa",
     "Rabu",
@@ -1867,70 +2014,295 @@ function renderPoster(){
     "Jumat",
     "Sabtu",
     "Minggu"
-  ].forEach(
-    hari => {
 
-      grouped[hari] = [];
+  ];
+
+
+  const hariGroups = [];
+
+
+  urutanHari.forEach(hari => {
+
+    if(
+      grouped[hari] &&
+      grouped[hari].length
+    ){
+
+      hariGroups.push({
+
+        hari: hari,
+
+        list:
+          grouped[hari]
+
+      });
 
     }
-  );
+
+  });
 
 
-  data.forEach(
-    j => {
+  /* =====================================================
+     PEMBAGIAN 2 KOLOM
+     
+     Kita mencoba seluruh kombinasi blok hari.
+     
+     Prioritas:
+     1. Selisih jumlah kajian terkecil
+     2. Perpindahan antar kolom seminimal mungkin
+        agar urutan hari tetap natural
+     3. Jumlah hari kiri-kanan seimbang
+  ===================================================== */
 
-      const hari =
-        normalHari(
-          j.hari
+  function bagiHariDuaKolom(
+    groups
+  ){
+
+    if(
+      !groups.length
+    ){
+
+      return {
+        kiri: [],
+        kanan: []
+      };
+
+    }
+
+
+    if(
+      groups.length === 1
+    ){
+
+      return {
+        kiri: groups,
+        kanan: []
+      };
+
+    }
+
+
+    const totalKajian =
+      groups.reduce(
+        (
+          total,
+          group
+        ) => {
+
+          return (
+            total +
+            group.list.length
+          );
+
+        },
+        0
+      );
+
+
+    const jumlahHari =
+      groups.length;
+
+
+    let terbaik = null;
+
+
+    /*
+     * Maksimal hanya 7 hari.
+     * Jadi seluruh kombinasi sangat ringan.
+     */
+    const jumlahKombinasi =
+      Math.pow(
+        2,
+        jumlahHari
+      );
+
+
+    for(
+      let mask = 1;
+      mask <
+      jumlahKombinasi - 1;
+      mask++
+    ){
+
+      const kiri = [];
+      const kanan = [];
+
+      let jumlahKiri = 0;
+      let jumlahKanan = 0;
+
+
+      for(
+        let i = 0;
+        i < jumlahHari;
+        i++
+      ){
+
+        if(
+          mask & (1 << i)
+        ){
+
+          kiri.push(
+            groups[i]
+          );
+
+          jumlahKiri +=
+            groups[i].list.length;
+
+        }
+        else{
+
+          kanan.push(
+            groups[i]
+          );
+
+          jumlahKanan +=
+            groups[i].list.length;
+
+        }
+
+      }
+
+
+      const selisih =
+        Math.abs(
+          jumlahKiri -
+          jumlahKanan
         );
 
 
-      if(
-        grouped[hari]
+      /*
+       * Berapa kali perpindahan kolom
+       * terjadi sepanjang urutan hari.
+       *
+       * Semakin kecil semakin natural.
+       */
+      let perpindahan = 0;
+
+
+      for(
+        let i = 1;
+        i < jumlahHari;
+        i++
       ){
 
-        grouped[hari].push(j);
+        const sebelumnya =
+          Boolean(
+            mask &
+            (1 << (i - 1))
+          );
+
+        const sekarang =
+          Boolean(
+            mask &
+            (1 << i)
+          );
+
+        if(
+          sebelumnya !==
+          sekarang
+        ){
+
+          perpindahan++;
+
+        }
+
+      }
+
+
+      const selisihJumlahHari =
+        Math.abs(
+          kiri.length -
+          kanan.length
+        );
+
+
+      const kandidat = {
+
+        kiri,
+        kanan,
+
+        jumlahKiri,
+        jumlahKanan,
+
+        selisih,
+
+        perpindahan,
+
+        selisihJumlahHari
+
+      };
+
+
+      /*
+       * Tentukan kandidat terbaik.
+       */
+      if(
+        terbaik === null
+      ){
+
+        terbaik =
+          kandidat;
+
+      }
+      else if(
+        kandidat.selisih <
+        terbaik.selisih
+      ){
+
+        terbaik =
+          kandidat;
+
+      }
+      else if(
+        kandidat.selisih ===
+        terbaik.selisih &&
+        kandidat.perpindahan <
+        terbaik.perpindahan
+      ){
+
+        terbaik =
+          kandidat;
+
+      }
+      else if(
+        kandidat.selisih ===
+        terbaik.selisih &&
+        kandidat.perpindahan ===
+        terbaik.perpindahan &&
+        kandidat.selisihJumlahHari <
+        terbaik.selisihJumlahHari
+      ){
+
+        terbaik =
+          kandidat;
 
       }
 
     }
-  );
 
 
-  /*
-    Urutkan waktu
-    dalam setiap hari.
-  */
+    return {
 
-  Object.keys(
-    grouped
-  ).forEach(
-    hari => {
+      kiri:
+        terbaik.kiri,
 
-      grouped[hari].sort(
-        (a,b) => {
+      kanan:
+        terbaik.kanan
 
-          return (
-            timeToNumber(
-              a.waktu
-            ) -
-            timeToNumber(
-              b.waktu
-            )
-          );
+    };
 
-        }
-      );
-
-    }
-  );
+  }
 
 
-  /*
-    ============================
-    HEADER
-    ============================
-  */
+  const kolom =
+    bagiHariDuaKolom(
+      hariGroups
+    );
+
+
+  /* =====================================================
+     HEADER POSTER
+  ===================================================== */
 
   let html = `
 
@@ -1939,6 +2311,8 @@ function renderPoster(){
     ">
 
 
+      <!-- BRAND -->
+
       <div class="
         poster-brand
       ">
@@ -1946,9 +2320,7 @@ function renderPoster(){
         <div class="
           poster-logo-mark
         ">
-
           JKC
-
         </div>
 
 
@@ -1957,27 +2329,21 @@ function renderPoster(){
           <div class="
             poster-title-small
           ">
-
             JADWAL
-
           </div>
 
 
           <div class="
             poster-title-main
           ">
-
             KAJIAN
-
           </div>
 
 
           <div class="
             poster-title-sub
           ">
-
             ISLAM ILMIAH
-
           </div>
 
 
@@ -1987,15 +2353,15 @@ function renderPoster(){
             color:#fff;
             font-weight:700;
           ">
-
             KOTA CILEGON
-
           </div>
 
         </div>
 
       </div>
 
+
+      <!-- LOKASI -->
 
       <div class="
         poster-location
@@ -2016,6 +2382,7 @@ function renderPoster(){
         ${
           area
             ? `
+
               <div class="
                 poster-location-area
               ">
@@ -2026,12 +2393,15 @@ function renderPoster(){
                 )}
 
               </div>
+
             `
             : ""
         }
 
       </div>
 
+
+      <!-- TANGGAL -->
 
       <div class="
         poster-date-box
@@ -2051,8 +2421,11 @@ function renderPoster(){
 
       </div>
 
+
     </div>
 
+
+    <!-- CATEGORY -->
 
     <div class="
       poster-badges
@@ -2062,9 +2435,7 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-kitab
       ">
-
         📖 KITAB
-
       </span>
 
 
@@ -2072,9 +2443,7 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-muslimah
       ">
-
         🌸 MUSLIMAH
-
       </span>
 
 
@@ -2082,9 +2451,7 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-anak
       ">
-
         👶 ANAK
-
       </span>
 
 
@@ -2092,62 +2459,54 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-pekan
       ">
-
         📅 PEKANAN
-
       </span>
 
     </div>
 
 
+    <!-- =================================================
+         DUA KOLOM
+    ================================================= -->
+
     <div class="
       poster-days
     ">
+
+
+      <!-- KOLOM KIRI -->
+
+      <div class="
+        poster-column
+        poster-column-left
+      ">
+
   `;
 
 
-  /*
-    ============================
-    HARI
-    ============================
-  */
+  /* =====================================================
+     RENDER BLOK HARI KIRI
+  ===================================================== */
 
-  let jumlahHari = 0;
+  kolom.kiri.forEach(
+    group => {
 
-
-  [
-    "Senin",
-    "Selasa",
-    "Rabu",
-    "Kamis",
-    "Jumat",
-    "Sabtu",
-    "Minggu"
-  ].forEach(
-    hari => {
+      const hari =
+        group.hari;
 
       const list =
-        grouped[hari];
-
-
-      if(
-        !list ||
-        list.length === 0
-      ){
-
-        return;
-
-      }
-
-
-      jumlahHari++;
+        group.list;
 
 
       html += `
 
-        <section class="
-          poster-day-section
-        ">
+        <section
+          class="
+            poster-day-section
+          "
+          data-day-block="
+            ${escapeHtml(hari)}
+          >
 
 
           <div class="
@@ -2156,10 +2515,12 @@ function renderPoster(){
 
             <span>
 
-             ${hari === "Minggu"
-                ? "AHAD"
-                : hari.toUpperCase()
+              ${
+                hari === "Minggu"
+                  ? "AHAD"
+                  : hari.toUpperCase()
               }
+
             </span>
 
 
@@ -2173,6 +2534,7 @@ function renderPoster(){
             </span>
 
           </div>
+
 
       `;
 
@@ -2197,26 +2559,245 @@ function renderPoster(){
   );
 
 
-  /*
-    Jika tidak ada kajian.
-  */
+  html += `
+
+      </div>
+
+
+      <!-- =============================================
+           KOLOM KANAN
+      ============================================== -->
+
+      <div class="
+        poster-column
+        poster-column-right
+      ">
+
+  `;
+
+
+  /* =====================================================
+     RENDER BLOK HARI KANAN
+  ===================================================== */
+
+  kolom.kanan.forEach(
+    group => {
+
+      const hari =
+        group.hari;
+
+      const list =
+        group.list;
+
+
+      html += `
+
+        <section
+          class="
+            poster-day-section
+          "
+          data-day-block="
+            ${escapeHtml(hari)}
+          >
+
+
+          <div class="
+            poster-day-header
+          ">
+
+            <span>
+
+              ${
+                hari === "Minggu"
+                  ? "AHAD"
+                  : hari.toUpperCase()
+              }
+
+            </span>
+
+
+            <span class="
+              poster-day-count
+            ">
+
+              ${list.length}
+              Kajian
+
+            </span>
+
+          </div>
+
+
+      `;
+
+
+      list.forEach(
+        j => {
+
+          html +=
+            renderKajianCard(j);
+
+        }
+      );
+
+
+      html += `
+
+        </section>
+
+      `;
+
+    }
+  );
+
+
+  /* =====================================================
+     TUTUP DUA KOLOM
+  ===================================================== */
+
+  html += `
+
+      </div>
+
+    </div>
+
+
+  `;
+
+
+  /* =====================================================
+     JIKA TIDAK ADA KAJIAN
+  ===================================================== */
 
   if(
     !data.length
   ){
 
-    html += `
+    html = `
 
       <div class="
-        poster-empty
+        poster-template-header
       ">
 
-        📚
+        <div class="
+          poster-brand
+        ">
 
-        <br><br>
+          <div class="
+            poster-logo-mark
+          ">
+            JKC
+          </div>
 
-        Tidak ada jadwal kajian
-        yang sesuai filter.
+          <div>
+
+            <div class="
+              poster-title-small
+            ">
+              JADWAL
+            </div>
+
+            <div class="
+              poster-title-main
+            ">
+              KAJIAN
+            </div>
+
+            <div class="
+              poster-title-sub
+            ">
+              ISLAM ILMIAH
+            </div>
+
+            <div style="
+              font-size:18px;
+              margin-top:3px;
+              color:#fff;
+              font-weight:700;
+            ">
+              KOTA CILEGON
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="
+          poster-location
+        ">
+
+          <div class="
+            poster-location-name
+          ">
+
+            🕌
+            ${escapeHtml(
+              namaMasjid
+            )}
+
+          </div>
+
+
+          ${
+            area
+              ? `
+
+                <div class="
+                  poster-location-area
+                ">
+
+                  📍
+                  ${escapeHtml(
+                    area
+                  )}
+
+                </div>
+
+              `
+              : ""
+          }
+
+        </div>
+
+
+        <div class="
+          poster-date-box
+        ">
+
+          📅
+
+          ${escapeHtml(
+            formatTanggal(start)
+          )}
+
+          &nbsp;–&nbsp;
+
+          ${escapeHtml(
+            formatTanggal(end)
+          )}
+
+        </div>
+
+      </div>
+
+
+      <div class="
+        poster-days
+      ">
+
+        <div class="
+          poster-empty
+        ">
+
+          📚
+
+          <br><br>
+
+          Tidak ada jadwal kajian
+          yang sesuai filter.
+
+        </div>
 
       </div>
 
@@ -2225,23 +2806,21 @@ function renderPoster(){
   }
 
 
+  /* =====================================================
+     QUOTE
+  ===================================================== */
+
   html += `
-
-    </div>
-
-
-    <!-- QUOTE -->
 
     <div class="
       poster-quote
     ">
 
+
       <div class="
         poster-quote-mark
       ">
-
         “
-
       </div>
 
 
@@ -2310,23 +2889,300 @@ function renderPoster(){
 
       </div>
 
+
     </div>
 
   `;
 
 
-  /*
-    Masukkan template
-    ke canvas poster.
-  */
+  /* =====================================================
+     MASUKKAN KE PREVIEW
+  ===================================================== */
 
   poster.innerHTML =
     html;
 
 
-  /*
-    Status.
-  */
+  /* =====================================================
+     CSS KHUSUS BALANCE
+     
+     Dimasukkan di sini supaya Anda cukup
+     mengganti SATU fungsi ini saja.
+  ===================================================== */
+
+  let balanceStyle =
+    document.getElementById(
+      "posterBalanceStyle"
+    );
+
+
+  if(!balanceStyle){
+
+    balanceStyle =
+      document.createElement(
+        "style"
+      );
+
+    balanceStyle.id =
+      "posterBalanceStyle";
+
+
+    balanceStyle.textContent = `
+
+      /*
+       * Dua kolom dengan tinggi fleksibel.
+       */
+
+      .poster-days{
+
+        display:grid !important;
+
+        grid-template-columns:
+          minmax(0,1fr)
+          minmax(0,1fr) !important;
+
+        gap:18px !important;
+
+        align-items:start !important;
+
+      }
+
+
+      .poster-column{
+
+        display:flex !important;
+
+        flex-direction:column !important;
+
+        gap:14px !important;
+
+        min-width:0 !important;
+
+      }
+
+
+      /*
+       * Margin bawah dihapus karena
+       * jarak antar blok dikontrol oleh gap.
+       */
+
+      .poster-day-section{
+
+        margin-bottom:0 !important;
+
+        break-inside:avoid !important;
+
+        page-break-inside:avoid !important;
+
+        box-sizing:border-box !important;
+
+      }
+
+
+      /*
+       * Card kajian tetap fleksibel.
+       */
+
+      .poster-kajian{
+
+        box-sizing:border-box !important;
+
+      }
+
+    `;
+
+
+    document.head.appendChild(
+      balanceStyle
+    );
+
+  }
+
+
+  /* =====================================================
+     BALANCE TINGGI KOLOM
+     
+     Kolom yang lebih pendek akan menerima
+     tambahan tinggi.
+     
+     Tambahan tinggi dibagi MERATA ke
+     seluruh CARD KAJIAN pada kolom tersebut.
+  ===================================================== */
+
+  function balancePosterColumns(){
+
+    const columns =
+      poster.querySelectorAll(
+        ".poster-column"
+      );
+
+
+    if(
+      columns.length !== 2
+    ){
+
+      return;
+
+    }
+
+
+    const kiri =
+      columns[0];
+
+    const kanan =
+      columns[1];
+
+
+    /*
+     * Reset semua ukuran tambahan.
+     */
+
+    poster
+      .querySelectorAll(
+        ".poster-kajian"
+      )
+      .forEach(card => {
+
+        card.style.minHeight =
+          "";
+
+      });
+
+
+    /*
+     * Paksa browser menghitung ulang
+     * layout asli.
+     */
+
+    void poster.offsetHeight;
+
+
+    const tinggiKiri =
+      kiri.getBoundingClientRect()
+        .height;
+
+    const tinggiKanan =
+      kanan.getBoundingClientRect()
+        .height;
+
+
+    const selisih =
+      Math.abs(
+        tinggiKiri -
+        tinggiKanan
+      );
+
+
+    /*
+     * Sudah hampir sama.
+     */
+
+    if(
+      selisih < 1
+    ){
+
+      return;
+
+    }
+
+
+    const kolomPendek =
+      tinggiKiri <
+      tinggiKanan
+        ? kiri
+        : kanan;
+
+
+    const kolomPanjang =
+      tinggiKiri <
+      tinggiKanan
+        ? kanan
+        : kiri;
+
+
+    /*
+     * Ambil seluruh card kajian
+     * pada kolom yang pendek.
+     */
+
+    const cards =
+      [
+        ...kolomPendek.querySelectorAll(
+          ".poster-kajian"
+        )
+      ];
+
+
+    if(
+      !cards.length
+    ){
+
+      return;
+
+    }
+
+
+    /*
+     * Tambahan tinggi dibagi rata
+     * kepada seluruh card.
+     */
+
+    const tambahanPerCard =
+      selisih /
+      cards.length;
+
+
+    cards.forEach(card => {
+
+      const tinggiAsli =
+        card.getBoundingClientRect()
+          .height;
+
+
+      card.style.minHeight =
+        `${tinggiAsli + tambahanPerCard}px`;
+
+    });
+
+
+    /*
+     * Pastikan browser menghitung
+     * hasil akhirnya.
+     */
+
+    void kolomPanjang.offsetHeight;
+
+
+  }
+
+
+  /* =====================================================
+     JALANKAN SETELAH LAYOUT SELESAI
+  ===================================================== */
+
+  requestAnimationFrame(() => {
+
+    balancePosterColumns();
+
+
+    /*
+     * Satu frame tambahan untuk memastikan
+     * layout akhir sudah stabil sebelum
+     * html2canvas digunakan.
+     */
+
+    requestAnimationFrame(() => {
+
+      balancePosterColumns();
+
+    });
+
+  });
+
+
+  /* =====================================================
+     STATUS
+  ===================================================== */
 
   showStatus(
     `Menampilkan ${data.length} kajian.`,
