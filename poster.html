@@ -1734,129 +1734,40 @@ FILTER DATA
 
 function getFilteredKajian(){
 
-  /*
-   * Ambil seluruh data kajian
-   */
   let data =
     [...semuaKajian];
 
-
-  /*
-   * FILTER AREA
-   */
-  const areaSelect =
+  const area =
     document.getElementById(
       "areaSelect"
-    );
-
-  const area =
-    areaSelect
-      ? areaSelect.value
-      : "";
-
-
-  /*
-   * FILTER MASJID
-   */
-  const masjidSelect =
-    document.getElementById(
-      "masjidSelect"
-    );
+    ).value;
 
   const masjidId =
-    masjidSelect
-      ? masjidSelect.value
-      : "";
-
-
-  /*
-   * FILTER HARI
-   *
-   * Sesuaikan ID ini dengan select
-   * hari yang ada di poster.html.
-   */
-  const hariSelect =
     document.getElementById(
-      "hariSelect"
-    );
-
-  const hari =
-    hariSelect
-      ? hariSelect.value
-      : "";
-
-
-  /* =====================================================
-     FILTER AREA
-  ===================================================== */
+      "masjidSelect"
+    ).value;
 
   if(area){
 
     data =
       data.filter(
         j =>
-
-          String(
-            j.kecamatan
-          ) ===
-
-          String(
-            area
-          )
-
+          String(j.kecamatan) ===
+          String(area)
       );
 
   }
-
-
-  /* =====================================================
-     FILTER MASJID
-  ===================================================== */
 
   if(masjidId){
 
     data =
       data.filter(
         j =>
-
-          String(
-            j.masjidId
-          ) ===
-
-          String(
-            masjidId
-          )
-
+          String(j.masjidId) ===
+          String(masjidId)
       );
 
   }
-
-
-  /* =====================================================
-     FILTER HARI
-  ===================================================== */
-
-  if(hari){
-
-    data =
-      data.filter(
-        j => {
-
-          const hariData =
-            normalHari(
-              j.hari
-            );
-
-          return (
-            hariData ===
-            normalHari(hari)
-          );
-
-        }
-      );
-
-  }
-
 
   return data;
 
