@@ -856,7 +856,7 @@ flex-wrap
 ">
 
 <button
-onclick="renderPoster()"
+onclick="refreshPoster()"
 class="
 bg-[#14532D]
 text-white
@@ -3290,42 +3290,198 @@ showStatus(
 
 
 /* =====================================================
-EVENT FILTER
+   EVENT FILTER
+   ===================================================== */
+
+/*
+ * Fungsi utama untuk menerapkan semua filter.
+ *
+ * Penting:
+ * - Minggu TIDAK memfilter data kajian
+ * - Minggu hanya mengubah periode tanggal poster
+ * - Area memfilter data kajian
+ * - Masjid memfilter data kajian
+ */
+
+function refreshPoster(){
+
+  try{
+
+    console.log(
+      "FILTER:",
+      {
+        minggu:
+          document.getElementById(
+            "weekSelect"
+          )?.value,
+
+        area:
+          document.getElementById(
+            "areaSelect"
+          )?.value,
+
+        masjid:
+          document.getElementById(
+            "masjidSelect"
+          )?.value
+      }
+    );
+
+
+    renderPoster();
+
+
+  }catch(err){
+
+    console.error(
+      "Gagal refresh poster:",
+      err
+    );
+
+    showStatus(
+      "Gagal memperbarui poster.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   AREA
 ===================================================== */
 
-document
-.getElementById(
-"areaSelect"
-)
-.addEventListener(
-"change",
-() => {
-
-populateMasjid();
-
-renderPoster();
-
-});
+const areaSelect =
+  document.getElementById(
+    "areaSelect"
+  );
 
 
-document
-.getElementById(
-"masjidSelect"
-)
-.addEventListener(
-"change",
-renderPoster
-);
+if(areaSelect){
+
+  areaSelect.addEventListener(
+    "change",
+    function(){
+
+      console.log(
+        "Area berubah:",
+        this.value
+      );
 
 
-document
-.getElementById(
-"weekSelect"
-)
-.addEventListener(
-"change",
-renderPoster
-);
+      /*
+       * Area berubah →
+       * daftar masjid harus dibuat ulang.
+       */
+
+      populateMasjid();
+
+
+      /*
+       * Setelah populateMasjid(),
+       * masjid kembali ke "Semua Masjid".
+       *
+       * Ini memang disengaja agar
+       * tidak terjadi kombinasi filter
+       * masjid lama dengan area baru.
+       */
+
+      const masjidSelect =
+        document.getElementById(
+          "masjidSelect"
+        );
+
+
+      if(masjidSelect){
+
+        masjidSelect.value = "";
+
+      }
+
+
+      refreshPoster();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   MASJID
+===================================================== */
+
+const masjidSelect =
+  document.getElementById(
+    "masjidSelect"
+  );
+
+
+if(masjidSelect){
+
+  masjidSelect.addEventListener(
+    "change",
+    function(){
+
+      console.log(
+        "Masjid berubah:",
+        this.value
+      );
+
+
+      refreshPoster();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   MINGGU
+===================================================== */
+
+const weekSelect =
+  document.getElementById(
+    "weekSelect"
+  );
+
+
+if(weekSelect){
+
+  weekSelect.addEventListener(
+    "change",
+    function(){
+
+      console.log(
+        "Minggu berubah:",
+        this.value
+      );
+
+
+      /*
+       * Jangan memanggil
+       * populateMasjid().
+       *
+       * Minggu hanya mengubah
+       * tanggal periode poster.
+       */
+
+      refreshPoster();
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   TOMBOL PREVIEW
+===================================================== */
+
+window.refreshPoster =
+  refreshPoster;
 
 
 /* =====================================================
