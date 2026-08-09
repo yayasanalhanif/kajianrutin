@@ -966,23 +966,18 @@ LIBRARY HTML2CANVAS
 src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js">
 </script>
 
-
 <script>
 
 /* =====================================================
-API
+   API
 ===================================================== */
-
-/*
-GANTI DENGAN API_URL YANG SAMA DENGAN home-v2.html
-*/
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyYS2hsQhEfsJHc882_sYPJBfdLnYVr1e7wu1XpSelEdVqVhe_SiGBB-_zcaTPhb3QEwA/exec";
 
 
 /* =====================================================
-GLOBAL DATA
+   GLOBAL
 ===================================================== */
 
 let homeData = null;
@@ -991,11 +986,9 @@ let semuaKajian = [];
 
 let semuaMasjid = [];
 
-let currentWeekStart = null;
-
 
 /* =====================================================
-UTILITY
+   STATUS
 ===================================================== */
 
 function showStatus(
@@ -1003,565 +996,796 @@ function showStatus(
   type = "normal"
 ){
 
-const el =
-document.getElementById(
-"status"
-);
+  const el =
+    document.getElementById(
+      "status"
+    );
 
-el.classList.remove(
-"hidden"
-);
+  if(!el){
+    return;
+  }
 
-el.textContent = text;
+  el.classList.remove(
+    "hidden"
+  );
 
-if(type === "error"){
 
-el.className =
-"bg-red-50 text-red-700 rounded-xl p-4 mb-5 shadow text-sm";
+  if(type === "error"){
 
-}
-else if(type === "success"){
+    el.className =
+      "bg-red-50 text-red-700 rounded-xl p-4 mb-5 shadow text-sm";
 
-el.className =
-"bg-green-50 text-green-700 rounded-xl p-4 mb-5 shadow text-sm";
+  }
 
-}
-else{
+  else if(type === "success"){
 
-el.className =
-"bg-white rounded-xl p-4 mb-5 shadow text-sm";
+    el.className =
+      "bg-green-50 text-green-700 rounded-xl p-4 mb-5 shadow text-sm";
 
-}
+  }
+
+  else{
+
+    el.className =
+      "bg-white rounded-xl p-4 mb-5 shadow text-sm";
+
+  }
+
+
+  el.textContent =
+    text;
 
 }
 
 
 /* =====================================================
-ESCAPE HTML
+   ESCAPE HTML
 ===================================================== */
 
-function escapeHtml(value){
+function escapeHtml(
+  value
+){
 
-return String(
-value ?? ""
-)
-.replace(
-/&/g,
-"&amp;"
-)
-.replace(
-/</g,
-"&lt;"
-)
-.replace(
-/>/g,
-"&gt;"
-)
-.replace(
-/"/g,
-"&quot;"
-)
-.replace(
-/'/g,
-"&#039;"
-);
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
 
 }
 
 
 /* =====================================================
-FORMAT TANGGAL
+   FORMAT TANGGAL
 ===================================================== */
 
 function formatTanggal(
-date
+  date
 ){
 
-return date.toLocaleDateString(
-"id-ID",
-{
-day:"numeric",
-month:"long",
-year:"numeric"
-}
-);
+  return date.toLocaleDateString(
+    "id-ID",
+    {
+      day:"numeric",
+      month:"long",
+      year:"numeric"
+    }
+  );
 
 }
 
 
 /* =====================================================
-NAMA HARI
-===================================================== */
-
-const namaHari = [
-"Minggu",
-"Senin",
-"Selasa",
-"Rabu",
-"Kamis",
-"Jumat",
-"Sabtu"
-];
-
-
-/* =====================================================
-MENCARI SENIN MINGGU BERJALAN
+   SENIN MINGGU BERJALAN
 ===================================================== */
 
 function getMonday(
-date = new Date()
+  date = new Date()
 ){
 
-const d =
-new Date(date);
+  const d =
+    new Date(date);
 
-const day =
-d.getDay();
+  const day =
+    d.getDay();
 
-const diff =
-day === 0
-? -6
-: 1 - day;
+  const diff =
+    day === 0
+      ? -6
+      : 1 - day;
 
-d.setDate(
-d.getDate() + diff
-);
+  d.setDate(
+    d.getDate() + diff
+  );
 
-d.setHours(
-0,0,0,0
-);
+  d.setHours(
+    0,
+    0,
+    0,
+    0
+  );
 
-return d;
+  return d;
 
 }
 
 
 /* =====================================================
-MEMBUAT DAFTAR MINGGU
+   DAFTAR MINGGU
 ===================================================== */
 
 function populateWeeks(){
 
-const select =
-document.getElementById(
-"weekSelect"
-);
+  const select =
+    document.getElementById(
+      "weekSelect"
+    );
 
-select.innerHTML = "";
+  if(!select){
+    return;
+  }
 
-const sekarang =
-getMonday();
+  select.innerHTML = "";
 
-for(
-let i = -4;
-i <= 8;
-i++
-){
 
-const start =
-new Date(sekarang);
+  const sekarang =
+    getMonday();
 
-start.setDate(
-start.getDate() +
-(i * 7)
-);
 
-const end =
-new Date(start);
+  for(
+    let i = -4;
+    i <= 8;
+    i++
+  ){
 
-end.setDate(
-end.getDate() + 6
-);
+    const start =
+      new Date(
+        sekarang
+      );
 
-const option =
-document.createElement(
-"option"
-);
+    start.setDate(
+      start.getDate()
+      +
+      (i * 7)
+    );
 
-option.value =
-start.toISOString();
 
-option.textContent =
-`${formatTanggal(start)} – ${formatTanggal(end)}`;
+    const end =
+      new Date(
+        start
+      );
 
-if(i === 0){
+    end.setDate(
+      end.getDate() + 6
+    );
 
-option.selected = true;
 
-}
+    const option =
+      document.createElement(
+        "option"
+      );
 
-select.appendChild(
-option
-);
 
-}
+    /*
+     * Jangan gunakan toISOString()
+     * sebagai sumber tanggal karena
+     * timezone dapat menggeser tanggal.
+     *
+     * Gunakan tanggal lokal.
+     */
 
-currentWeekStart =
-sekarang;
+    option.value =
+      [
+        start.getFullYear(),
+        String(
+          start.getMonth() + 1
+        ).padStart(2,"0"),
+        String(
+          start.getDate()
+        ).padStart(2,"0")
+      ].join("-");
+
+
+    option.textContent =
+      `${formatTanggal(start)} – ${formatTanggal(end)}`;
+
+
+    if(i === 0){
+
+      option.selected =
+        true;
+
+    }
+
+
+    select.appendChild(
+      option
+    );
+
+  }
 
 }
 
 
 /* =====================================================
-AREA
+   MENGAMBIL MINGGU YANG DIPILIH
+===================================================== */
+
+function getKajianMinggu(){
+
+  const select =
+    document.getElementById(
+      "weekSelect"
+    );
+
+
+  if(
+    !select ||
+    !select.value
+  ){
+
+    const start =
+      getMonday();
+
+    const end =
+      new Date(start);
+
+    end.setDate(
+      end.getDate() + 6
+    );
+
+    return {
+      start,
+      end
+    };
+
+  }
+
+
+  /*
+   * Nilai select adalah:
+   *
+   * YYYY-MM-DD
+   *
+   * Buat tanggal secara lokal,
+   * bukan new Date("YYYY-MM-DD")
+   * agar tidak terkena pergeseran UTC.
+   */
+
+  const parts =
+    select.value.split("-");
+
+
+  const start =
+    new Date(
+      Number(parts[0]),
+      Number(parts[1]) - 1,
+      Number(parts[2])
+    );
+
+
+  start.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  const end =
+    new Date(
+      start
+    );
+
+
+  end.setDate(
+    end.getDate() + 6
+  );
+
+
+  end.setHours(
+    23,
+    59,
+    59,
+    999
+  );
+
+
+  return {
+    start,
+    end
+  };
+
+}
+
+
+/* =====================================================
+   NORMALISASI HARI
+===================================================== */
+
+function normalHari(
+  hari
+){
+
+  if(!hari){
+    return "";
+  }
+
+
+  const h =
+    String(hari)
+    .trim()
+    .toLowerCase();
+
+
+  if(
+    h === "ahad" ||
+    h === "minggu"
+  ){
+
+    return "Minggu";
+
+  }
+
+
+  return (
+    h.charAt(0).toUpperCase()
+    +
+    h.slice(1)
+  );
+
+}
+
+
+/* =====================================================
+   NORMALISASI NILAI
+===================================================== */
+
+function normalizeValue(
+  value
+){
+
+  return String(
+    value ?? ""
+  )
+  .trim()
+  .toLowerCase();
+
+}
+
+
+/* =====================================================
+   AREA
 ===================================================== */
 
 function populateAreas(){
 
-const select =
-document.getElementById(
-"areaSelect"
-);
+  const select =
+    document.getElementById(
+      "areaSelect"
+    );
 
-select.innerHTML = `
-<option value="">
-Semua Area
-</option>
-`;
+  if(!select){
+    return;
+  }
 
-const areas =
-[
-...new Set(
-semuaKajian
-.map(
-j => j.kecamatan
-)
-.filter(
-k => k &&
-String(k).trim()
-)
-)
-]
-.sort(
-(a,b) =>
-String(a).localeCompare(
-String(b)
-)
-);
 
-areas.forEach(
-area => {
+  select.innerHTML = `
 
-const option =
-document.createElement(
-"option"
-);
+    <option value="">
+      Semua Area
+    </option>
 
-option.value =
-area;
+  `;
 
-option.textContent =
-area;
 
-select.appendChild(
-option
-);
+  const areas =
+    [
+      ...new Set(
 
-});
+        semuaKajian
+          .map(
+            j =>
+              String(
+                j.kecamatan ?? ""
+              ).trim()
+          )
+          .filter(
+            x => x !== ""
+          )
+
+      )
+    ]
+    .sort(
+      (a,b) =>
+        a.localeCompare(
+          b,
+          "id"
+        )
+    );
+
+
+  areas.forEach(
+    area => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+      option.value =
+        area;
+
+      option.textContent =
+        area;
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
 
 }
 
 
 /* =====================================================
-MASJID
+   MASJID
 ===================================================== */
 
 function populateMasjid(){
 
-const select =
-document.getElementById(
-"masjidSelect"
-);
+  const select =
+    document.getElementById(
+      "masjidSelect"
+    );
 
-select.innerHTML = `
-<option value="">
-Semua Masjid
-</option>
-`;
-
-const area =
-document.getElementById(
-"areaSelect"
-).value;
+  if(!select){
+    return;
+  }
 
 
-/*
-Ambil daftar masjid langsung
-dari data jadwal.
-*/
-
-let data =
-semuaKajian;
+  const areaSelect =
+    document.getElementById(
+      "areaSelect"
+    );
 
 
-/*
-Filter berdasarkan area
-jika dipilih.
-*/
+  const area =
+    areaSelect
+      ? normalizeValue(
+          areaSelect.value
+        )
+      : "";
 
-if(area){
 
-data =
-data.filter(
-j =>
-String(j.kecamatan) ===
-String(area)
-);
+  /*
+   * Simpan pilihan masjid lama.
+   * Kalau masih tersedia setelah
+   * area berubah, kita pertahankan.
+   */
+
+  const oldValue =
+    select.value;
+
+
+  select.innerHTML = `
+
+    <option value="">
+      Semua Masjid
+    </option>
+
+  `;
+
+
+  const map =
+    new Map();
+
+
+  semuaKajian.forEach(
+    j => {
+
+      const id =
+        j.masjidId;
+
+
+      if(
+        id === undefined ||
+        id === null ||
+        String(id).trim() === ""
+      ){
+
+        return;
+
+      }
+
+
+      const kecamatan =
+        normalizeValue(
+          j.kecamatan
+        );
+
+
+      if(
+        area &&
+        kecamatan !== area
+      ){
+
+        return;
+
+      }
+
+
+      const key =
+        String(id);
+
+
+      if(
+        !map.has(key)
+      ){
+
+        map.set(
+          key,
+          {
+            id:id,
+
+            nama:
+              j.namaMasjid ||
+              j.lokasi ||
+              "Masjid"
+          }
+        );
+
+      }
+
+    }
+  );
+
+
+  const daftar =
+    [
+      ...map.values()
+    ]
+    .sort(
+      (a,b) =>
+        String(a.nama)
+        .localeCompare(
+          String(b.nama),
+          "id"
+        )
+    );
+
+
+  daftar.forEach(
+    m => {
+
+      const option =
+        document.createElement(
+          "option"
+        );
+
+
+      option.value =
+        String(m.id);
+
+
+      option.textContent =
+        m.nama;
+
+
+      select.appendChild(
+        option
+      );
+
+    }
+  );
+
+
+  /*
+   * Pertahankan pilihan lama
+   * jika masih tersedia.
+   */
+
+  if(
+    oldValue &&
+    [
+      ...select.options
+    ].some(
+      o =>
+        o.value ===
+        String(oldValue)
+    )
+  ){
+
+    select.value =
+      String(oldValue);
+
+  }
 
 }
-
-
-/*
-Buat daftar unik berdasarkan masjidId.
-*/
-
-const masjidMap = new Map();
-
-data.forEach(
-j => {
-
-const id =
-j.masjidId;
-
-if(
-id === undefined ||
-id === null
-){
-
-return;
-
-}
-
-if(
-!masjidMap.has(
-String(id)
-)
-){
-
-masjidMap.set(
-String(id),
-{
-id:id,
-nama:
-j.namaMasjid ||
-j.lokasi ||
-"Masjid",
-kecamatan:
-j.kecamatan ||
-""
-}
-);
-
-}
-
-});
-
-
-/*
-Urutkan nama masjid.
-*/
-
-const daftarMasjid =
-[
-...masjidMap.values()
-]
-.sort(
-(a,b) =>
-String(a.nama)
-.localeCompare(
-String(b.nama)
-)
-);
-
-
-/*
-Masukkan ke SELECT.
-*/
-
-daftarMasjid.forEach(
-m => {
-
-const option =
-document.createElement(
-"option"
-);
-
-option.value =
-m.id;
-
-option.textContent =
-m.nama;
-
-select.appendChild(
-option
-);
-
-});
-
-}
-
-
-
 
 
 /* =====================================================
-WAKTU SORTING
+   FILTER DATA
+===================================================== */
+
+function getFilteredKajian(){
+
+  /*
+   * Minggu TIDAK digunakan
+   * untuk memfilter data.
+   *
+   * Karena jadwal JKC adalah
+   * jadwal rutin mingguan.
+   *
+   * Minggu hanya menentukan
+   * tanggal Senin-Ahad pada
+   * header poster.
+   */
+
+  let data =
+    [
+      ...semuaKajian
+    ];
+
+
+  const areaSelect =
+    document.getElementById(
+      "areaSelect"
+    );
+
+
+  const masjidSelect =
+    document.getElementById(
+      "masjidSelect"
+    );
+
+
+  const area =
+    areaSelect
+      ? normalizeValue(
+          areaSelect.value
+        )
+      : "";
+
+
+  const masjidId =
+    masjidSelect
+      ? String(
+          masjidSelect.value
+        ).trim()
+      : "";
+
+
+  /*
+   * AREA
+   */
+
+  if(area){
+
+    data =
+      data.filter(
+        j =>
+
+          normalizeValue(
+            j.kecamatan
+          )
+          ===
+          area
+
+      );
+
+  }
+
+
+  /*
+   * MASJID
+   */
+
+  if(masjidId){
+
+    data =
+      data.filter(
+        j =>
+
+          String(
+            j.masjidId ?? ""
+          ).trim()
+          ===
+          masjidId
+
+      );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =====================================================
+   SORTING WAKTU
 ===================================================== */
 
 function timeToNumber(
-waktu
+  waktu
 ){
 
-if(!waktu){
+  if(!waktu){
 
-return 9999;
+    return 9999;
 
-}
+  }
 
-const match =
-String(waktu)
-.match(
-/(\d{1,2})[.:](\d{2})/
-);
 
-if(!match){
+  const text =
+    String(
+      waktu
+    ).trim();
 
-return 9999;
 
-}
+  const match =
+    text.match(
+      /(\d{1,2})[.:](\d{2})/
+    );
 
-return (
-Number(match[1]) * 60 +
-Number(match[2])
-);
+
+  if(!match){
+
+    return 9999;
+
+  }
+
+
+  return (
+    Number(match[1]) * 60
+    +
+    Number(match[2])
+  );
 
 }
 
 
 /* =====================================================
-NORMALISASI HARI
-===================================================== */
-
-function normalHari(
-hari
-){
-
-if(!hari){
-
-return "";
-
-}
-
-const h =
-String(hari)
-.trim()
-.toLowerCase();
-
-if(h === "ahad"){
-
-return "Minggu";
-
-}
-
-return (
-h.charAt(0).toUpperCase() +
-h.slice(1)
-);
-
-}
-
-
-/* =====================================================
-MEMBUAT BADGE
+   BADGE
 ===================================================== */
 
 function renderBadges(
-j
+  j
 ){
 
-let html = "";
+  let html =
+    "";
 
-if(
-j.isKitab === true ||
-j.isKitab === "TRUE"
-){
-
-html += `
-<span class="
-badge
-badge-kitab
-">
-📖 KITAB
-</span>
-`;
-
-}
-
-if(
-j.isMuslimah === true ||
-j.isMuslimah === "TRUE"
-){
-
-html += `
-<span class="
-badge
-badge-muslimah
-">
-🌹 MUSLIMAH
-</span>
-`;
-
-}
-
-if(
-j.isAnak === true ||
-j.isAnak === "TRUE"
-){
-
-html += `
-<span class="
-badge
-badge-anak
-">
-👶 ANAK
-</span>
-`;
-
-}
-
-if(j.pekan){
-
-html += `
-<span class="
-badge
-badge-pekan
-">
-Pekan ${escapeHtml(j.pekan)}
-</span>
-`;
-
-}
-
-return html;
-
-}
-
-
-/* =====================================================
-MEMBUAT CARD KAJIAN
-===================================================== */
-
-  function renderKajianCard(j){
-
-  let badges = "";
 
   const isKitab =
     j.isKitab === true ||
     j.isKitab === "TRUE";
 
+
   const isMuslimah =
     j.isMuslimah === true ||
     j.isMuslimah === "TRUE";
+
 
   const isAnak =
     j.isAnak === true ||
@@ -1570,13 +1794,15 @@ MEMBUAT CARD KAJIAN
 
   if(isKitab){
 
-    badges += `
+    html += `
+
       <span class="
         poster-card-badge
         poster-card-kitab
       ">
         📖 KITAB
       </span>
+
     `;
 
   }
@@ -1584,13 +1810,15 @@ MEMBUAT CARD KAJIAN
 
   if(isMuslimah){
 
-    badges += `
+    html += `
+
       <span class="
         poster-card-badge
         poster-card-muslimah
       ">
         🌸 MUSLIMAH
       </span>
+
     `;
 
   }
@@ -1598,13 +1826,15 @@ MEMBUAT CARD KAJIAN
 
   if(isAnak){
 
-    badges += `
+    html += `
+
       <span class="
         poster-card-badge
         poster-card-anak
       ">
         👶 ANAK
       </span>
+
     `;
 
   }
@@ -1612,31 +1842,42 @@ MEMBUAT CARD KAJIAN
 
   if(j.pekan){
 
-    badges += `
+    html += `
+
       <span class="
         poster-card-badge
         poster-card-pekan
       ">
-        📅 PEKAN ${escapeHtml(
-          String(j.pekan)
+        📅 PEKAN
+        ${escapeHtml(
+          j.pekan
         )}
       </span>
+
     `;
 
   }
 
 
-  /*
-    Waktu dibuat lebih aman.
+  return html;
 
-    Jika panjang teks lebih dari 8 karakter,
-    beri class long agar ukuran font mengecil.
-  */
+}
+
+
+/* =====================================================
+   CARD KAJIAN
+===================================================== */
+
+function renderKajianCard(
+  j
+){
 
   const waktu =
     String(
-      j.waktu || "--:--"
+      j.waktu ||
+      "--:--"
     ).trim();
+
 
   const waktuClass =
     waktu.length > 8
@@ -1646,47 +1887,63 @@ MEMBUAT CARD KAJIAN
 
   return `
 
-    <div class="poster-kajian">
+    <div class="
+      poster-kajian
+    ">
+
 
       <div class="
         poster-time
         ${waktuClass}
       ">
 
-        ${escapeHtml(waktu)}
+        ${escapeHtml(
+          waktu
+        )}
 
       </div>
 
 
-      <div class="poster-kajian-body">
+      <div class="
+        poster-kajian-body
+      ">
 
 
-        <div class="poster-pemateri">
+        <div class="
+          poster-pemateri
+        ">
 
           ${escapeHtml(
-            j.pemateri || "-"
+            j.pemateri ||
+            "-"
           )}
 
         </div>
 
 
-        <div class="poster-materi">
+        <div class="
+          poster-materi
+        ">
 
           ${escapeHtml(
-            j.materi || "-"
+            j.materi ||
+            "-"
           )}
 
         </div>
 
 
-        <div class="poster-card-badges">
+        <div class="
+          poster-card-badges
+        ">
 
-          ${badges}
+          ${renderBadges(j)}
 
         </div>
 
 
       </div>
+
 
     </div>
 
@@ -1696,140 +1953,192 @@ MEMBUAT CARD KAJIAN
 
 
 /* =====================================================
-MENGAMBIL DATA MINGGU
+   GROUP HARI
 ===================================================== */
 
-function getKajianMinggu(){
+function buatHariGroups(
+  data
+){
 
-const value =
-document.getElementById(
-"weekSelect"
-).value;
+  const urutan = [
 
-const start =
-new Date(value);
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu",
+    "Minggu"
 
-start.setHours(
-0,0,0,0
-);
+  ];
 
-const end =
-new Date(start);
 
-end.setDate(
-end.getDate() + 6
-);
+  const grouped = {};
 
-return {
-start,
-end
-};
+
+  urutan.forEach(
+    hari => {
+
+      grouped[hari] = [];
+
+    }
+  );
+
+
+  data.forEach(
+    j => {
+
+      const hari =
+        normalHari(
+          j.hari
+        );
+
+
+      if(
+        grouped[hari]
+      ){
+
+        grouped[hari].push(
+          j
+        );
+
+      }
+
+    }
+  );
+
+
+  urutan.forEach(
+    hari => {
+
+      grouped[hari].sort(
+        (a,b) =>
+
+          timeToNumber(
+            a.waktu
+          )
+          -
+          timeToNumber(
+            b.waktu
+          )
+
+      );
+
+    }
+  );
+
+
+  return urutan
+    .filter(
+      hari =>
+        grouped[hari].length
+        > 0
+    )
+    .map(
+      hari => ({
+
+        hari,
+
+        list:
+          grouped[hari]
+
+      })
+    );
 
 }
 
 
 /* =====================================================
-FILTER DATA
+   BAGI HARI MENJADI 2 KOLOM
 ===================================================== */
 
-function getFilteredKajian(){
+function bagiHariMenjadiDuaKolom(
+  hariGroups
+){
 
-  let data =
-    [...semuaKajian];
-
-  const area =
-    document.getElementById(
-      "areaSelect"
-    ).value;
-
-  const masjidId =
-    document.getElementById(
-      "masjidSelect"
-    ).value;
-
-  if(area){
-
-    data =
-      data.filter(
-        j =>
-          String(j.kecamatan) ===
-          String(area)
-      );
-
-  }
-
-  if(masjidId){
-
-    data =
-      data.filter(
-        j =>
-          String(j.masjidId) ===
-          String(masjidId)
-      );
-
-  }
-
-  return data;
-
-}
-
-
-  function bagiHariMenjadiDuaKolom(hariGroups) {
-
-  if (!hariGroups || hariGroups.length <= 1) {
+  if(
+    !hariGroups.length
+  ){
 
     return {
-      kiri: hariGroups || [],
-      kanan: []
+
+      kiri:[],
+      kanan:[]
+
     };
 
   }
 
-  const totalKajian =
-    hariGroups.reduce(
-      (total, hari) =>
-        total + hari.list.length,
-      0
-    );
 
-  let terbaik = null;
+  if(
+    hariGroups.length === 1
+  ){
+
+    return {
+
+      kiri:
+        hariGroups,
+
+      kanan:[]
+
+    };
+
+  }
+
+
+  let terbaik =
+    null;
+
 
   /*
-   * Karena jumlah hari biasanya hanya 7,
-   * kita bisa mencoba semua kemungkinan
-   * titik pemisah.
+   * Hari harus tetap berurutan.
    *
-   * Yang dicari:
-   * - seluruh blok hari tetap utuh
-   * - urutan hari tetap terjaga
-   * - selisih jumlah kajian sekecil mungkin
+   * Kita hanya memilih titik
+   * pemisah antar hari.
    */
 
-  for (
+  for(
     let i = 1;
     i < hariGroups.length;
     i++
-  ) {
+  ){
 
     const kiri =
-      hariGroups.slice(0, i);
+      hariGroups.slice(
+        0,
+        i
+      );
+
 
     const kanan =
-      hariGroups.slice(i);
+      hariGroups.slice(
+        i
+      );
+
 
     const jumlahKiri =
       kiri.reduce(
-        (total, hari) =>
-          total + hari.list.length,
+        (
+          total,
+          group
+        ) =>
+          total +
+          group.list.length,
         0
       );
 
+
     const jumlahKanan =
       kanan.reduce(
-        (total, hari) =>
-          total + hari.list.length,
+        (
+          total,
+          group
+        ) =>
+          total +
+          group.list.length,
         0
       );
+
 
     const selisih =
       Math.abs(
@@ -1837,10 +2146,12 @@ function getFilteredKajian(){
         jumlahKanan
       );
 
-    if (
+
+    if(
       terbaik === null ||
-      selisih < terbaik.selisih
-    ) {
+      selisih <
+      terbaik.selisih
+    ){
 
       terbaik = {
 
@@ -1858,426 +2169,112 @@ function getFilteredKajian(){
 
   }
 
+
   return {
 
-    kiri: terbaik.kiri,
-    kanan: terbaik.kanan
+    kiri:
+      terbaik.kiri,
+
+    kanan:
+      terbaik.kanan
 
   };
 
 }
 
+
 /* =====================================================
-RENDER POSTER
+   RENDER BLOK HARI
 ===================================================== */
 
-```javascript
-function renderPoster(){
+function renderHariGroup(
+  group
+){
 
-  const poster =
-    document.getElementById("poster");
-
-  if(!poster){
-    return;
-  }
-
-
-  /* =====================================================
-     PERIODE
-  ===================================================== */
-
-  const {
-    start,
-    end
-  } = getKajianMinggu();
-
-
-  /* =====================================================
-     DATA SESUAI FILTER
-  ===================================================== */
-
-  const data =
-    getFilteredKajian();
-
-
-  /* =====================================================
-     NAMA MASJID
-  ===================================================== */
-
-  const masjidSelect =
-    document.getElementById(
-      "masjidSelect"
-    );
-
-  let namaMasjid =
-    "Semua Masjid";
-
-  if(
-    masjidSelect &&
-    masjidSelect.value
-  ){
-
-    const option =
-      masjidSelect.options[
-        masjidSelect.selectedIndex
-      ];
-
-    if(option){
-      namaMasjid =
-        option.textContent.trim();
-    }
-
-  }
-
-
-  /* =====================================================
-     AREA
-  ===================================================== */
-
-  let area = "";
-
-  if(data.length){
-
-    area =
-      data[0].kecamatan ||
-      "";
-
-  }
-
-
-  /* =====================================================
-     GROUP PER HARI
-  ===================================================== */
-
-  const grouped = {
-
-    Senin: [],
-    Selasa: [],
-    Rabu: [],
-    Kamis: [],
-    Jumat: [],
-    Sabtu: [],
-    Minggu: []
-
-  };
-
-
-  data.forEach(j => {
-
-    const hari =
-      normalHari(j.hari);
-
-    if(grouped[hari]){
-
-      grouped[hari].push(j);
-
-    }
-
-  });
-
-
-  /* =====================================================
-     URUTKAN WAKTU
-  ===================================================== */
-
-  Object.keys(
-    grouped
-  ).forEach(hari => {
-
-    grouped[hari].sort(
-      (a,b) => {
-
-        return (
-          timeToNumber(a.waktu) -
-          timeToNumber(b.waktu)
-        );
-
-      }
-    );
-
-  });
-
-
-  /* =====================================================
-     URUTAN HARI
-  ===================================================== */
-
-  const urutanHari = [
-
-    "Senin",
-    "Selasa",
-    "Rabu",
-    "Kamis",
-    "Jumat",
-    "Sabtu",
+  const nama =
+    group.hari ===
     "Minggu"
 
-  ];
+      ? "AHAD"
 
+      : group.hari
+          .toUpperCase();
 
-  /* =====================================================
-     BENTUK BLOK HARI
-     
-     SETIAP HARI ADALAH 1 BLOK UTUH.
-  ===================================================== */
-
-  const hariGroups = [];
-
-
-  urutanHari.forEach(hari => {
-
-    if(
-      grouped[hari] &&
-      grouped[hari].length
-    ){
-
-      hariGroups.push({
-
-        hari: hari,
-
-        list:
-          grouped[hari]
-
-      });
-
-    }
-
-  });
-
-
-  /* =====================================================
-     BAGI MENJADI 2 KOLOM
-     
-     PENTING:
-     Pembagian hanya menggunakan TITIK PEMISAH.
-
-     Contoh:
-
-     Senin
-     Selasa
-     Rabu
-     ----------
-     Kamis
-     Jumat
-     Sabtu
-
-     Tidak ada hari yang lompat-lompat
-     antar kolom.
-  ===================================================== */
-
-  function bagiDuaKolom(groups){
-
-    if(!groups.length){
-
-      return {
-
-        kiri: [],
-        kanan: []
-
-      };
-
-    }
-
-
-    if(groups.length === 1){
-
-      return {
-
-        kiri: groups,
-        kanan: []
-
-      };
-
-    }
-
-
-    let terbaik = null;
-
-
-    for(
-      let titik = 1;
-      titik < groups.length;
-      titik++
-    ){
-
-      const kiri =
-        groups.slice(
-          0,
-          titik
-        );
-
-      const kanan =
-        groups.slice(
-          titik
-        );
-
-
-      const jumlahKiri =
-        kiri.reduce(
-          (total, group) => {
-
-            return (
-              total +
-              group.list.length
-            );
-
-          },
-          0
-        );
-
-
-      const jumlahKanan =
-        kanan.reduce(
-          (total, group) => {
-
-            return (
-              total +
-              group.list.length
-            );
-
-          },
-          0
-        );
-
-
-      const selisih =
-        Math.abs(
-          jumlahKiri -
-          jumlahKanan
-        );
-
-
-      /*
-       * Pilih titik yang menghasilkan
-       * jumlah kajian paling seimbang.
-       */
-
-      if(
-        terbaik === null ||
-        selisih <
-        terbaik.selisih
-      ){
-
-        terbaik = {
-
-          kiri,
-          kanan,
-
-          jumlahKiri,
-          jumlahKanan,
-
-          selisih
-
-        };
-
-      }
-
-    }
-
-
-    return {
-
-      kiri:
-        terbaik.kiri,
-
-      kanan:
-        terbaik.kanan
-
-    };
-
-  }
-
-
-  const kolom =
-    bagiDuaKolom(
-      hariGroups
-    );
-
-
-  /* =====================================================
-     FUNGSI RENDER BLOK HARI
-  ===================================================== */
-
-  function renderBlokHari(
-    group
-  ){
-
-    const hari =
-      group.hari;
-
-    const list =
-      group.list;
-
-
-    const namaHari =
-      hari === "Minggu"
-        ? "AHAD"
-        : hari.toUpperCase();
-
-
-    let html = `
-
-      <section
-        class="
-          poster-day-section
-        "
-        data-day-block="
-          ${escapeHtml(hari)}
-        ">
-
-
-        <div
-          class="
-            poster-day-header
-          ">
-
-          <span>
-
-            ${namaHari}
-
-          </span>
-
-
-          <span
-            class="
-              poster-day-count
-            ">
-
-            ${list.length}
-            Kajian
-
-          </span>
-
-        </div>
-
-    `;
-
-
-    list.forEach(j => {
-
-      html +=
-        renderKajianCard(j);
-
-    });
-
-
-    html += `
-
-      </section>
-
-    `;
-
-
-    return html;
-
-  }
-
-
-  /* =====================================================
-     HEADER
-  ===================================================== */
 
   let html = `
+
+    <section
+      class="
+        poster-day-section
+      "
+    >
+
+
+      <div
+        class="
+          poster-day-header
+        "
+      >
+
+        <span>
+
+          ${nama}
+
+        </span>
+
+
+        <span
+          class="
+            poster-day-count
+          "
+        >
+
+          ${group.list.length}
+          Kajian
+
+        </span>
+
+      </div>
+
+  `;
+
+
+  group.list.forEach(
+    j => {
+
+      html +=
+        renderKajianCard(
+          j
+        );
+
+    }
+  );
+
+
+  html += `
+
+    </section>
+
+  `;
+
+
+  return html;
+
+}
+
+
+/* =====================================================
+   HEADER POSTER
+===================================================== */
+
+function renderPosterHeader(
+  namaMasjid,
+  area,
+  start,
+  end
+){
+
+  return `
 
     <div class="
       poster-template-header
@@ -2288,10 +2285,13 @@ function renderPoster(){
         poster-brand
       ">
 
+
         <div class="
           poster-logo-mark
         ">
+
           JKC
+
         </div>
 
 
@@ -2300,21 +2300,27 @@ function renderPoster(){
           <div class="
             poster-title-small
           ">
+
             JADWAL
+
           </div>
 
 
           <div class="
             poster-title-main
           ">
+
             KAJIAN
+
           </div>
 
 
           <div class="
             poster-title-sub
           ">
+
             ISLAM ILMIAH
+
           </div>
 
 
@@ -2324,10 +2330,13 @@ function renderPoster(){
             color:#fff;
             font-weight:700;
           ">
+
             KOTA CILEGON
+
           </div>
 
         </div>
+
 
       </div>
 
@@ -2336,11 +2345,13 @@ function renderPoster(){
         poster-location
       ">
 
+
         <div class="
           poster-location-name
         ">
 
           🕌
+
           ${escapeHtml(
             namaMasjid
           )}
@@ -2350,14 +2361,15 @@ function renderPoster(){
 
         ${
           area
+
             ? `
 
-              <div
-                class="
-                  poster-location-area
-                ">
+              <div class="
+                poster-location-area
+              ">
 
                 📍
+
                 ${escapeHtml(
                   area
                 )}
@@ -2365,8 +2377,10 @@ function renderPoster(){
               </div>
 
             `
+
             : ""
         }
+
 
       </div>
 
@@ -2378,31 +2392,37 @@ function renderPoster(){
         📅
 
         ${escapeHtml(
-          formatTanggal(start)
+          formatTanggal(
+            start
+          )
         )}
 
         &nbsp;–&nbsp;
 
         ${escapeHtml(
-          formatTanggal(end)
+          formatTanggal(
+            end
+          )
         )}
 
       </div>
 
+
     </div>
 
-
-    <!-- BADGE KATEGORI -->
 
     <div class="
       poster-badges
     ">
 
+
       <span class="
         poster-filter-badge
         poster-filter-kitab
       ">
+
         📖 KITAB
+
       </span>
 
 
@@ -2410,7 +2430,9 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-muslimah
       ">
+
         🌸 MUSLIMAH
+
       </span>
 
 
@@ -2418,7 +2440,9 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-anak
       ">
+
         👶 ANAK
+
       </span>
 
 
@@ -2426,41 +2450,195 @@ function renderPoster(){
         poster-filter-badge
         poster-filter-pekan
       ">
+
         📅 PEKANAN
+
       </span>
+
 
     </div>
 
+  `;
 
-    <!-- =================================================
-         DUA KOLOM SELALU
-    ================================================= -->
+}
+
+
+/* =====================================================
+   RENDER POSTER
+===================================================== */
+
+function renderPoster(){
+
+  const poster =
+    document.getElementById(
+      "poster"
+    );
+
+
+  if(!poster){
+
+    return;
+
+  }
+
+
+  /*
+   * Minggu:
+   *
+   * hanya menentukan tanggal
+   * yang ditampilkan di header.
+   */
+
+  const {
+    start,
+    end
+  } =
+    getKajianMinggu();
+
+
+  /*
+   * Ambil data hasil filter
+   */
+
+  const data =
+    getFilteredKajian();
+
+
+  /*
+   * Nama masjid
+   */
+
+  const masjidSelect =
+    document.getElementById(
+      "masjidSelect"
+    );
+
+
+  let namaMasjid =
+    "Semua Masjid";
+
+
+  if(
+    masjidSelect &&
+    masjidSelect.value
+  ){
+
+    const option =
+      masjidSelect.options[
+        masjidSelect.selectedIndex
+      ];
+
+
+    if(option){
+
+      namaMasjid =
+        option.textContent.trim();
+
+    }
+
+  }
+
+
+  /*
+   * Area.
+   *
+   * Jika hanya satu area
+   * yang dipilih, tampilkan area itu.
+   *
+   * Jika semua area,
+   * jangan mengambil area pertama
+   * secara sembarang.
+   */
+
+  const areaSelect =
+    document.getElementById(
+      "areaSelect"
+    );
+
+
+  let area =
+    "";
+
+
+  if(
+    areaSelect &&
+    areaSelect.value
+  ){
+
+    area =
+      areaSelect.value;
+
+  }
+
+
+  /*
+   * Buat kelompok hari
+   */
+
+  const hariGroups =
+    buatHariGroups(
+      data
+    );
+
+
+  /*
+   * Bagi menjadi dua kolom.
+   *
+   * Fungsi ini SEKARANG benar-benar
+   * digunakan.
+   */
+
+  const columns =
+    bagiHariMenjadiDuaKolom(
+      hariGroups
+    );
+
+
+  /*
+   * HEADER
+   */
+
+  let html =
+    renderPosterHeader(
+      namaMasjid,
+      area,
+      start,
+      end
+    );
+
+
+  /*
+   * DUA KOLOM SELALU
+   */
+
+  html += `
 
     <div
       class="
         poster-days
-      ">
+      "
+    >
 
-
-      <!-- KOLOM KIRI -->
 
       <div
         class="
           poster-column
           poster-column-left
-        ">
+        "
+      >
+
   `;
 
 
-  /* =====================================================
-     RENDER KIRI
-  ===================================================== */
+  /*
+   * KIRI
+   */
 
-  kolom.kiri.forEach(
+  columns.kiri.forEach(
     group => {
 
       html +=
-        renderBlokHari(
+        renderHariGroup(
           group
         );
 
@@ -2468,19 +2646,26 @@ function renderPoster(){
   );
 
 
-  /*
-   * Kalau hanya ada satu hari,
-   * kolom kanan tetap dibuat.
-   */
   if(
-    !kolom.kiri.length
+    !columns.kiri.length
   ){
 
     html += `
 
-      <div class="
-        poster-empty-column
-      "></div>
+      <div
+        class="
+          poster-empty
+        "
+      >
+
+        📚
+
+        <br><br>
+
+        Tidak ada jadwal kajian
+        yang sesuai filter.
+
+      </div>
 
     `;
 
@@ -2492,25 +2677,25 @@ function renderPoster(){
       </div>
 
 
-      <!-- KOLOM KANAN -->
-
       <div
         class="
           poster-column
           poster-column-right
-        ">
+        "
+      >
+
   `;
 
 
-  /* =====================================================
-     RENDER KANAN
-  ===================================================== */
+  /*
+   * KANAN
+   */
 
-  kolom.kanan.forEach(
+  columns.kanan.forEach(
     group => {
 
       html +=
-        renderBlokHari(
+        renderHariGroup(
           group
         );
 
@@ -2524,14 +2709,16 @@ function renderPoster(){
    */
 
   if(
-    !kolom.kanan.length
+    !columns.kanan.length
   ){
 
     html += `
 
-      <div class="
-        poster-empty-column
-      "></div>
+      <div
+        style="
+          min-height:1px;
+        "
+      ></div>
 
     `;
 
@@ -2547,168 +2734,9 @@ function renderPoster(){
   `;
 
 
-  /* =====================================================
-     JIKA TIDAK ADA DATA
-  ===================================================== */
-
-  if(!data.length){
-
-    html = `
-
-      <div class="
-        poster-template-header
-      ">
-
-        <div class="
-          poster-brand
-        ">
-
-          <div class="
-            poster-logo-mark
-          ">
-            JKC
-          </div>
-
-
-          <div>
-
-            <div class="
-              poster-title-small
-            ">
-              JADWAL
-            </div>
-
-            <div class="
-              poster-title-main
-            ">
-              KAJIAN
-            </div>
-
-            <div class="
-              poster-title-sub
-            ">
-              ISLAM ILMIAH
-            </div>
-
-            <div style="
-              font-size:18px;
-              margin-top:3px;
-              color:#fff;
-              font-weight:700;
-            ">
-              KOTA CILEGON
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <div class="
-          poster-location
-        ">
-
-          <div class="
-            poster-location-name
-          ">
-
-            🕌
-            ${escapeHtml(
-              namaMasjid
-            )}
-
-          </div>
-
-
-          ${
-            area
-              ? `
-
-                <div
-                  class="
-                    poster-location-area
-                  ">
-
-                  📍
-                  ${escapeHtml(
-                    area
-                  )}
-
-                </div>
-
-              `
-              : ""
-          }
-
-        </div>
-
-
-        <div class="
-          poster-date-box
-        ">
-
-          📅
-
-          ${escapeHtml(
-            formatTanggal(start)
-          )}
-
-          &nbsp;–&nbsp;
-
-          ${escapeHtml(
-            formatTanggal(end)
-          )}
-
-        </div>
-
-      </div>
-
-
-      <!-- TETAP DUA KOLOM -->
-
-      <div
-        class="
-          poster-days
-        ">
-
-        <div
-          class="
-            poster-column
-          ">
-
-          <div
-            class="
-              poster-empty
-            ">
-
-            📚
-
-            <br><br>
-
-            Tidak ada jadwal kajian
-            yang sesuai filter.
-
-          </div>
-
-        </div>
-
-
-        <div
-          class="
-            poster-column
-          ">
-        </div>
-
-      </div>
-
-    `;
-
-  }
-
-
-  /* =====================================================
-     QUOTE
-  ===================================================== */
+  /*
+   * QUOTE
+   */
 
   html += `
 
@@ -2716,10 +2744,13 @@ function renderPoster(){
       poster-quote
     ">
 
+
       <div class="
         poster-quote-mark
       ">
+
         “
+
       </div>
 
 
@@ -2743,14 +2774,22 @@ function renderPoster(){
 
       </div>
 
+
     </div>
 
+  `;
 
-    <!-- FOOTER -->
+
+  /*
+   * FOOTER
+   */
+
+  html += `
 
     <div class="
       poster-template-footer
     ">
+
 
       <div>
 
@@ -2787,255 +2826,33 @@ function renderPoster(){
 
       </div>
 
+
     </div>
 
   `;
 
 
-  /* =====================================================
-     MASUKKAN KE POSTER
-  ===================================================== */
+  /*
+   * MASUKKAN KE PREVIEW
+   */
 
   poster.innerHTML =
     html;
 
 
-  /* =====================================================
-     PAKSA SELALU 2 KOLOM
-     
-     CSS dimasukkan dari fungsi ini supaya
-     tidak perlu mengubah CSS lain.
-  ===================================================== */
+  /*
+   * ===================================================
+   * BALANCE HEIGHT
+   *
+   * Kolom yang lebih pendek akan
+   * di-stretch secara merata.
+   * ===================================================
+   */
+
+  requestAnimationFrame(
+    balancePosterColumns
+  );
 
-  let style =
-    document.getElementById(
-      "posterTwoColumnStyle"
-    );
-
-
-  if(!style){
-
-    style =
-      document.createElement(
-        "style"
-      );
-
-    style.id =
-      "posterTwoColumnStyle";
-
-
-    style.textContent = `
-
-      .poster-days{
-
-        display:grid !important;
-
-        grid-template-columns:
-          minmax(0, 1fr)
-          minmax(0, 1fr) !important;
-
-        gap:18px !important;
-
-        width:100% !important;
-
-        align-items:stretch !important;
-
-      }
-
-
-      .poster-column{
-
-        display:flex !important;
-
-        flex-direction:column !important;
-
-        min-width:0 !important;
-
-        width:100% !important;
-
-        gap:14px !important;
-
-        box-sizing:border-box !important;
-
-      }
-
-
-      .poster-day-section{
-
-        margin-bottom:0 !important;
-
-        box-sizing:border-box !important;
-
-        break-inside:avoid !important;
-
-        page-break-inside:avoid !important;
-
-      }
-
-
-      .poster-empty-column{
-
-        min-height:1px;
-
-      }
-
-    `;
-
-
-    document.head.appendChild(
-      style
-    );
-
-  }
-
-
-  /* =====================================================
-     SEIMBANGKAN TINGGI
-     
-     Kolom pendek diperpanjang.
-     
-     Yang diperpanjang adalah BLOK HARI,
-     bukan memindahkan kajian ke kolom lain.
-  ===================================================== */
-
-  function balanceColumns(){
-
-    const columns =
-      poster.querySelectorAll(
-        ".poster-column"
-      );
-
-
-    if(
-      columns.length !== 2
-    ){
-
-      return;
-
-    }
-
-
-    const kiri =
-      columns[0];
-
-    const kanan =
-      columns[1];
-
-
-    /*
-     * Reset tinggi sebelumnya.
-     */
-
-    poster
-      .querySelectorAll(
-        ".poster-day-section"
-      )
-      .forEach(block => {
-
-        block.style.minHeight =
-          "";
-
-      });
-
-
-    void poster.offsetHeight;
-
-
-    const tinggiKiri =
-      kiri.getBoundingClientRect()
-        .height;
-
-
-    const tinggiKanan =
-      kanan.getBoundingClientRect()
-        .height;
-
-
-    const selisih =
-      Math.abs(
-        tinggiKiri -
-        tinggiKanan
-      );
-
-
-    if(
-      selisih < 2
-    ){
-
-      return;
-
-    }
-
-
-    const kolomPendek =
-      tinggiKiri <
-      tinggiKanan
-        ? kiri
-        : kanan;
-
-
-    const blok =
-      [
-        ...kolomPendek.querySelectorAll(
-          ".poster-day-section"
-        )
-      ];
-
-
-    if(!blok.length){
-
-      return;
-
-    }
-
-
-    /*
-     * Bagikan tambahan tinggi
-     * secara merata ke BLOK HARI.
-     */
-
-    const tambahan =
-      selisih /
-      blok.length;
-
-
-    blok.forEach(block => {
-
-      const tinggiAsli =
-        block.getBoundingClientRect()
-          .height;
-
-
-      block.style.minHeight =
-        `${tinggiAsli + tambahan}px`;
-
-    });
-
-
-  }
-
-
-  /* =====================================================
-     TUNGGU LAYOUT SELESAI
-  ===================================================== */
-
-  requestAnimationFrame(() => {
-
-    balanceColumns();
-
-
-    requestAnimationFrame(() => {
-
-      balanceColumns();
-
-    });
-
-  });
-
-
-  /* =====================================================
-     STATUS
-  ===================================================== */
 
   showStatus(
     `Menampilkan ${data.length} kajian.`,
@@ -3043,303 +2860,270 @@ function renderPoster(){
   );
 
 }
-```
 
 
 /* =====================================================
-DOWNLOAD PNG
+   BALANCE 2 KOLOM
+===================================================== */
+
+function balancePosterColumns(){
+
+  const poster =
+    document.getElementById(
+      "poster"
+    );
+
+
+  if(!poster){
+
+    return;
+
+  }
+
+
+  const columns =
+    poster.querySelectorAll(
+      ".poster-column"
+    );
+
+
+  if(
+    columns.length !== 2
+  ){
+
+    return;
+
+  }
+
+
+  const kiri =
+    columns[0];
+
+
+  const kanan =
+    columns[1];
+
+
+  /*
+   * Reset tinggi sebelumnya.
+   */
+
+  [
+    kiri,
+    kanan
+  ].forEach(
+    column => {
+
+      column.style.minHeight =
+        "";
+
+    }
+  );
+
+
+  void poster.offsetHeight;
+
+
+  const tinggiKiri =
+    kiri.getBoundingClientRect()
+      .height;
+
+
+  const tinggiKanan =
+    kanan.getBoundingClientRect()
+      .height;
+
+
+  const target =
+    Math.max(
+      tinggiKiri,
+      tinggiKanan
+    );
+
+
+  /*
+   * Jangan melakukan apa-apa
+   * jika sudah seimbang.
+   */
+
+  if(
+    Math.abs(
+      tinggiKiri -
+      tinggiKanan
+    ) < 2
+  ){
+
+    return;
+
+  }
+
+
+  /*
+   * Kolom pendek.
+   */
+
+  const pendek =
+    tinggiKiri <
+    tinggiKanan
+      ? kiri
+      : kanan;
+
+
+  const tinggiPendek =
+    Math.min(
+      tinggiKiri,
+      tinggiKanan
+    );
+
+
+  const tambahan =
+    target -
+    tinggiPendek;
+
+
+  /*
+   * Ambil semua BLOK HARI
+   * pada kolom pendek.
+   */
+
+  const blocks =
+    [
+      ...pendek.querySelectorAll(
+        ".poster-day-section"
+      )
+    ];
+
+
+  if(
+    !blocks.length
+  ){
+
+    pendek.style.minHeight =
+      `${target}px`;
+
+    return;
+
+  }
+
+
+  /*
+   * Stretch dibagi merata
+   * ke seluruh blok hari.
+   */
+
+  const tambahanPerBlock =
+    tambahan /
+    blocks.length;
+
+
+  blocks.forEach(
+    block => {
+
+      const h =
+        block.getBoundingClientRect()
+          .height;
+
+
+      block.style.minHeight =
+        `${h + tambahanPerBlock}px`;
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   DOWNLOAD PNG
 ===================================================== */
 
 async function downloadPoster(){
 
-const poster =
-document.getElementById(
-"poster"
-);
-
-if(!poster){
-
-return;
-
-}
-
-showStatus(
-"Sedang membuat PNG..."
-);
-
-try{
-
-const canvas =
-await html2canvas(
-poster,
-{
-scale:2,
-useCORS:true,
-backgroundColor:"#ffffff"
-}
-);
-
-const link =
-document.createElement(
-"a"
-);
-
-link.download =
-"jadwal-kajian-cilegon.png";
-
-link.href =
-canvas.toDataURL(
-"image/png"
-);
-
-link.click();
-
-showStatus(
-"Poster berhasil dibuat.",
-"success"
-);
-
-}catch(err){
-
-console.error(err);
-
-showStatus(
-"Gagal membuat PNG.",
-"error"
-);
-
-}
-
-}
-
-
-/* =====================================================
-SHARE
-===================================================== */
-
-async function sharePoster(){
-
-const poster =
-document.getElementById(
-"poster"
-);
-
-try{
-
-const canvas =
-await html2canvas(
-poster,
-{
-scale:2,
-useCORS:true,
-backgroundColor:"#ffffff"
-}
-);
-
-canvas.toBlob(
-async blob => {
-
-if(!blob){
-
-return;
-
-}
-
-const file =
-new File(
-[blob],
-"jadwal-kajian-cilegon.png",
-{
-type:"image/png"
-}
-);
-
-if(
-navigator.share &&
-navigator.canShare &&
-navigator.canShare({
-files:[file]
-})
-){
-
-await navigator.share({
-
-title:
-"Jadwal Kajian Cilegon",
-
-text:
-"Jadwal Kajian Islam Ilmiah Kota Cilegon",
-
-files:[file]
-
-});
-
-}
-else{
-
-downloadPoster();
-
-}
-
-},
-"image/png"
-);
-
-}catch(err){
-
-console.error(err);
-
-showStatus(
-"Gagal membagikan poster.",
-"error"
-);
-
-}
-
-}
-
-
-/* =====================================================
-LOAD DATA
-===================================================== */
-
-async function loadData(){
-
-showStatus(
-"Memuat data dari database..."
-);
-
-try{
-
-const res =
-await fetch(
-API_URL
-);
-
-if(!res.ok){
-
-throw new Error(
-"HTTP " + res.status
-);
-
-}
-
-homeData =
-await res.json();
-
-console.log(
-"Data API:",
-homeData
-);
-
-
-/* =========================================
-AMBIL DATA
-========================================= */
-
-semuaKajian =
-Array.isArray(
-homeData.jadwal
-)
-? homeData.jadwal
-: [];
-
-
-semuaMasjid = [];
-
-
-/*
-Beberapa versi API mungkin memakai
-rankingMasjid.
-
-Tidak masalah karena kita memakai
-homeData.masjid sebagai sumber utama.
-*/
-
-
-populateWeeks();
-
-populateAreas();
-
-populateMasjid();
-
-renderPoster();
-
-
-showStatus(
-`Data berhasil dimuat: ${semuaKajian.length} kajian dari ${semuaMasjid.length} masjid.`,
-"success"
-);
-
-
-}catch(err){
-
-console.error(
-"Gagal memuat data:",
-err
-);
-
-showStatus(
-"Gagal memuat data Live Database.",
-"error"
-);
-
-}
-
-}
-
-
-/* =====================================================
-   EVENT FILTER
-   ===================================================== */
-
-/*
- * Fungsi utama untuk menerapkan semua filter.
- *
- * Penting:
- * - Minggu TIDAK memfilter data kajian
- * - Minggu hanya mengubah periode tanggal poster
- * - Area memfilter data kajian
- * - Masjid memfilter data kajian
- */
-
-function refreshPoster(){
-
-  try{
-
-    console.log(
-      "FILTER:",
-      {
-        minggu:
-          document.getElementById(
-            "weekSelect"
-          )?.value,
-
-        area:
-          document.getElementById(
-            "areaSelect"
-          )?.value,
-
-        masjid:
-          document.getElementById(
-            "masjidSelect"
-          )?.value
-      }
+  const poster =
+    document.getElementById(
+      "poster"
     );
 
 
-    renderPoster();
+  if(!poster){
+
+    return;
+
+  }
+
+
+  showStatus(
+    "Sedang membuat PNG..."
+  );
+
+
+  try{
+
+    /*
+     * Pastikan balancing selesai
+     * sebelum screenshot.
+     */
+
+    balancePosterColumns();
+
+
+    await new Promise(
+      resolve =>
+        requestAnimationFrame(
+          resolve
+        )
+    );
+
+
+    const canvas =
+      await html2canvas(
+        poster,
+        {
+          scale:2,
+
+          useCORS:true,
+
+          backgroundColor:
+            "#ffffff"
+        }
+      );
+
+
+    const link =
+      document.createElement(
+        "a"
+      );
+
+
+    link.download =
+      "jadwal-kajian-cilegon.png";
+
+
+    link.href =
+      canvas.toDataURL(
+        "image/png"
+      );
+
+
+    link.click();
+
+
+    showStatus(
+      "Poster berhasil dibuat.",
+      "success"
+    );
 
 
   }catch(err){
 
     console.error(
-      "Gagal refresh poster:",
+      "Download poster:",
       err
     );
 
+
     showStatus(
-      "Gagal memperbarui poster.",
+      "Gagal membuat PNG.",
       "error"
     );
 
@@ -3349,143 +3133,388 @@ function refreshPoster(){
 
 
 /* =====================================================
-   AREA
+   SHARE POSTER
 ===================================================== */
 
-const areaSelect =
-  document.getElementById(
-    "areaSelect"
-  );
+async function sharePoster(){
+
+  const poster =
+    document.getElementById(
+      "poster"
+    );
 
 
-if(areaSelect){
+  if(!poster){
 
-  areaSelect.addEventListener(
-    "change",
-    function(){
+    return;
 
-      console.log(
-        "Area berubah:",
-        this.value
+  }
+
+
+  try{
+
+    balancePosterColumns();
+
+
+    await new Promise(
+      resolve =>
+        requestAnimationFrame(
+          resolve
+        )
+    );
+
+
+    const canvas =
+      await html2canvas(
+        poster,
+        {
+          scale:2,
+
+          useCORS:true,
+
+          backgroundColor:
+            "#ffffff"
+        }
       );
 
 
-      /*
-       * Area berubah →
-       * daftar masjid harus dibuat ulang.
-       */
+    canvas.toBlob(
+      async blob => {
 
-      populateMasjid();
+        if(!blob){
 
+          showStatus(
+            "Gagal membuat gambar.",
+            "error"
+          );
 
-      /*
-       * Setelah populateMasjid(),
-       * masjid kembali ke "Semua Masjid".
-       *
-       * Ini memang disengaja agar
-       * tidak terjadi kombinasi filter
-       * masjid lama dengan area baru.
-       */
+          return;
 
-      const masjidSelect =
-        document.getElementById(
-          "masjidSelect"
-        );
+        }
 
 
-      if(masjidSelect){
+        const file =
+          new File(
+            [
+              blob
+            ],
+            "jadwal-kajian-cilegon.png",
+            {
+              type:
+                "image/png"
+            }
+          );
 
-        masjidSelect.value = "";
 
-      }
+        if(
+          navigator.share &&
+          navigator.canShare &&
+          navigator.canShare({
+            files:[
+              file
+            ]
+          })
+        ){
+
+          await navigator.share({
+
+            title:
+              "Jadwal Kajian Cilegon",
+
+            text:
+              "Jadwal Kajian Islam Ilmiah Kota Cilegon",
+
+            files:[
+              file
+            ]
+
+          });
+
+        }
+
+        else{
+
+          downloadPoster();
+
+        }
+
+      },
+      "image/png"
+    );
 
 
-      refreshPoster();
+  }catch(err){
 
-    }
-  );
+    console.error(
+      "Share poster:",
+      err
+    );
+
+
+    showStatus(
+      "Gagal membagikan poster.",
+      "error"
+    );
+
+  }
 
 }
 
 
 /* =====================================================
-   MASJID
+   REFRESH POSTER
 ===================================================== */
 
-const masjidSelect =
-  document.getElementById(
-    "masjidSelect"
-  );
+function refreshPoster(){
 
-
-if(masjidSelect){
-
-  masjidSelect.addEventListener(
-    "change",
-    function(){
-
-      console.log(
-        "Masjid berubah:",
-        this.value
-      );
-
-
-      refreshPoster();
-
-    }
-  );
+  renderPoster();
 
 }
 
 
 /* =====================================================
-   MINGGU
+   EVENT FILTER
 ===================================================== */
 
-const weekSelect =
-  document.getElementById(
-    "weekSelect"
-  );
+function setupFilterEvents(){
+
+  const areaSelect =
+    document.getElementById(
+      "areaSelect"
+    );
 
 
-if(weekSelect){
-
-  weekSelect.addEventListener(
-    "change",
-    function(){
-
-      console.log(
-        "Minggu berubah:",
-        this.value
-      );
+  const masjidSelect =
+    document.getElementById(
+      "masjidSelect"
+    );
 
 
-      /*
-       * Jangan memanggil
-       * populateMasjid().
-       *
-       * Minggu hanya mengubah
-       * tanggal periode poster.
-       */
+  const weekSelect =
+    document.getElementById(
+      "weekSelect"
+    );
 
-      refreshPoster();
 
-    }
-  );
+  /*
+   * AREA
+   */
+
+  if(areaSelect){
+
+    areaSelect.onchange =
+      function(){
+
+        /*
+         * Area berubah.
+         *
+         * Bangun ulang daftar masjid
+         * sesuai area.
+         */
+
+        populateMasjid();
+
+
+        /*
+         * Masjid harus kembali
+         * ke Semua Masjid.
+         */
+
+        if(masjidSelect){
+
+          masjidSelect.value =
+            "";
+
+        }
+
+
+        renderPoster();
+
+      };
+
+  }
+
+
+  /*
+   * MASJID
+   */
+
+  if(masjidSelect){
+
+    masjidSelect.onchange =
+      function(){
+
+        renderPoster();
+
+      };
+
+  }
+
+
+  /*
+   * MINGGU
+   */
+
+  if(weekSelect){
+
+    weekSelect.onchange =
+      function(){
+
+        /*
+         * Minggu hanya mengubah
+         * periode tanggal header.
+         *
+         * Data kajian tetap sama
+         * karena bersifat rutin.
+         */
+
+        renderPoster();
+
+      };
+
+  }
 
 }
 
 
 /* =====================================================
-   TOMBOL PREVIEW
+   LOAD DATA
+===================================================== */
+
+async function loadData(){
+
+  showStatus(
+    "Memuat data dari database..."
+  );
+
+
+  try{
+
+    const res =
+      await fetch(
+        API_URL,
+        {
+          cache:"no-store"
+        }
+      );
+
+
+    if(!res.ok){
+
+      throw new Error(
+        "HTTP " +
+        res.status
+      );
+
+    }
+
+
+    homeData =
+      await res.json();
+
+
+    console.log(
+      "Data API:",
+      homeData
+    );
+
+
+    /*
+     * DATA JADWAL
+     */
+
+    semuaKajian =
+      Array.isArray(
+        homeData.jadwal
+      )
+
+      ? homeData.jadwal
+
+      : [];
+
+
+    /*
+     * Tidak menggunakan
+     * homeData.masjid karena
+     * beberapa versi API tidak
+     * mengirim field tersebut.
+     *
+     * Daftar masjid dibuat dari
+     * data jadwal.
+     */
+
+    semuaMasjid =
+      [];
+
+
+    /*
+     * POPULATE
+     */
+
+    populateWeeks();
+
+    populateAreas();
+
+    populateMasjid();
+
+
+    /*
+     * EVENT
+     *
+     * Dipasang SATU KALI
+     * setelah elemen siap.
+     */
+
+    setupFilterEvents();
+
+
+    /*
+     * POSTER AWAL
+     */
+
+    renderPoster();
+
+
+    showStatus(
+      `Data berhasil dimuat: ${semuaKajian.length} kajian.`,
+      "success"
+    );
+
+
+  }catch(err){
+
+    console.error(
+      "Gagal memuat data:",
+      err
+    );
+
+
+    showStatus(
+      "Gagal memuat data Live Database.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   GLOBAL BUTTON
 ===================================================== */
 
 window.refreshPoster =
   refreshPoster;
 
+window.downloadPoster =
+  downloadPoster;
+
+window.sharePoster =
+  sharePoster;
+
 
 /* =====================================================
-START
+   START
 ===================================================== */
 
 loadData();
